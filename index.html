@@ -7,8 +7,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Supabase CDN Integration -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
+    <script type="module">
+        // Supabase Initialization Configuration
+        const SUPABASE_URL = "https://sxqmdh1cmxndsc8nefr8.supabase.co"; 
+        const SUPABASE_ANON_KEY = "Sb_publishable_sxqMDh1cMxndSc8Nefr8hA_PZI98wye";
+
+        // Global Supabase Client
+        window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        console.log("Supabase infrastructure connected successfully!");
+    </script>
+
     <style>
         :root {
             --bg-main: #020617;
@@ -19,6 +30,7 @@
             --light-blue: #38bdf8;
             --shine-blue: #06b6d4;
             --blue-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+            --shine-gradient: linear-gradient(135deg, #38bdf8 0%, #06b6d4 100%);
             --red: #ef4444;
             --green: #22c55e;
             --violet: #8b5cf6;
@@ -27,6 +39,7 @@
             --radius-lg: 16px;
             --radius-md: 12px;
             --glow: 0 0 25px rgba(6, 182, 212, 0.35);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * {
@@ -61,6 +74,11 @@
             padding-bottom: 74px;
         }
 
+        .hidden { display: none !important; }
+
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: var(--light-blue); border-radius: 10px; }
+
         .toast-notification {
             position: fixed;
             top: 24px;
@@ -70,19 +88,103 @@
             border: 2px solid var(--shine-blue);
             padding: 14px 28px;
             border-radius: 30px;
-            box-shadow: var(--glow);
+            box-shadow: var(--glow), 0 10px 40px rgba(0,0,0,0.8);
             z-index: 99999;
             font-weight: 800;
             font-size: 14px;
             text-align: center;
+            backdrop-filter: blur(10px);
             opacity: 0;
-            transition: all 0.3s ease;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
         .toast-notification.active {
             transform: translateX(-50%) translateY(0);
             opacity: 1;
         }
 
+        /* Auth Layout */
+        .auth-container {
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .luxury-logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .luxury-logo h1 {
+            font-weight: 900;
+            font-size: 46px;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+            background: var(--blue-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 15px rgba(29, 78, 216, 0.6));
+        }
+        .luxury-logo p {
+            color: var(--light-blue);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 6px;
+            font-weight: 800;
+        }
+        .card-panel {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            border: 1px solid rgba(56, 189, 248, 0.08);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .input-control {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 16px 18px;
+            border-radius: var(--radius-md);
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .input-control:focus {
+            border-color: var(--light-blue);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+        }
+        .gold-button {
+            width: 100%;
+            background: var(--blue-gradient);
+            color: #fff;
+            border: none;
+            padding: 18px;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px rgba(29, 78, 216, 0.4);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+        }
+        .gold-button:active { transform: scale(0.97); }
+
+        /* Top Header Navigation */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -90,14 +192,37 @@
             padding: 16px 20px;
             background: var(--bg-card);
             border-bottom: 1px solid rgba(56, 189, 248, 0.12);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         .header-brand {
             font-weight: 900;
             font-size: 26px;
+            letter-spacing: -0.5px;
             background: var(--blue-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .header-icon-btn {
+            background: var(--bg-input);
+            border: none;
+            color: var(--text-primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .header-icon-btn:hover { color: var(--light-blue); }
         .balance-chip {
             background: var(--bg-input);
             padding: 10px 18px;
@@ -107,8 +232,47 @@
             gap: 8px;
             border: 2px solid var(--shine-blue);
             font-weight: 900;
+            color: #fff;
+            background: linear-gradient(rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.9));
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
         }
 
+        /* Profile Popover menu */
+        .profile-menu {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 2px solid var(--shine-blue);
+            border-radius: var(--radius-md);
+            width: 220px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
+            z-index: 2000;
+            overflow: hidden;
+        }
+        .profile-menu-header {
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+            font-size: 13px;
+        }
+        .profile-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .profile-menu-item:hover {
+            background: var(--bg-input);
+            color: var(--light-blue);
+        }
+
+        /* Action Hub Screens Structure */
         .arena-padding { padding: 20px 16px; }
         .period-card-panel {
             background: linear-gradient(145deg, #0f172a 0%, #0b0f19 100%);
@@ -120,13 +284,15 @@
             margin-bottom: 18px;
             border: 1px solid rgba(56, 189, 248, 0.1);
         }
+        .period-title { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+        .period-value { font-size: 24px; font-weight: 800; margin-top: 4px; color: #fff; font-family: monospace; }
         .countdown-value { font-size: 36px; font-weight: 900; color: var(--light-blue); font-family: monospace; text-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
 
         .color-matrix-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            margin-top: 20px;
+            margin-bottom: 22px;
         }
         .matrix-btn {
             border: none;
@@ -136,223 +302,520 @@
             font-weight: 900;
             color: #fff;
             cursor: pointer;
-            text-transform: uppercase;
+            transition: var(--transition);
             box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            text-transform: uppercase;
         }
+        .matrix-btn:active { transform: scale(0.95); }
         .m-green { background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); }
         .m-violet { background: linear-gradient(135deg, #a855f7 0%, #6b21a8 100%); }
         .m-red { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
 
-        .pools-display-panel {
+        .section-header-title {
+            font-size: 15px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary);
+        }
+        .data-table-wrapper {
             background: var(--bg-card);
             border-radius: var(--radius-lg);
-            padding: 20px;
-            border: 1px solid rgba(56, 189, 248, 0.1);
+            overflow: hidden;
+            border: 1px solid rgba(56, 189, 248, 0.08);
+            margin-bottom: 24px;
         }
-        .pool-data-row {
+        .table-row-node {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .table-row-node:last-child { border-bottom: none; }
+
+        /* Guide Information Box Component */
+        .guide-box {
+            background: rgba(6, 182, 212, 0.04);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .guide-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            color: #fff;
+            font-weight: 500;
+        }
+        .guide-step:last-child { margin-bottom: 0; }
+        .guide-number {
+            background: var(--shine-blue);
+            color: #000;
+            font-weight: 900;
+            font-size: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .copy-chip-btn {
+            background: var(--bg-input);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            color: var(--light-blue);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-left: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Realtime Traffic Simulator Window */
+        .live-traffic-box {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            border: 1px solid rgba(56, 189, 248, 0.08);
+            margin-bottom: 24px;
+        }
+        .traffic-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .pulse-node {
+            width: 10px;
+            height: 10px;
+            background-color: var(--green);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 10px var(--green);
+            animation: pulse-fx 2s infinite;
+        }
+        @keyframes pulse-fx {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+        .feed-container-box { height: 120px; overflow: hidden; position: relative; }
+
+        /* Application Shell Floating Navigation Bar */
+        .fixed-navigation-shell {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 480px;
+            background: rgba(11, 15, 25, 0.96);
+            backdrop-filter: blur(20px);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 14px 0;
+            border-top: 1px solid rgba(56, 189, 248, 0.15);
+            z-index: 9999;
+        }
+        .fixed-navigation-shell.admin-mode-shell {
+            grid-template-columns: repeat(4, 1fr) !important;
+        }
+        .nav-anchor-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            gap: 6px;
+            transition: var(--transition);
+        }
+        .nav-anchor-item.active { color: var(--light-blue); }
+        .nav-anchor-item i { font-size: 22px; }
+
+        .vault-card {
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+            border-radius: var(--radius-lg);
+            padding: 26px;
+            text-align: center;
+            border: 2px solid rgba(6, 182, 212, 0.25);
+            margin-bottom: 22px;
+            box-shadow: var(--glow);
+        }
+        .tab-split-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+        .admin-tab-wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .split-tab-trigger {
+            background: var(--bg-card);
+            padding: 16px;
+            text-align: center;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 14px;
+            border: 1px solid transparent;
+            transition: var(--transition);
+            color: #fff;
+        }
+        .split-tab-trigger.active {
+            border-color: var(--light-blue);
+            background: var(--bg-input);
+            color: var(--light-blue);
+        }
+
+        /* Overlay Layout Modals */
+        .modal-blur-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            align-items: flex-end;
+        }
+        .modal-slide-sheet {
+            width: 100%;
+            background: var(--bg-card);
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            padding: 28px 24px;
+            border-top: 2px solid var(--shine-blue);
+            transform: translateY(0);
+            transition: transform 0.3s ease-out;
+        }
+        .chip-flex-selection {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+        .chip-node-selector {
+            background: var(--bg-input);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 14px 0;
+            text-align: center;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 15px;
+            transition: var(--transition);
+            color: #fff;
+        }
+        .chip-node-selector.active {
+            border-color: var(--light-blue);
+            background: rgba(6, 182, 212, 0.15);
+            color: var(--light-blue);
+        }
+
+        /* Administrative Secret Console Panel */
+        .admin-view-container { padding: 20px; background: #020617; min-height: 100vh; }
+        .admin-summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+        .summary-card-node {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border-left: 4px solid var(--primary-blue);
+        }
+        .summary-card-node p { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; }
+        .summary-card-node h3 { font-size: 22px; font-weight: 800; margin-top: 4px; }
+        
+        .realtime-bet-tracker-card {
+            background: #0f172a;
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            margin-bottom: 22px;
+            border: 1px solid rgba(56, 189, 248, 0.1);
+        }
+        .live-bet-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 12px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-weight: 600;
         }
-        .pool-data-row:last-child { border-bottom: none; }
-        .pool-val { font-family: monospace; font-size: 16px; font-weight: 800; }
-        .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .live-bet-row:last-child { border-bottom: none; }
+        
+        .admin-badge {
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .admin-custom-remark-input {
+            width: 100%;
+            background: var(--bg-main);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 12px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .admin-custom-remark-input:focus {
+            border-color: var(--light-blue);
+        }
+
+        /* Live Chat Matrix Elements */
+        .support-trigger-badge {
+            background: rgba(6, 182, 212, 0.06);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            border-radius: var(--radius-md);
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 22px;
+            transition: var(--transition);
+        }
+        .support-trigger-badge:hover { background: rgba(6, 182, 212, 0.12); }
+        
+        .chat-canvas-window {
+            height: 240px;
+            overflow-y: auto;
+            background: var(--bg-main);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--radius-md);
+            padding: 14px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chat-bubble-node {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+            font-weight: 500;
+        }
+        .bubble-user {
+            background: var(--bg-input);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        .bubble-support {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            color: #fff;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+        .chat-input-row-flex { display: flex; gap: 8px; }
+
+        .admin-user-thread-card {
+            background: var(--bg-input);
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            transition: var(--transition);
+            margin-bottom: 8px;
+        }
+        .admin-user-thread-card.active {
+            border-color: var(--light-blue);
+            background: rgba(6, 182, 212, 0.12);
+        }
+        
+        /* Direct Silent Balance Control Style */
+        .admin-direct-balance-control {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
     <div class="phone-wrapper">
+        
         <div id="system-toast" class="toast-notification">Notification System Alert</div>
 
-        <header class="app-header">
-            <div class="header-brand">DUBAI ELITE</div>
-            <div class="balance-chip">
-                <i class="fa-solid fa-wallet" style="color:var(--light-blue);"></i>
-                <span id="global-display-balance">₹1000.00</span>
+        <div id="view-auth" class="auth-container">
+            <div class="luxury-logo">
+                <h1>DUBAI ELITE</h1>
+                <p>High Stakes Cash Arena</p>
             </div>
-        </header>
-
-        <div class="arena-padding">
-            <div class="period-card-panel">
-                <div>
-                    <div style="font-size: 12px; color: var(--text-secondary);">Active Round Number</div>
-                    <div id="arena-period-id" style="font-size: 24px; font-weight: 800;">#20260518</div>
-                </div>
-                <div style="text-align: right;">
-                    <div style="font-size: 12px; color: var(--text-secondary);">Time Left</div>
-                    <div id="arena-timer-value" class="countdown-value">02:30</div>
-                </div>
+            
+            <div class="tab-split-wrapper">
+                <div id="trigger-auth-login" class="split-tab-trigger active" onclick="switchAuthModeTab('login')">Log In</div>
+                <div id="trigger-auth-signup" class="split-tab-trigger" onclick="switchAuthModeTab('signup')">Sign Up</div>
             </div>
 
-            <div class="pools-display-panel">
-                <div style="font-size:15px; font-weight:800; margin-bottom:14px; color:var(--text-secondary);">
-                    <i class="fa-solid fa-chart-pie" style="color: var(--light-blue);"></i> LIVE POOLS MATRIX DATA
+            <div class="card-panel">
+                <div class="form-group">
+                    <label id="auth-label-account">Mobile Number</label>
+                    <input type="text" id="auth-input-account" class="input-control" placeholder="Enter 10-digit mobile number" autocomplete="off">
                 </div>
-                
-                <div class="pool-data-row">
-                    <span><span class="dot" style="background: var(--green);"></span> Green Pool</span>
-                    <span id="db-green-val" class="pool-val">140</span>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="auth-input-secret" class="input-control" placeholder="Enter account password">
                 </div>
-                <div class="pool-data-row">
-                    <span><span class="dot" style="background: var(--red);"></span> Red Pool</span>
-                    <span id="db-red-val" class="pool-val">90</span>
+                <button id="auth-main-action-btn" class="gold-button" onclick="executeAuthenticationRequest()">Log In Now</button>
+            </div>
+        </div>
+
+        <div id="view-main-app-shell" class="hidden">
+            
+            <header class="app-header">
+                <div class="header-brand">DUBAI ELITE</div>
+                <div class="header-actions">
+                    <button class="header-icon-btn" onclick="toggleEngineAcousticState()">
+                        <i id="acoustic-toggle-icon" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <div class="balance-chip">
+                        <i class="fa-solid fa-wallet" style="color:var(--light-blue);"></i>
+                        <span id="global-display-balance">₹0.00</span>
+                    </div>
+                    <button class="header-icon-btn" onclick="toggleProfileDropdownMenu()">
+                        <i class="fa-solid fa-user"></i>
+                    </button>
                 </div>
-                <div class="pool-data-row">
-                    <span><span class="dot" style="background: var(--violet);"></span> Violet Pool</span>
-                    <span id="db-violet-val" class="pool-val">35</span>
+
+                <div id="profile-context-dropdown" class="profile-menu hidden">
+                    <div class="profile-menu-header">
+                        <span style="color: var(--text-secondary); display:block; font-size:10px; text-transform:uppercase; font-weight:700;">Account Profile</span>
+                        <strong id="dropdown-profile-id" style="color:var(--light-blue); font-family:monospace;">9999999999</strong>
+                    </div>
+                    <div class="profile-menu-item" onclick="routeToProfileVaultAccount()">
+                        <i class="fa-solid fa-wallet" style="color: var(--light-blue);"></i> Wallet
+                    </div>
+                    <div class="profile-menu-item" style="color: var(--red);" onclick="executeApplicationLogoutSequence()">
+                        <i class="fa-solid fa-power-off"></i> Log Out
+                    </div>
+                </div>
+            </header>
+
+            <div id="view-game-arena" class="arena-padding">
+                <div class="period-card-panel">
+                    <div>
+                        <div class="period-title">Active Round Number</div>
+                        <div id="arena-period-id" class="period-value">--------</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="period-title">Time Left</div>
+                        <div id="arena-timer-value" class="countdown-value">00:00</div>
+                    </div>
+                </div>
+
+                <div class="color-matrix-grid">
+                    <button class="matrix-btn m-green" onclick="launchBetSheetModal('Green')">Green<br><small>2.0x Payout</small></button>
+                    <button class="matrix-btn m-violet" onclick="launchBetSheetModal('Violet')">Violet<br><small>4.5x Payout</small></button>
+                    <button class="matrix-btn m-red" onclick="launchBetSheetModal('Red')">Red<br><small>2.0x Payout</small></button>
+                </div>
+
+                <div class="live-traffic-box">
+                    <div class="traffic-header">
+                        <div style="display:flex; align-items:center; gap:6px; font-weight:800; color:#fff;">
+                            <span class="pulse-node"></span>
+                            <span id="live-traffic-counter">0</span> Users Playing
+                        </div>
+                        <div>Live Trade Activity</div>
+                    </div>
+                    <div id="live-traffic-ticker-stream" class="feed-container-box"></div>
                 </div>
             </div>
 
-            <div class="color-matrix-grid">
-                <button class="matrix-btn m-green" onclick="betOnColor('Green')">Green<br><small>2.0x Payout</small></button>
-                <button class="matrix-btn m-violet" onclick="betOnColor('Violet')">Violet<br><small>4.5x Payout</small></button>
-                <button class="matrix-btn m-red" onclick="betOnColor('Red')">Red<br><small>2.0x Payout</small></button>
+            <div id="view-vault-platform" class="arena-padding hidden">
+                <div class="vault-card">
+                    <p style="color: var(--text-secondary); font-size:12px; text-transform:uppercase; margin-bottom:6px; font-weight:700;">Your Available Cash Balance</p>
+                    <h2 id="vault-total-balance" style="font-size: 38px; font-weight:900; color:#fff; font-family:monospace; filter: drop-shadow(0 2px 10px rgba(255,255,255,0.1));">₹0.00</h2>
+                </div>
+
+                <div class="support-trigger-badge" onclick="openCustomerSupportDialogModal()">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <i class="fa-solid fa-headset" style="color:var(--light-blue); font-size:20px;"></i>
+                        <div>
+                            <span style="display:block; font-size:14px; font-weight:700;">Customer Support</span>
+                            <span style="display:block; font-size:11px; color:var(--text-secondary); font-weight:600;">24/7 Live Assistance Channel</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-angle-right" style="color:var(--text-secondary);"></i>
+                </div>
+
+                <div class="tab-split-wrapper">
+                    <div id="trigger-tab-deposit" class="split-tab-trigger active" onclick="toggleVaultSubmoduleTab('deposit')">Deposit Cash</div>
+                    <div id="trigger-tab-withdraw" class="split-tab-trigger" onclick="toggleVaultSubmoduleTab('withdraw')">Withdraw Cash</div>
+                </div>
+
+                <div id="vault-module-deposit">
+                    <div class="card-panel" style="margin-bottom: 24px;">
+                        <div class="guide-box">
+                            <div class="guide-step">
+                                <span class="guide-number">1</span>
+                                <div>
+                                    Copy this UPI ID: 
+                                    <strong style="color:#fff; font-family:monospace; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">apple444@axl</strong>
+                                    <button class="copy-chip-btn" onclick="copyUpiIdToClipboard('apple444@axl')">
+                                        <i class="fa-regular fa-copy"></i> Copy ID
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <span class="guide-number">2</span>
+                                <div>Open your payment app (PhonePe, Google Pay, Paytm) and pay your amount to this UPI.</div>
+                            </div>
+                            <div class="guide-step">
+                                <span class="guide-number">3</span>
+                                <div>Copy the 12-digit UTR / Transaction ID from your payment history.</div>
+                            </div>
+                            <div class="guide-step">
+                                <span class="guide-number">4</span>
+                                <div>Paste that UTR ID below and click submit to verify your cash deposit.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <script>
-        const SUPABASE_URL = "https://ofwpdybibavhajlqlcok.supabase.co"; 
-        const SUPABASE_KEY = "sb_publishable_sxqMDh1cMxndSc8Nefr8hA_PZI98wye";
-        
-        let supabaseClient = null;
-        try {
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        } catch(e) {
-            console.log("Supabase Client Init Bypassed");
-        }
-
-        const greenDisplay = document.getElementById('db-green-val');
-        const redDisplay = document.getElementById('db-red-val');
-        const violetDisplay = document.getElementById('db-violet-val');
-        const roundDisplay = document.getElementById('arena-period-id');
-        const timerDisplay = document.getElementById('arena-timer-value');
-        const balanceDisplay = document.getElementById('global-display-balance');
-
-        let currentBalance = 1000.00;
-
-        function showNotification(text) {
-            const toast = document.getElementById('system-toast');
-            toast.innerText = text;
-            toast.classList.add('active');
-            setTimeout(() => { toast.classList.remove('active'); }, 2000);
-        }
-
-        // --- FETCH LIVE DATA (Bypassed if network breaks) ---
-        async function getLiveRoundData() {
-            if(!supabaseClient) return;
-            try {
-                let { data: pools, error } = await supabaseClient
-                    .from('pools')
-                    .select('*')
-                    .order('id', { ascending: false })
-                    .limit(1);
-                
-                if (!error && pools && pools.length > 0) {
-                    updateUIElements(pools[0]);
-                }
-            } catch (err) {
-                console.log("Silent fallback activated");
-            }
-        }
-
-        function updateUIElements(data) {
-            if(data.round_number) roundDisplay.innerText = "#" + data.round_number;
-            if(data.time_left) timerDisplay.innerText = data.time_left;
-            if(data.green_pool !== undefined) greenDisplay.innerText = data.green_pool;
-            if(data.red_pool !== undefined) redDisplay.innerText = data.red_pool;
-            if(data.violet_pool !== undefined) violetDisplay.innerText = data.violet_pool;
-        }
-
-        // REALTIME CHANNEL
-        if(supabaseClient) {
-            try {
-                supabaseClient
-                    .channel('schema-db-changes')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'pools' }, payload => {
-                        if (payload.new) { updateUIElements(payload.new); }
-                    }).subscribe();
-            } catch(e) {}
-        }
-
-        // AUTOMATIC NON-FREEZING TIMER (100% Reliable Frontend Counter)
-        setInterval(() => {
-            let timeParts = timerDisplay.innerText.split(':');
-            if(timeParts.length === 2) {
-                let minutes = parseInt(timeParts[0], 10);
-                let seconds = parseInt(timeParts[1], 10);
-                
-                if(seconds > 0) {
-                    seconds--;
-                } else if(minutes > 0) {
-                    minutes--;
-                    seconds = 59;
-                } else {
-                    minutes = 2;
-                    seconds = 30;
-                    let currentRound = parseInt(roundDisplay.innerText.replace('#','')) || 20260518;
-                    roundDisplay.innerText = "#" + (currentRound + 1);
-                    // Reset matrix values casually on new round
-                    greenDisplay.innerText = "120";
-                    redDisplay.innerText = "85";
-                    violetDisplay.innerText = "20";
-                }
-                timerDisplay.innerText = (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
-            }
-        }, 1000);
-
-        // LIVE FAKE TRAFFIC SIMULATOR (Keeps the screen highly active)
-        setInterval(() => {
-            if(Math.random() > 0.3) {
-                let luckyAdd = Math.floor(Math.random() * 10) + 2;
-                let pick = Math.random();
-                if(pick < 0.45) greenDisplay.innerText = parseInt(greenDisplay.innerText) + luckyAdd;
-                else if(pick < 0.90) redDisplay.innerText = parseInt(redDisplay.innerText) + luckyAdd;
-                else violetDisplay.innerText = parseInt(violetDisplay.innerText) + Math.floor(luckyAdd/2);
-            }
-        }, 3500);
-
-        // --- SMART WRITE OPERATION ---
-        window.betOnColor = async function(colorName) {
-            if (currentBalance < 100) {
-                showNotification("Insufficient balance! Minimum ₹100 required.");
-                return;
-            }
-
-            currentBalance -= 100;
-            balanceDisplay.innerText = "₹" + currentBalance.toFixed(2);
-            showNotification(`Placed ₹100 bet on ${colorName}!`);
-
-            // Instant local visual updates
-            let targetDisplay = colorName === 'Green' ? greenDisplay : (colorName === 'Red' ? redDisplay : violetDisplay);
-            targetDisplay.innerText = parseInt(targetDisplay.innerText) + 100;
-
-            if(!supabaseClient) return;
-            const dbColumnName = colorName.toLowerCase() + "_pool"; 
-
-            try {
-                let { data: currentData, error: fetchErr } = await supabaseClient
-                    .from('pools')
-                    .select('*')
-                    .order('id', { ascending: false })
-                    .limit(1);
-
-                if (!fetchErr && currentData && currentData.length > 0) {
-                    const row = currentData[0];
-                    const currentPoolValue = row[dbColumnName] || 0;
-                    await supabaseClient
-                        .from('pools')
-                        .update({ [dbColumnName]: currentPoolValue + 1 })
-                        .eq('id', row.id);
-                }
-            } catch (err) {
-                console.log("Bet localized successfully");
-            }
-        }
-
-        getLiveRoundData();
-    </script>
 </body>
 </html>
