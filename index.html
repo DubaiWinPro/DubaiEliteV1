@@ -24,14 +24,14 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         
-        // Expose to window object for legacy integration
+        // Connect to global window for layout scripts
         window.firebaseDB = db;
         window.dbRef = ref;
         window.dbSet = set;
         window.dbPush = push;
         window.dbOnValue = onValue;
 
-        console.log("Firebase Global Connection Active.");
+        console.log("Firebase Engine Successfully Hooked to Dubai Elite Core!");
     </script>
 
     <style>
@@ -90,7 +90,7 @@
             display: flex;
         }
 
-        /* Login Layout */
+        /* Gatekeeper Panel */
         #gatekeeper-auth-panel {
             justify-content: center;
             align-items: center;
@@ -183,7 +183,7 @@
             gap: 10px;
         }
 
-        /* Navbar Layout */
+        /* App System Navbar */
         #primary-system-navbar {
             background: var(--bg-secondary);
             border-top: 1px solid rgba(255,255,255,0.05);
@@ -216,10 +216,10 @@
             color: var(--accent-gold);
         }
 
-        /* Pool Cards */
+        /* Pools View styling */
         .dashboard-header-block {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
@@ -227,7 +227,7 @@
             background: var(--bg-secondary);
             border: 1px solid rgba(255,255,255,0.05);
             border-radius: 12px;
-            padding: 20px;
+            padding: 15px;
             margin-bottom: 15px;
         }
 
@@ -241,25 +241,13 @@
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         /* Chat System */
-        .support-thread-node {
-            background: var(--bg-secondary);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-        }
-
         .chat-overlay-canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background: var(--bg-primary);
             z-index: 200;
             display: none;
@@ -274,88 +262,47 @@
         }
 
         .chat-canvas-header button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 18px;
-            margin-right: 15px;
+            background: none; border: none; color: white; font-size: 18px; margin-right: 15px;
         }
 
         .chat-bubbles-stream-canvas {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
         }
 
-        .chat-bubble-node {
-            max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 8px;
-        }
-
+        .chat-bubble-node { max-width: 80%; padding: 10px 15px; border-radius: 8px; font-size: 14px; }
         .bubble-user { background: rgba(212,175,55,0.1); align-self: flex-start; }
         .bubble-support { background: #1e2238; align-self: flex-end; }
 
         .chat-input-controls-footer {
-            padding: 10px;
-            background: var(--bg-secondary);
-            display: flex;
-            gap: 10px;
+            padding: 10px; background: var(--bg-secondary); display: flex; gap: 10px;
         }
 
         .chat-input-controls-footer input {
-            flex: 1;
-            padding: 10px;
-            background: var(--bg-primary);
-            border: 1px solid #333;
-            color: white;
-            border-radius: 4px;
+            flex: 1; padding: 10px; background: var(--bg-primary); border: 1px solid #333; color: white; border-radius: 4px;
         }
 
         .chat-input-controls-footer button {
-            padding: 10px 20px;
-            background: var(--accent-gold);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            padding: 10px 20px; background: var(--accent-gold); border: none; border-radius: 4px; color: black; font-weight: bold;
         }
 
-        /* Modal & Toast */
+        .support-thread-node {
+            background: var(--bg-secondary); padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; cursor: pointer;
+        }
+
+        /* System Modal & Toast */
         .system-modal-backdrop {
-            position: fixed;
-            top:0; left:0; width:100vw; height:100vh;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 300;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 300;
         }
 
-        .modal-surface-card {
-            background: var(--bg-secondary);
-            padding: 25px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 400px;
-        }
-
+        .modal-surface-card { background: var(--bg-secondary); padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; }
+        
         #system-notification-toast {
-            position: fixed;
-            bottom: 85px; left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #141625;
-            padding: 12px 24px;
-            border-radius: 4px;
-            transition: transform 0.3s;
-            z-index: 1000;
+            position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: #141625; padding: 12px 24px; border-radius: 4px; transition: transform 0.3s; z-index: 1000;
         }
 
-        #system-notification-toast.toast-visible {
-            transform: translateX(-50%) translateY(0);
-        }
+        #system-notification-toast.toast-visible { transform: translateX(-50%) translateY(0); }
     </style>
 </head>
 <body>
@@ -382,22 +329,24 @@
             </div>
         </div>
 
-        <div id="investment-pools-display-panel" class="view-panel-node">
-            <div class="dashboard-header-block">
-                <h2>INVESTMENT POOLS</h2>
-                <p>Select a liquidity pool to deploy configuration metrics.</p>
+        <div id="investment-pools-display-panel" class="view-panel-node" style="padding: 10px; padding-bottom: 80px;">
+            <div class="dashboard-header-block" style="margin-bottom: 10px;">
+                <h2>VIP PLATFORM LIVE CHAT</h2>
+                <p>Send messages directly to the server database.</p>
             </div>
-            <div>
-                <div class="pool-metric-card">
-                    <h3>BURJ KHALIFA LIQUIDITY</h3>
-                    <p style="margin-bottom: 10px; color: var(--accent-gold)">Min: $50,000 | APY: 24.5%</p>
-                    <button class="pool-interaction-button" onclick="initializeLiquidityDeploymentWizard('BURJ KHALIFA LIQUIDITY', 50000)">Deploy Capital</button>
-                </div>
-                <div class="pool-metric-card">
-                    <h3>PALM JUMEIRAH CAP FUND</h3>
-                    <p style="margin-bottom: 10px; color: var(--accent-gold)">Min: $125,000 | APY: 31.2%</p>
-                    <button class="pool-interaction-button" onclick="initializeLiquidityDeploymentWizard('PALM JUMEIRAH CAP FUND', 125000)">Deploy Capital</button>
-                </div>
+            
+            <div id="user-side-chat-buffer" style="flex: 1; background: #0d0e15; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; height: 55vh;">
+                <div style="color: var(--text-secondary); text-align: center; font-size: 13px; margin-top: 20px;">No message logs found. Start typing below...</div>
+            </div>
+
+            <div style="display: flex; gap: 10px; background: var(--bg-secondary); padding: 8px; border-radius: 6px;">
+                <input type="text" id="user-chat-input-element" placeholder="Enter message data sequence..." style="flex:1; background: var(--bg-primary); border: 1px solid #222; border-radius: 4px; padding: 12px; color: white; font-size: 14px;" onkeydown="if(event.key === 'Enter') submitUserChatMessageToServer()">
+                <button type="button" onclick="submitUserChatMessageToServer()" style="background: var(--accent-gold); border: none; padding: 0 20px; border-radius: 4px; color: black; font-weight: bold; cursor: pointer;">Send</button>
+            </div>
+
+            <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <button onclick="initializeLiquidityDeploymentWizard('BURJ KHALIFA INDEX', 50000)" style="background: #16192b; border: 1px solid rgba(212,175,55,0.3); padding: 10px; border-radius: 6px; color: white; font-size: 12px; font-weight: bold; cursor: pointer;">⚡ Trigger Pool Alpha</button>
+                <button onclick="initializeLiquidityDeploymentWizard('PALM FUND TRADING', 125000)" style="background: #16192b; border: 1px solid rgba(212,175,55,0.3); padding: 10px; border-radius: 6px; color: white; font-size: 12px; font-weight: bold; cursor: pointer;">⚡ Trigger Pool Beta</button>
             </div>
         </div>
 
@@ -407,27 +356,27 @@
             </div>
             <div style="background:var(--bg-secondary); padding:20px; border-radius:8px;">
                 <h3 id="profile-identity-mobile-string">+91 0000000000</h3>
-                <p style="color:var(--success); margin-top:10px;">LEVEL 4 APPROVED</p>
+                <p style="color:var(--success); margin-top:10px; font-weight: bold;">LEVEL 4 APPROVED SYSTEM NODE</p>
             </div>
         </div>
 
         <div id="admin-support-channel-panel" class="view-panel-node">
             <div class="dashboard-header-block">
-                <h2>ADMINISTRATIVE TERMINAL CONTROL</h2>
+                <h2>ADMIN CONTROL MONITOR</h2>
+                <p>Listen and talk to all active phone connections real-time.</p>
             </div>
-            <div id="administrative-channels-live-list-box">
-                </div>
+            <div id="administrative-channels-live-list-box"></div>
         </div>
 
         <nav id="primary-system-navbar">
             <a href="#" class="nav-tab-anchor tab-selected" onclick="switchActiveSystemPanelContext('investment-pools-display-panel', this)">
-                <i class="fa-solid fa-chart-pie"></i><span>Pools</span>
+                <i class="fa-solid fa-comments"></i><span style="margin-top:2px;">Terminal</span>
             </a>
             <a href="#" class="nav-tab-anchor" onclick="switchActiveSystemPanelContext('user-core-profile-panel', this)">
-                <i class="fa-solid fa-fingerprint"></i><span>Profile</span>
+                <i class="fa-solid fa-fingerprint"></i><span style="margin-top:2px;">Profile</span>
             </a>
             <a href="#" class="nav-tab-anchor" id="admin-navbar-link-node" style="display:none;" onclick="switchActiveSystemPanelContext('admin-support-channel-panel', this)">
-                <i class="fa-solid fa-terminal"></i><span>Console</span>
+                <i class="fa-solid fa-terminal"></i><span style="margin-top:2px;">Console</span>
             </a>
         </nav>
     </div>
@@ -435,28 +384,28 @@
     <div class="chat-overlay-canvas" id="administrative-dedicated-chat-workspace">
         <div class="chat-canvas-header">
             <button type="button" onclick="dismissAdministrativeDedicatedChatWorkspace()"><i class="fa-solid fa-chevron-left"></i></button>
-            <h3 id="adm-chat-header-identity-string">User Terminal</h3>
+            <h3 id="adm-chat-header-identity-string">Intercept Console</h3>
         </div>
         <div class="chat-bubbles-stream-canvas" id="administrative-chat-bubbles-stream-canvas"></div>
         <div class="chat-input-controls-footer">
-            <input type="text" id="adm-support-response-field" placeholder="Type message..." onkeydown="if(event.key === 'Enter') executeAdministrativeSupportReplyDispatch()">
-            <button type="button" onclick="executeAdministrativeSupportReplyDispatch()">Send</button>
+            <input type="text" id="adm-support-response-field" placeholder="Type response data matrix..." onkeydown="if(event.key === 'Enter') executeAdministrativeSupportReplyDispatch()">
+            <button type="button" onclick="executeAdministrativeSupportReplyDispatch()">Inject</button>
         </div>
     </div>
 
     <div class="system-modal-backdrop" id="liquidity-deployment-wizard-modal">
         <div class="modal-surface-card">
-            <h3 id="wizard-target-pool-title">Deploy Assets</h3>
-            <p id="wizard-target-pool-descriptor">Confirm transaction allocation details.</p>
+            <h3 id="wizard-target-pool-title">Execute Capital Transaction</h3>
+            <p id="wizard-target-pool-descriptor">Confirm dispatch parameters to transmit telemetry packets straight to backend real-time nodes.</p>
             <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:20px;">
                 <button type="button" onclick="dismissLiquidityDeploymentWizard()" style="background:none; border:none; color:white; cursor:pointer;">Cancel</button>
-                <button type="button" onclick="executeLiquidityDeploymentTransactionSequence()" style="background:var(--accent-gold); border:none; padding:10px 20px; border-radius:4px; cursor:pointer; color:black; font-weight:bold;">Confirm</button>
+                <button type="button" onclick="executeLiquidityDeploymentTransactionSequence()" style="background:var(--accent-gold); border:none; padding:10px 20px; border-radius:4px; color:black; font-weight:bold; cursor:pointer;">Confirm</button>
             </div>
         </div>
     </div>
 
     <div id="system-notification-toast">
-        <span id="toast-message-string">Context Initialized</span>
+        <span id="toast-message-string">Context Synchronized</span>
     </div>
 
     <script>
@@ -466,7 +415,7 @@
                 if(!this.audioContext) this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const osc = this.audioContext.createOscillator();
                 const gain = this.audioContext.createGain();
-                osc.type = 'sine'; osc.frequency.setValueAtTime(400, this.audioContext.currentTime);
+                osc.type = 'sine'; osc.frequency.setValueAtTime(450, this.audioContext.currentTime);
                 gain.gain.setValueAtTime(0.02, this.audioContext.currentTime);
                 osc.connect(gain); gain.connect(this.audioContext.destination);
                 osc.start(); osc.stop(this.audioContext.currentTime + 0.05);
@@ -498,45 +447,85 @@
             if(navElement) navElement.classList.add('tab-selected');
         }
 
-        // 1. SUBMIT MOBILE / REGISTER USER
+        // 1. GATEKEEPER SIGN IN & SYNC
         function executeAuthenticationRequest() {
-            const mobileInput = document.getElementById('auth-terminal-mobile-node').value.trim();
-            if(mobileInput.length < 10 || isNaN(mobileInput)) {
-                alert("Please enter a valid 10-digit number.");
+            const num = document.getElementById('auth-terminal-mobile-node').value.trim();
+            if(num.length < 10 || isNaN(num)) {
+                alert("Please enter a valid 10-digit VIP token sequence.");
                 return;
             }
 
             CoreSoundEngine.triggerTapFeedbackEffect();
-            SystemStateEngine.sessionContextMobile = mobileInput;
-            document.getElementById('profile-identity-mobile-string').innerText = "+91 " + mobileInput;
+            SystemStateEngine.sessionContextMobile = num;
+            document.getElementById('profile-identity-mobile-string').innerText = "+91 " + num;
 
             document.getElementById('gatekeeper-auth-panel').classList.remove('panel-active');
             document.getElementById('investment-pools-display-panel').classList.add('panel-active');
             document.getElementById('primary-system-navbar').style.display = 'flex';
 
-            // ADMIN LOGINS OVERRIDE
-            if(mobileInput === "9999999999" || mobileInput === "8383042456") {
+            if(num === "9999999999" || num === "8383042456") {
                 SystemStateEngine.administrativeAccessFlag = true;
                 document.getElementById('admin-navbar-link-node').style.display = 'flex';
-                startAdminDataPipeline();
+                initializeAdminListenerEngine();
             } else {
-                // Regular user: Create database node path in Firebase Realtime Database
-                syncUserSessionWithFirebase(mobileInput);
+                establishLiveUserDataSyncChannel(num);
             }
         }
 
-        function syncUserSessionWithFirebase(mobile) {
+        function establishLiveUserDataSyncChannel(mobile) {
             if(!window.firebaseDB) return;
-            const nodeRef = window.dbRef(window.firebaseDB, 'pools/' + mobile);
-            window.dbSet(nodeRef, {
-                identity: mobile,
-                registeredTimestamp: new Date().toISOString(),
-                transactions: { "init_handshake": "success" }
+            const chatRef = window.dbRef(window.firebaseDB, 'pools/' + mobile + '/chats');
+            
+            // Sync current chat records list dynamically from firebase
+            window.dbOnValue(chatRef, (snapshot) => {
+                const data = snapshot.val();
+                const buffer = document.getElementById('user-side-chat-buffer');
+                buffer.innerHTML = "";
+
+                if(!data) {
+                    buffer.innerHTML = `<div style="color: var(--text-secondary); text-align: center; font-size:13px; margin-top:20px;">No chats logged in cloud database yet. Say hello!</div>`;
+                    return;
+                }
+
+                Object.keys(data).forEach(key => {
+                    const msg = data[key];
+                    const isUser = msg.side === "user";
+                    buffer.innerHTML += `
+                        <div class="chat-bubble-node ${isUser ? 'bubble-user' : 'bubble-support'}">
+                            <strong style="display:block; font-size:10px; color:${isUser ? 'var(--light-blue)' : 'var(--accent-gold)'}; margin-bottom:2px;">
+                                ${isUser ? 'You' : 'System Operator'}
+                            </strong>
+                            <span>${msg.text}</span>
+                        </div>
+                    `;
+                });
+                buffer.scrollTop = buffer.scrollHeight;
             });
         }
 
-        // 2. LIQUIDITY DEPLOYMENT PROTOCOLS
-        function initializeLiquidityDeploymentWizard(poolName, amount) {
+        // USER SEND MESSAGE LOGIC
+        function submitUserChatMessageToServer() {
+            const inp = document.getElementById('user-chat-input-element');
+            const txt = inp.value.trim();
+            const mobile = SystemStateEngine.sessionContextMobile;
+
+            if(txt === "" || !mobile || !window.firebaseDB) return;
+            CoreSoundEngine.triggerTapFeedbackEffect();
+
+            const msgListRef = window.dbRef(window.firebaseDB, `pools/${mobile}/chats`);
+            const newNode = window.dbPush(msgListRef);
+
+            window.dbSet(newNode, {
+                side: "user",
+                text: txt,
+                timestamp: new Date().toISOString()
+            }).then(() => {
+                inp.value = "";
+            });
+        }
+
+        // POOL ACTIONS WRITE INTERFACES
+        function initializeLiquidityDeploymentWizard(poolName, amt) {
             CoreSoundEngine.triggerTapFeedbackEffect();
             SystemStateEngine.activeWizardTargetPool = poolName;
             document.getElementById('wizard-target-pool-title').innerText = "Deploy -> " + poolName;
@@ -555,93 +544,104 @@
             const pool = SystemStateEngine.activeWizardTargetPool;
 
             if(window.firebaseDB && mobile) {
-                const txListRef = window.dbRef(window.firebaseDB, `pools/${mobile}/transactions`);
-                const newTxNode = window.dbPush(txListRef);
+                // Send transaction log straight as a user text into chat node so database receives it immediately
+                const msgListRef = window.dbRef(window.firebaseDB, `pools/${mobile}/chats`);
+                const newNode = window.dbPush(msgListRef);
                 
-                window.dbSet(newTxNode, {
-                    poolName: pool,
-                    executionTimestamp: new Date().toISOString(),
-                    status: "PROCESSED_VERIFIED"
+                window.dbSet(newNode, {
+                    side: "user",
+                    text: `⚠️ [TRANSACTION TRIGGERED]: Capital allocation packet deployed into ${pool}. Verified.`,
+                    timestamp: new Date().toISOString()
                 }).then(() => {
-                    displaySystemNotificationAlert("Allocation successfully sent to Database!");
-                }).catch(err => {
-                    alert("Firebase Write Error: " + err.message);
+                    displaySystemNotificationAlert("Allocation logged to Realtime Cloud Database!");
                 });
-            } else {
-                displaySystemNotificationAlert("Completed locally.");
             }
         }
 
-        // 3. ADMIN LISTENING MECHANISM
-        function startAdminDataPipeline() {
+        // 3. ADMIN OPERATIONS PIPELINE
+        function initializeAdminListenerEngine() {
             if(!window.firebaseDB) return;
             const rootRef = window.dbRef(window.firebaseDB, 'pools');
             window.dbOnValue(rootRef, (snapshot) => {
                 const data = snapshot.val();
                 if(!data) return;
                 SystemStateEngine.supportChannelData.userConversations = data;
-                renderAdminUsersList();
+                renderAdminControlDashboard();
             });
         }
 
-        function renderAdminUsersList() {
-            const box = document.getElementById('administrative-channels-live-list-box');
-            box.innerHTML = "";
-            const conversations = SystemStateEngine.supportChannelData.userConversations;
+        function renderAdminControlDashboard() {
+            const listContainer = document.getElementById('administrative-channels-live-list-box');
+            listContainer.innerHTML = "";
+            const convs = SystemStateEngine.supportChannelData.userConversations;
 
-            Object.keys(conversations).forEach(userKey => {
+            Object.keys(convs).forEach(userKey => {
                 if(userKey === "9999999999" || userKey === "8383042456") return;
-                box.innerHTML += `
-                    <div class="support-thread-node" onclick="openAdminChatWindow('${userKey}')">
+                listContainer.innerHTML += `
+                    <div class="support-thread-node" onclick="openAdminInterceptConsole('${userKey}')">
                         <div>
-                            <h4>User Node: +91 ${userKey}</h4>
-                            <p>Data stream active</p>
+                            <h4>Terminal Intercept: +91 ${userKey}</h4>
+                            <p>Live datastream synchronizing...</p>
                         </div>
-                        <i class="fa-solid fa-terminal" style="color:var(--accent-gold)"></i>
+                        <i class="fa-solid fa-terminal" style="color:var(--accent-gold); align-self: center;"></i>
                     </div>
                 `;
             });
         }
 
-        function openAdminChatWindow(userKey) {
+        function openAdminInterceptConsole(userKey) {
             CoreSoundEngine.triggerTapFeedbackEffect();
             SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile = userKey;
-            document.getElementById('adm-chat-header-identity-string').innerText = "Intercept: +91 " + userKey;
+            document.getElementById('adm-chat-header-identity-string').innerText = "Console Intercept: +91 " + userKey;
             document.getElementById('administrative-dedicated-chat-workspace').style.display = 'flex';
-            loadUserTerminalLogs();
+            renderAdminLiveTerminalLogs();
         }
 
         function dismissAdministrativeDedicatedChatWorkspace() {
             document.getElementById('administrative-dedicated-chat-workspace').style.display = 'none';
         }
 
-        function loadUserTerminalLogs() {
+        function renderAdminLiveTerminalLogs() {
+            const target = SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile;
             const stream = document.getElementById('administrative-chat-bubbles-stream-canvas');
             stream.innerHTML = "";
-            const userKey = SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile;
-            const data = SystemStateEngine.supportChannelData.userConversations[userKey];
+            
+            const userData = SystemStateEngine.supportChannelData.userConversations[target];
+            if(!userData || !userData.chats) return;
 
-            if(!data) return;
-
-            if(data.transactions) {
-                Object.keys(data.transactions).forEach(k => {
-                    if(k === "init_handshake") return;
-                    const tx = data.transactions[k];
-                    stream.innerHTML += `
-                        <div class="chat-bubble-node bubble-user">
-                            <strong>[TX ALLOCATION INTERCEPT]</strong><br>
-                            Pool: ${tx.poolName}<br>Status: ${tx.status}
-                        </div>
-                    `;
-                });
-            }
+            Object.keys(userData.chats).forEach(k => {
+                const msg = userData.chats[k];
+                const isUser = msg.side === "user";
+                stream.innerHTML += `
+                    <div class="chat-bubble-node ${isUser ? 'bubble-user' : 'bubble-support'}">
+                        <strong>${isUser ? ('+91 ' + target) : 'System Operator'}</strong><br>
+                        <span>${msg.text}</span>
+                    </div>
+                `;
+            });
             stream.scrollTop = stream.scrollHeight;
         }
 
         function executeAdministrativeSupportReplyDispatch() {
-            document.getElementById('adm-support-response-field').value = "";
-            dismissAdministrativeDedicatedChatWorkspace();
-            displaySystemNotificationAlert("Directive pushed successfully.");
+            const input = document.getElementById('adm-support-response-field');
+            const txt = input.value.trim();
+            const target = SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile;
+
+            if(txt === "" || !target || !window.firebaseDB) return;
+            CoreSoundEngine.triggerTapFeedbackEffect();
+
+            const replyRef = window.dbRef(window.firebaseDB, `pools/${target}/chats`);
+            const newNode = window.dbPush(replyRef);
+
+            window.dbSet(newNode, {
+                side: "support",
+                text: txt,
+                timestamp: new Date().toISOString()
+            }).then(() => {
+                input.value = "";
+                renderAdminLiveTerminalLogs();
+                displaySystemNotificationAlert("Directive payload injected into user screen.");
+            });
         }
     </script>
 </body>
