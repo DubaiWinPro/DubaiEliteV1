@@ -7,17 +7,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Supabase CDN Integration (Zero Bugs / Fully Working) -->
+    <!-- SUPABASE CLIENT SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="module">
-        // Supabase Credentials Configured Authentically
-        const SUPABASE_URL = "https://sxqMDh1cMxndSc8Nefr8.supabase.co"; 
-        const SUPABASE_ANON_KEY = "Sb_publishable_sxqMDh1cMxndSc8Nefr8hA_PZI98wye";
-
-        // Global initialization
-        window.supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log("Supabase infrastructure integrated successfully!");
-    </script>
 
     <style>
         :root {
@@ -75,9 +66,6 @@
 
         .hidden { display: none !important; }
 
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--light-blue); border-radius: 10px; }
-
         .toast-notification {
             position: fixed;
             top: 24px;
@@ -131,6 +119,31 @@
             margin-top: 6px;
             font-weight: 800;
         }
+
+        /* Tabs System */
+        .tab-split-wrapper {
+            display: flex;
+            background: var(--bg-card);
+            padding: 6px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .split-tab-trigger {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: calc(var(--radius-md) - 4px);
+            color: var(--text-secondary);
+            transition: var(--transition);
+        }
+        .split-tab-trigger.active {
+            background: var(--blue-gradient);
+            color: #fff;
+        }
+
         .card-panel {
             background: var(--bg-card);
             border-radius: var(--radius-lg);
@@ -138,9 +151,7 @@
             border: 1px solid rgba(56, 189, 248, 0.08);
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-        .form-group {
-            margin-bottom: 22px;
-        }
+        .form-group { margin-bottom: 22px; }
         .form-group label {
             display: block;
             font-size: 12px;
@@ -161,10 +172,6 @@
             font-weight: 600;
             transition: var(--transition);
         }
-        .input-control:focus {
-            border-color: var(--light-blue);
-            box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
-        }
         .gold-button {
             width: 100%;
             background: var(--blue-gradient);
@@ -179,11 +186,9 @@
             cursor: pointer;
             transition: var(--transition);
             box-shadow: 0 4px 20px rgba(29, 78, 216, 0.4);
-            border: 1px solid rgba(56, 189, 248, 0.2);
         }
-        .gold-button:active { transform: scale(0.97); }
 
-        /* Top Header Navigation */
+        /* Dashboard Application Shell */
         .app-header {
             display: flex;
             justify-content: space-between;
@@ -191,37 +196,14 @@
             padding: 16px 20px;
             background: var(--bg-card);
             border-bottom: 1px solid rgba(56, 189, 248, 0.12);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
         }
         .header-brand {
             font-weight: 900;
             font-size: 26px;
-            letter-spacing: -0.5px;
             background: var(--blue-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .header-icon-btn {
-            background: var(--bg-input);
-            border: none;
-            color: var(--text-primary);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .header-icon-btn:hover { color: var(--light-blue); }
         .balance-chip {
             background: var(--bg-input);
             padding: 10px 18px;
@@ -231,48 +213,9 @@
             gap: 8px;
             border: 2px solid var(--shine-blue);
             font-weight: 900;
-            color: #fff;
-            background: linear-gradient(rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.9));
-            box-shadow: 0 0 10px rgba(6, 182, 212, 0.2);
         }
 
-        /* Profile Popover menu */
-        .profile-menu {
-            position: absolute;
-            top: 70px;
-            right: 20px;
-            background: var(--bg-card);
-            border: 2px solid var(--shine-blue);
-            border-radius: var(--radius-md);
-            width: 220px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.6);
-            z-index: 2000;
-            overflow: hidden;
-        }
-        .profile-menu-header {
-            padding: 14px 16px;
-            background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
-            font-size: 13px;
-        }
-        .profile-menu-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .profile-menu-item:hover {
-            background: var(--bg-input);
-            color: var(--light-blue);
-        }
-
-        /* Action Hub Screens Structure */
-        .arena-padding { padding: 20px 16px; }
+        .arena-padding { padding: 20px; }
         .period-card-panel {
             background: linear-gradient(145deg, #0f172a 0%, #0b0f19 100%);
             border-radius: var(--radius-lg);
@@ -283,9 +226,9 @@
             margin-bottom: 18px;
             border: 1px solid rgba(56, 189, 248, 0.1);
         }
-        .period-title { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-        .period-value { font-size: 24px; font-weight: 800; margin-top: 4px; color: #fff; font-family: monospace; }
-        .countdown-value { font-size: 36px; font-weight: 900; color: var(--light-blue); font-family: monospace; text-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+        .period-title { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; font-weight: 700; }
+        .period-value { font-size: 24px; font-weight: 800; color: #fff; }
+        .countdown-value { font-size: 36px; font-weight: 900; color: var(--light-blue); }
 
         .color-matrix-grid {
             display: grid;
@@ -301,25 +244,43 @@
             font-weight: 900;
             color: #fff;
             cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
             text-transform: uppercase;
         }
-        .matrix-btn:active { transform: scale(0.95); }
         .m-green { background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); }
         .m-violet { background: linear-gradient(135deg, #a855f7 0%, #6b21a8 100%); }
         .m-red { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
 
-        /* Rest of your exact component styles retained securely */
+        /* Navigation Bar */
+        .fixed-navigation-shell {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 480px;
+            background: rgba(11, 15, 25, 0.96);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            padding: 14px 0;
+            border-top: 1px solid rgba(56, 189, 248, 0.15);
+        }
+        .nav-anchor-item {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .nav-anchor-item.active { color: var(--light-blue); }
     </style>
 </head>
 <body>
 
     <div class="phone-wrapper">
-        
-        <div id="system-toast" class="toast-notification">Notification System Alert</div>
+        <div id="system-toast" class="toast-notification">Notification Active</div>
 
+        <!-- AUTH VIEW -->
         <div id="view-auth" class="auth-container">
             <div class="luxury-logo">
                 <h1>DUBAI ELITE</h1>
@@ -327,209 +288,190 @@
             </div>
             
             <div class="tab-split-wrapper">
-                <div id="trigger-auth-login" class="split-tab-trigger active" onclick="switchAuthModeTab('login')">Log In</div>
-                <div id="trigger-auth-signup" class="split-tab-trigger" onclick="switchAuthModeTab('signup')">Sign Up</div>
+                <div id="tab-login" class="split-tab-trigger active">Log In</div>
+                <div id="tab-signup" class="split-tab-trigger">Sign Up</div>
             </div>
 
             <div class="card-panel">
                 <div class="form-group">
-                    <label id="auth-label-account">Mobile Number</label>
-                    <input type="text" id="auth-input-account" class="input-control" placeholder="Enter 10-digit mobile number" autocomplete="off">
+                    <label>Mobile Number</label>
+                    <input type="text" id="auth-mobile" class="input-control" placeholder="Enter 10-digit mobile number">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" id="auth-input-secret" class="input-control" placeholder="Enter account password">
+                    <input type="password" id="auth-password" class="input-control" placeholder="Enter account password">
                 </div>
-                <button id="auth-main-action-btn" class="gold-button" onclick="executeAuthenticationRequest()">Log In Now</button>
+                <button id="auth-action-btn" class="gold-button">Log In Now</button>
             </div>
         </div>
 
-        <div id="view-main-app-shell" class="hidden">
+        <!-- MAIN APP VIEW -->
+        <div id="view-main-app" class="hidden">
             <header class="app-header">
                 <div class="header-brand">DUBAI ELITE</div>
                 <div class="header-actions">
-                    <button class="header-icon-btn" onclick="toggleEngineAcousticState()">
-                        <i id="acoustic-toggle-icon" class="fa-solid fa-volume-high"></i>
-                    </button>
                     <div class="balance-chip">
                         <i class="fa-solid fa-wallet" style="color:var(--light-blue);"></i>
-                        <span id="global-display-balance">₹0.00</span>
-                    </div>
-                    <button class="header-icon-btn" onclick="toggleProfileDropdownMenu()">
-                        <i class="fa-solid fa-user"></i>
-                    </button>
-                </div>
-
-                <div id="profile-context-dropdown" class="profile-menu hidden">
-                    <div class="profile-menu-header">
-                        <span style="color: var(--text-secondary); display:block; font-size:10px; text-transform:uppercase; font-weight:700;">Account Profile</span>
-                        <strong id="dropdown-profile-id" style="color:var(--light-blue); font-family:monospace;">9999999999</strong>
-                    </div>
-                    <div class="profile-menu-item" onclick="routeToProfileVaultAccount()">
-                        <i class="fa-solid fa-wallet" style="color: var(--light-blue);"></i> Wallet
-                    </div>
-                    <div class="profile-menu-item" style="color: var(--red);" onclick="executeApplicationLogoutSequence()">
-                        <i class="fa-solid fa-power-off"></i> Log Out
+                        <span id="display-balance">₹0.00</span>
                     </div>
                 </div>
             </header>
 
-            <div id="view-game-arena" class="arena-padding">
+            <!-- ARENA TAB -->
+            <div id="panel-arena" class="arena-padding">
                 <div class="period-card-panel">
                     <div>
-                        <div class="period-title">Active Round Number</div>
-                        <div id="arena-period-id" class="period-value">--------</div>
+                        <div class="period-title">Active Round</div>
+                        <div id="arena-period-id" class="period-value">2026051801</div>
                     </div>
                     <div style="text-align: right;">
                         <div class="period-title">Time Left</div>
-                        <div id="arena-timer-value" class="countdown-value">00:00</div>
+                        <div id="arena-timer" class="countdown-value">02:30</div>
                     </div>
                 </div>
 
                 <div class="color-matrix-grid">
-                    <button class="matrix-btn m-green" onclick="launchBetSheetModal('Green')">Green<br><small>2.0x Payout</small></button>
-                    <button class="matrix-btn m-violet" onclick="launchBetSheetModal('Violet')">Violet<br><small>4.5x Payout</small></button>
-                    <button class="matrix-btn m-red" onclick="launchBetSheetModal('Red')">Red<br><small>2.0x Payout</small></button>
-                </div>
-
-                <div class="live-traffic-box">
-                    <div class="traffic-header">
-                        <div style="display:flex; align-items:center; gap:6px; font-weight:800; color:#fff;">
-                            <span class="pulse-node"></span>
-                            <span id="live-traffic-counter">0</span> Users Playing
-                        </div>
-                        <div>Live Trade Activity</div>
-                    </div>
-                    <div id="live-traffic-ticker-stream" class="feed-container-box"></div>
+                    <button class="matrix-btn m-green" onclick="placeBet('Green')">Green<br><small>2.0x</small></button>
+                    <button class="matrix-btn m-violet" onclick="placeBet('Violet')">Violet<br><small>4.5x</small></button>
+                    <button class="matrix-btn m-red" onclick="placeBet('Red')">Red<br><small>2.0x</small></button>
                 </div>
             </div>
 
-            <div id="view-vault-platform" class="arena-padding hidden">
-                <div class="vault-card">
-                    <p style="color: var(--text-secondary); font-size:12px; text-transform:uppercase; margin-bottom:6px; font-weight:700;">Your Available Cash Balance</p>
-                    <h2 id="vault-total-balance" style="font-size: 38px; font-weight:900; color:#fff; font-family:monospace; filter: drop-shadow(0 2px 10px rgba(255,255,255,0.1));">₹0.00</h2>
+            <!-- VAULT TAB -->
+            <div id="panel-vault" class="arena-padding hidden">
+                <div class="card-panel">
+                    <h2>Vault Deposit / Withdrawal</h2>
+                    <p style="color: var(--text-secondary); margin: 10px 0;">Manage your VIP funds directly.</p>
+                    <input type="number" class="input-control" placeholder="Enter Amount (₹)" style="margin-bottom: 15px;">
+                    <button class="gold-button">Deposit Funds</button>
                 </div>
+            </div>
 
-                <div class="support-trigger-badge" onclick="openCustomerSupportDialogModal()">
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <i class="fa-solid fa-headset" style="color:var(--light-blue); font-size:20px;"></i>
-                        <div>
-                            <span style="display:block; font-size:14px; font-weight:700;">Customer Support</span>
-                            <span style="display:block; font-size:11px; color:var(--text-secondary); font-weight:600;">24/7 Live Assistance Channel</span>
-                        </div>
-                    </div>
-                    <i class="fa-solid fa-angle-right" style="color:var(--text-secondary);"></i>
-                </div>
-
-                <div class="tab-split-wrapper">
-                    <div id="trigger-tab-deposit" class="split-tab-trigger active" onclick="toggleVaultSubmoduleTab('deposit')">Deposit Cash</div>
-                    <div id="trigger-tab-withdraw" class="split-tab-trigger" onclick="toggleVaultSubmoduleTab('withdraw')">Withdraw Cash</div>
-                </div>
-
-                <div id="vault-module-deposit">
-                    <div class="card-panel" style="margin-bottom: 24px;">
-                        <div class="guide-box">
-                            <div class="guide-step">
-                                <span class="guide-number">1</span>
-                                <div>
-                                    Copy this UPI ID: 
-                                    <strong style="color:#fff; font-family:monospace; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">apple444@axl</strong>
-                                    <button class="copy-chip-btn" onclick="copyUpiIdToClipboard('apple444@axl')">
-                                        <i class="fa-regular fa-copy"></i> Copy ID
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="guide-step">
-                                <span class="guide-number">2</span>
-                                <div>Open your payment app (PhonePe, Google Pay, Paytm) and pay your amount to this UPI.</div>
-                            </div>
-                            <div class="guide-step">
-                                <span class="guide-number">3</span>
-                                <div>Enter transaction detail parameters seamlessly below.</div>
-                            </div>
-                        </div>
+            <!-- ADMIN TAB -->
+            <div id="panel-admin" class="arena-padding hidden">
+                <div class="card-panel">
+                    <h2>Admin Control Room</h2>
+                    <p style="color: var(--text-secondary); margin: 10px 0;">Manually declare the next winner pattern.</p>
+                    <div class="color-matrix-grid" style="margin-top:15px;">
+                        <button class="matrix-btn m-green" onclick="adminDeclare('Green')">Force Green</button>
+                        <button class="matrix-btn m-violet" onclick="adminDeclare('Violet')">Force Violet</button>
+                        <button class="matrix-btn m-red" onclick="adminDeclare('Red')">Force Red</button>
                     </div>
                 </div>
             </div>
+
+            <!-- NAVIGATION -->
+            <nav class="fixed-navigation-shell">
+                <div class="nav-anchor-item active" onclick="switchTab('arena', this)"><i class="fa-solid fa-gamepad"></i>Arena</div>
+                <div class="nav-anchor-item" onclick="switchTab('vault', this)"><i class="fa-solid fa-wallet"></i>Vault</div>
+                <div class="nav-anchor-item" onclick="switchTab('admin', this)"><i class="fa-solid fa-user-shield"></i>Admin</div>
+            </nav>
         </div>
     </div>
 
-    <!-- Interface Controller Logic (Unedited & Fully Responsive) -->
+    <!-- MAIN ENGINE IMPLEMENTATION -->
     <script>
-        let currentAuthMode = 'login';
-        
-        function switchAuthModeTab(mode) {
-            currentAuthMode = mode;
-            document.getElementById('trigger-auth-login').classList.toggle('active', mode === 'login');
-            document.getElementById('trigger-auth-signup').classList.toggle('active', mode === 'signup');
-            document.getElementById('auth-main-action-btn').innerText = mode === 'login' ? 'Log In Now' : 'Register Account';
+        const SUPABASE_URL = "https://sxqMDh1cMxndSc8Nefr8hA.supabase.co"; 
+        const SUPABASE_KEY = "Sb_publishable_sxqMDh1cMxndSc8Nefr8hA_PZI98wye";
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentUser = null;
+        let isLoginMode = true;
+
+        function showToast(msg) {
+            const t = document.getElementById('system-toast');
+            t.innerText = msg;
+            t.classList.add('active');
+            setTimeout(() => t.classList.remove('active'), 3000);
         }
 
-        function showSystemToastMessage(msg) {
-            const toast = document.getElementById('system-toast');
-            toast.innerText = msg;
-            toast.classList.add('active');
-            setTimeout(() => toast.classList.remove('active'), 3000);
-        }
+        // Toggle Sign Up / Log In Form State
+        document.getElementById('tab-login').addEventListener('click', () => {
+            isLoginMode = true;
+            document.getElementById('tab-login').classList.add('active');
+            document.getElementById('tab-signup').classList.remove('active');
+            document.getElementById('auth-action-btn').innerText = "Log In Now";
+        });
 
-        function executeAuthenticationRequest() {
-            const account = document.getElementById('auth-input-account').value.trim();
-            const secret = document.getElementById('auth-input-secret').value.trim();
+        document.getElementById('tab-signup').addEventListener('click', () => {
+            isLoginMode = false;
+            document.getElementById('tab-signup').classList.add('active');
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('auth-action-btn').innerText = "Register Account";
+        });
 
-            if(!account || !secret) {
-                showSystemToastMessage("Please fill in all layout credentials!");
-                return;
+        // Auth Logic Handler
+        document.getElementById('auth-action-btn').addEventListener('click', async () => {
+            const mobile = document.getElementById('auth-mobile').value.trim();
+            const password = document.getElementById('auth-password').value.trim();
+
+            if(!mobile || !password) return showToast("Please fill all details.");
+
+            if(isLoginMode) {
+                // Log In Routine
+                const { data, error } = await supabase.from('users').select('*').eq('mobile', mobile).eq('password', password).single();
+                if(error || !data) {
+                    showToast("Invalid Account Credentials.");
+                } else {
+                    currentUser = data;
+                    initDashboard();
+                }
+            } else {
+                // Sign Up Routine
+                const { data: existing } = await supabase.from('users').select('mobile').eq('mobile', mobile).maybeSingle();
+                if(existing) return showToast("Number already registered.");
+
+                const { error } = await supabase.from('users').insert([{ mobile, password, balance: 500.00 }]);
+                if(error) {
+                    showToast("Registration Failed.");
+                } else {
+                    showToast("Account Created! Logging in...");
+                    const { data } = await supabase.from('users').select('*').eq('mobile', mobile).single();
+                    currentUser = data;
+                    initDashboard();
+                }
             }
+        });
 
-            // Clean pipeline execution simulation
-            showSystemToastMessage(currentAuthMode === 'login' ? "Authenticating user..." : "Creating secure profile...");
-            setTimeout(() => {
-                document.getElementById('view-auth').classList.add('hidden');
-                document.getElementById('view-main-app-shell').classList.remove('hidden');
-                document.getElementById('dropdown-profile-id').innerText = account;
-                showSystemToastMessage("Welcome to Dubai Elite VIP Platform!");
-            }, 1200);
+        function initDashboard() {
+            document.getElementById('view-auth').classList.add('hidden');
+            document.getElementById('view-main-app').classList.remove('hidden');
+            document.getElementById('display-balance').innerText = "₹" + currentUser.balance.toFixed(2);
+            showToast(`Welcome Back, User!`);
+            startTimerSimulation();
         }
 
-        function toggleProfileDropdownMenu() {
-            document.getElementById('profile-context-dropdown').classList.toggle('hidden');
+        // Tab Switching
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.nav-anchor-item').forEach(item => item.classList.remove('active'));
+            el.classList.add('active');
+            
+            document.getElementById('panel-arena').classList.add('hidden');
+            document.getElementById('panel-vault').classList.add('hidden');
+            document.getElementById('panel-admin').classList.add('hidden');
+
+            document.getElementById(`panel-${tabId}`).classList.remove('hidden');
         }
 
-        function routeToProfileVaultAccount() {
-            document.getElementById('view-game-arena').classList.add('hidden');
-            document.getElementById('view-vault-platform').classList.remove('hidden');
-            document.getElementById('profile-context-dropdown').classList.add('hidden');
+        // Timer Simulation
+        function startTimerSimulation() {
+            let time = 150; 
+            setInterval(() => {
+                let mins = Math.floor(time / 60);
+                let secs = time % 60;
+                document.getElementById('arena-timer').innerText = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                if (time <= 0) time = 150;
+                else time--;
+            }, 1000);
         }
 
-        function executeApplicationLogoutSequence() {
-            document.getElementById('view-main-app-shell').classList.add('hidden');
-            document.getElementById('view-auth').classList.remove('hidden');
-            document.getElementById('profile-context-dropdown').classList.add('hidden');
-            showSystemToastMessage("Logged out securely.");
+        // Action Placeholders for Games
+        async function placeBet(color) {
+            showToast(`Bet placed on ${color}!`);
         }
 
-        function toggleVaultSubmoduleTab(type) {
-            document.getElementById('trigger-tab-deposit').classList.toggle('active', type === 'deposit');
-            document.getElementById('trigger-tab-withdraw').classList.toggle('active', type === 'withdraw');
-        }
-
-        function copyUpiIdToClipboard(text) {
-            navigator.clipboard.writeText(text);
-            showSystemToastMessage("UPI ID Copied to Clipboard!");
-        }
-
-        function launchBetSheetModal(color) {
-            showSystemToastMessage("Bet sheet initialized for: " + color);
-        }
-
-        function toggleEngineAcousticState() {
-            const icon = document.getElementById('acoustic-toggle-icon');
-            icon.classList.toggle('fa-volume-high');
-            icon.classList.toggle('fa-volume-xmark');
-        }
-
-        function openCustomerSupportDialogModal() {
-            showSystemToastMessage("Live chat engine initializing...");
+        function adminDeclare(color) {
+            showToast(`Admin Matrix set next win to: ${color}`);
         }
     </script>
 </body>
