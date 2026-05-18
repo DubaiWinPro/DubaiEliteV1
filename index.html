@@ -9,11 +9,8 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        // Agar aapko Realtime Database ya Auth use karna ho, toh inhein uncomment kar sakte hain:
-        // import { getDatabase } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        // import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getDatabase, ref, set, push, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Aapka Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAT_k0R_NtvPB0Tns22KZfDeFBsrqNELLM",
             authDomain: "dubaielitev1.firebaseapp.com",
@@ -24,10 +21,17 @@
             appId: "1:290011585541:web:1db926844e47133a3a106c"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        // const db = getDatabase(app); // Database use karne ke liye
-        console.log("Firebase integrated successfully!");
+        const db = getDatabase(app);
+        
+        // Game connection code
+        window.firebaseDB = db;
+        window.dbRef = ref;
+        window.dbSet = set;
+        window.dbPush = push;
+        window.dbOnValue = onValue;
+
+        console.log("Database connected successfully!");
     </script>
 
     <style>
