@@ -4,21 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DUBAI ELITE - VIP PLATFORM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <script>
-        // --- YAHA APNI SUPABASE DETAILS UPDATE KAREIN ---
-        const SUPABASE_URL = "https://your-project-id.supabase.co"; 
-        const SUPABASE_ANON_KEY = "your-anon-key-here";
-
-        // Initialize Supabase Client globally
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log("Supabase system connected successfully!");
-    </script>
-
     <style>
         :root {
             --bg-main: #020617;
@@ -661,7 +649,7 @@
             border-color: var(--light-blue);
             background: rgba(6, 182, 212, 0.12);
         }
-
+        
         /* Direct Silent Balance Control Style */
         .admin-direct-balance-control {
             background: rgba(255, 255, 255, 0.02);
@@ -673,18 +661,22 @@
     </style>
 </head>
 <body>
+
     <div class="phone-wrapper">
-        <div id="system-toast" class="toast-notification">Notification System Alert</div>
         
+        <div id="system-toast" class="toast-notification">Notification System Alert</div>
+
         <div id="view-auth" class="auth-container">
             <div class="luxury-logo">
                 <h1>DUBAI ELITE</h1>
                 <p>High Stakes Cash Arena</p>
             </div>
+            
             <div class="tab-split-wrapper">
                 <div id="trigger-auth-login" class="split-tab-trigger active" onclick="switchAuthModeTab('login')">Log In</div>
                 <div id="trigger-auth-signup" class="split-tab-trigger" onclick="switchAuthModeTab('signup')">Sign Up</div>
             </div>
+
             <div class="card-panel">
                 <div class="form-group">
                     <label id="auth-label-account">Mobile Number</label>
@@ -699,6 +691,7 @@
         </div>
 
         <div id="view-main-app-shell" class="hidden">
+            
             <header class="app-header">
                 <div class="header-brand">DUBAI ELITE</div>
                 <div class="header-actions">
@@ -713,7 +706,7 @@
                         <i class="fa-solid fa-user"></i>
                     </button>
                 </div>
-                
+
                 <div id="profile-context-dropdown" class="profile-menu hidden">
                     <div class="profile-menu-header">
                         <span style="color: var(--text-secondary); display:block; font-size:10px; text-transform:uppercase; font-weight:700;">Account Profile</span>
@@ -750,7 +743,8 @@
                     <div class="traffic-header">
                         <div style="display:flex; align-items:center; gap:6px; font-weight:800; color:#fff;">
                             <span class="pulse-node"></span>
-                            <span id="live-traffic-counter">0</span> Users Playing </div>
+                            <span id="live-traffic-counter">0</span> Users Playing
+                        </div>
                         <div>Live Trade Activity</div>
                     </div>
                     <div id="live-traffic-ticker-stream" class="feed-container-box"></div>
@@ -763,231 +757,447 @@
                     <h2 id="vault-total-balance" style="font-size: 38px; font-weight:900; color:#fff; font-family:monospace; filter: drop-shadow(0 2px 10px rgba(255,255,255,0.1));">₹0.00</h2>
                 </div>
 
+                <div class="support-trigger-badge" onclick="openCustomerSupportDialogModal()">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <i class="fa-solid fa-headset" style="color:var(--light-blue); font-size:20px;"></i>
+                        <div>
+                            <span style="display:block; font-size:14px; font-weight:700;">Customer Support</span>
+                            <span style="display:block; font-size:11px; color:var(--text-secondary); font-weight:600;">24/7 Live Assistance Channel</span>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-angle-right" style="color:var(--text-secondary);"></i>
+                </div>
+
                 <div class="tab-split-wrapper">
                     <div id="trigger-tab-deposit" class="split-tab-trigger active" onclick="toggleVaultSubmoduleTab('deposit')">Deposit Cash</div>
-                    <div id="trigger-tab-withdraw" class="split-tab-trigger" onclick="toggleVaultSubmoduleTab('withdraw')">Withdrawal Request</div>
+                    <div id="trigger-tab-withdraw" class="split-tab-trigger" onclick="toggleVaultSubmoduleTab('withdraw')">Withdraw Cash</div>
                 </div>
 
-                <div id="panel-vault-deposit">
-                    <div class="guide-box">
-                        <div class="guide-step">
-                            <span class="guide-number">1</span>
-                            <div>
-                                Copy official system UPI ID: <br>
-                                <strong id="target-payment-upi-string" style="color:var(--light-blue); font-family:monospace; font-size:15px; display:inline-block; margin-top:4px;">elitevip.pay@ybl</strong>
-                                <button class="copy-chip-btn" onclick="copyUpiIdToClipboard(document.getElementById('target-payment-upi-string').innerText)">
-                                    <i class="fa-regular fa-copy"></i> Copy
-                                </button>
+                <div id="vault-module-deposit">
+                    <div class="card-panel" style="margin-bottom: 24px;">
+                        
+                        <div class="guide-box">
+                            <div class="guide-step">
+                                <span class="guide-number">1</span>
+                                <div>
+                                    Copy this UPI ID: 
+                                    <strong style="color:#fff; font-family:monospace; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">apple444@axl</strong>
+                                    <button class="copy-chip-btn" onclick="copyUpiIdToClipboard('apple444@axl')">
+                                        <i class="fa-regular fa-copy"></i> Copy ID
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="guide-step">
+                                <span class="guide-number">2</span>
+                                <div>Open your payment app (PhonePe, Google Pay, Paytm) and pay your amount to this UPI.</div>
+                            </div>
+                            <div class="guide-step">
+                                <span class="guide-number">3</span>
+                                <div>Copy the 12-digit UTR / Transaction ID from your payment history.</div>
+                            </div>
+                            <div class="guide-step">
+                                <span class="guide-number">4</span>
+                                <div>Paste that UTR ID below and click submit to verify your cash deposit.</div>
                             </div>
                         </div>
-                        <div class="guide-step">
-                            <span class="guide-number">2</span>
-                            <div>Transfer required amount via any standard UPI payment application (PhonePe, GPay, Paytm).</div>
-                        </div>
-                        <div class="guide-step">
-                            <span class="guide-number">3</span>
-                            <div>Paste your transaction Reference Number (UTR) below for instant automated authorization approval.</div>
-                        </div>
-                    </div>
 
-                    <div class="card-panel">
                         <div class="form-group">
-                            <label>Deposit Amount (₹)</label>
-                            <input type="number" id="deposit-input-amount" class="input-control" placeholder="Minimum entry ₹100">
+                            <label>Deposit Amount (₹) <span style="color:var(--light-blue); text-transform:none;">(Min ₹100)</span></label>
+                            <input type="number" id="deposit-form-quantum" class="input-control" placeholder="Enter amount you paid">
                         </div>
                         <div class="form-group">
-                            <label>12-Digit UPI Ref No / UTR</label>
-                            <input type="text" id="deposit-input-utr" class="input-control" placeholder="Enter valid UTR sequence number">
+                            <label>12-Digit UTR ID / Reference Number</label>
+                            <input type="text" id="deposit-form-utr" class="input-control" placeholder="Paste your 12-digit UTR ID here">
                         </div>
-                        <button class="gold-button" onclick="executeCashDepositSubmissionRequest()">Submit Deposit</button>
+                        <button class="gold-button" onclick="submitCapitalInwardFormRequest()">Submit Deposit Form</button>
                     </div>
                 </div>
 
-                <div id="panel-vault-withdraw" class="hidden">
-                    <div class="card-panel">
+                <div id="vault-module-withdraw" class="hidden">
+                    <div class="card-panel" style="margin-bottom: 24px;">
                         <div class="form-group">
-                            <label>Withdrawal Amount (₹)</label>
-                            <input type="number" id="withdraw-input-amount" class="input-control" placeholder="Enter payout amount">
+                            <label>Account Holder Name</label>
+                            <input type="text" id="withdraw-form-identity" class="input-control" placeholder="Enter your official bank name">
                         </div>
                         <div class="form-group">
-                            <label>Your Payout UPI ID Link</label>
-                            <input type="text" id="withdraw-input-upi" class="input-control" placeholder="username@upi">
+                            <label>Receiving UPI ID</label>
+                            <input type="text" id="withdraw-form-endpoint" class="input-control" placeholder="example@upi">
                         </div>
-                        <button class="gold-button" onclick="executeCashWithdrawalSubmissionRequest()">Request Payout</button>
+                        <div class="form-group">
+                            <label>Withdrawal Amount (₹) <span style="color:var(--light-blue); text-transform:none;">(Min ₹300)</span></label>
+                            <input type="number" id="withdraw-form-quantum" class="input-control" placeholder="Enter amount to withdraw to bank">
+                        </div>
+                        <button class="gold-button" onclick="submitCapitalOutwardFormRequest()">Send Withdrawal Request</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="view-history-ledgers" class="arena-padding hidden">
+                <div class="section-header-title">
+                    <i class="fa-solid fa-receipt" style="color: var(--light-blue);"></i> Game Play History
+                </div>
+                <div class="data-table-wrapper">
+                    <div id="table-user-bets-ledger"></div>
+                </div>
+
+                <div class="section-header-title">
+                    <i class="fa-solid fa-money-bill-transfer" style="color: var(--light-blue);"></i> Wallet Transaction History
+                </div>
+                <div class="data-table-wrapper">
+                    <div id="table-user-vault-ledger"></div>
+                </div>
+            </div>
+
+            <div id="view-admin-override" class="admin-view-container hidden">
+                <div class="luxury-logo" style="text-align:left; margin-bottom:24px;">
+                    <h1 style="font-size:26px;">SYSTEM SETTINGS</h1>
+                    <p style="letter-spacing:2px; font-weight:700;">Real-time Performance Metrics & Balance Parameters</p>
+                </div>
+
+                <div class="realtime-bet-tracker-card" style="border: 2px solid var(--light-blue);">
+                    <h4 style="font-size:13px; text-transform:uppercase; color:var(--light-blue); margin-bottom:10px; font-weight:800;">
+                        <i class="fa-solid fa-shield-halved"></i> Quick Admin Bet Placement
+                    </h4>
+                    <p style="font-size:11px; color:var(--text-secondary); margin-bottom:12px;">Place quick testing trades using Admin balance directly onto the active matrix pool vectors.</p>
+                    <div class="color-matrix-grid" style="margin-bottom:0;">
+                        <button class="matrix-btn m-green" onclick="launchBetSheetModal('Green')" style="padding:12px 0; font-size:12px;">Bet Green</button>
+                        <button class="matrix-btn m-violet" onclick="launchBetSheetModal('Violet')" style="padding:12px 0; font-size:12px;">Bet Violet</button>
+                        <button class="matrix-btn m-red" onclick="launchBetSheetModal('Red')" style="padding:12px 0; font-size:12px;">Bet Red</button>
                     </div>
                 </div>
 
-                <div style="margin-top: 24px;">
-                    <div class="section-header-title">
-                        <i class="fa-solid fa-headset" style="color:var(--shine-blue);"></i> Emergency Terminal Support
+                <div class="admin-summary-grid">
+                    <div class="summary-card-node">
+                        <p>Total Real Users</p>
+                        <h3 id="adm-metric-total-users">--</h3>
                     </div>
-                    <div id="user-support-chat-badge" class="support-trigger-badge">
-                        <div>
-                            <span style="font-size:14px; font-weight:800; display:block;">Secure Support Channel</span>
-                            <span style="font-size:11px; color:var(--text-secondary);">Direct connection with support agents</span>
-                        </div>
-                        <i class="fa-solid fa-chevron-right" style="color:var(--text-secondary);"></i>
+                    <div class="summary-card-node">
+                        <p>Real Active Load</p>
+                        <h3 id="adm-metric-active-users">0</h3>
+                    </div>
+                </div>
+
+                <div class="realtime-bet-tracker-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid rgba(56, 189, 248, 0.15); padding-bottom:8px;">
+                        <h4 style="font-size:12px; text-transform:uppercase; color:var(--text-secondary); letter-spacing:1px; font-weight:700;">Real User Bets (No Bots)</h4>
+                        <span style="font-size:11px; color:var(--light-blue); font-weight:800;">Round: <span id="adm-live-sync-period" style="font-family:monospace;">--------</span></span>
+                    </div>
+                    <div class="live-bet-row">
+                        <span><i class="fa-solid fa-circle" style="color:var(--green);"></i> Real Green Bet:</span>
+                        <strong id="adm-pool-weight-green" style="font-family:monospace; color:var(--green);">₹0.00</strong>
+                    </div>
+                    <div class="live-bet-row">
+                        <span><i class="fa-solid fa-circle" style="color:var(--violet);"></i> Real Violet Bet:</span>
+                        <strong id="adm-pool-weight-violet" style="font-family:monospace; color:var(--violet);">₹0.00</strong>
+                    </div>
+                    <div class="live-bet-row">
+                        <span><i class="fa-solid fa-circle" style="color:var(--red);"></i> Real Red Bet:</span>
+                        <strong id="adm-pool-weight-red" style="font-family:monospace; color:var(--red);">₹0.00</strong>
                     </div>
 
-                    <div id="user-support-chat-window-panel" class="card-panel hidden" style="margin-bottom:24px;">
-                        <div id="user-support-chat-stream-box" class="chat-canvas-window"></div>
+                    <div class="form-group" style="margin-top:16px; margin-bottom:0;">
+                        <label>Protocol Execution Rule</label>
+                        <div class="admin-tab-wrapper" style="margin-bottom:0; margin-top:6px;">
+                            <button id="adm-mode-btn-auto" class="split-tab-trigger active" onclick="adjustAdminOutcomeSelectionMode('auto')">Auto Mode</button>
+                            <button id="adm-mode-btn-lowside" class="split-tab-trigger" onclick="adjustAdminOutcomeSelectionMode('lowside')">Low Side Win</button>
+                            <button id="adm-mode-btn-manual" class="split-tab-trigger" onclick="adjustAdminOutcomeSelectionMode('manual')">Manual</button>
+                        </div>
+                    </div>
+
+                    <div id="adm-manual-action-tray" class="hidden" style="margin-top:14px; border-top:1px solid rgba(255,255,255,0.05); padding-top:14px;">
+                        <label style="display:block; font-size:11px; color:var(--text-secondary); margin-bottom:8px; text-transform:uppercase; font-weight:700;">Enforce Forced Destination Result</label>
+                        <div class="color-matrix-grid" style="margin-bottom:0;">
+                            <button class="matrix-btn m-green" onclick="forceAdminOutcomeVector('Green')" style="padding:10px 0; font-size:13px;">Force Green</button>
+                            <button class="matrix-btn m-violet" onclick="forceAdminOutcomeVector('Violet')" style="padding:10px 0; font-size:13px;">Force Violet</button>
+                            <button class="matrix-btn m-red" onclick="forceAdminOutcomeVector('Red')" style="padding:10px 0; font-size:13px;">Force Red</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header-title">
+                    <i class="fa-solid fa-headset" style="color:var(--light-blue);"></i> Customer Support Operational Inbox
+                </div>
+                <div class="card-panel" style="padding:16px; margin-bottom:24px;">
+                    <label style="display:block; font-size:11px; color:var(--text-secondary); margin-bottom:6px; text-transform:uppercase; font-weight:700;">Select User Live Conversation Thread</label>
+                    <div id="adm-support-threads-list" style="margin-bottom: 14px; max-height: 120px; overflow-y: auto;"></div>
+                    
+                    <div id="adm-support-empty-notice" style="font-size:12px; color:var(--text-secondary); text-align:center; padding:10px; font-weight:600;">No communication logs submitted yet.</div>
+                    
+                    <div id="adm-support-active-container" class="hidden">
+                        <div id="adm-support-chat-stream" class="chat-canvas-window" style="height:180px;"></div>
                         <div class="chat-input-row-flex">
-                            <input type="text" id="user-support-chat-msg-field" class="input-control" placeholder="Type support message..." style="padding:12px 14px; font-size:14px;">
-                            <button class="gold-button" onclick="executeUserSupportMessageTransmission()" style="width: auto; padding:12px 20px;"><i class="fa-solid fa-paper-plane"></i></button>
+                            <input type="text" id="adm-support-response-field" class="input-control" placeholder="Write reply message as Support..." style="padding:12px;">
+                            <button class="gold-button" style="width:auto; padding:0 20px; font-size:14px;" onclick="executeAdministrativeSupportReplyDispatch()">Reply</button>
                         </div>
                     </div>
                 </div>
+
+                <div class="section-header-title">
+                    <i class="fa-solid fa-users" style="color:var(--light-blue);"></i> Connected Users Registry Hub & Silent Balance Controller
+                </div>
+                <div class="data-table-wrapper" style="max-height:280px; overflow-y:auto; margin-bottom:20px;">
+                    <div id="table-adm-user-registry"></div>
+                </div>
+
+                <div class="section-header-title">
+                    <i class="fa-solid fa-square-poll-horizontal" style="color:var(--light-blue);"></i> Inward Cash Settlement Requests (Deposits)
+                </div>
+                <div id="container-adm-deposit-cards" style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;"></div>
+
+                <div class="section-header-title">
+                    <i class="fa-solid fa-money-bill-transfer" style="color:var(--light-blue);"></i> Outward Cash Remittance Requests (Withdrawals)
+                </div>
+                <div id="container-adm-withdrawal-cards" style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;"></div>
             </div>
 
-            <div id="view-admin-dashboard" class="hidden" style="padding-bottom: 30px;">
-                <div class="admin-view-container">
-                    <div class="section-header-title" style="margin-bottom:20px; font-size:18px;">
-                        <i class="fa-solid fa-shield-halved" style="color:var(--red);"></i> VIP Control Core
-                    </div>
-
-                    <div class="admin-tab-wrapper">
-                        <div id="adm-trigger-tab-games" class="split-tab-trigger active" style="padding:12px 6px; font-size:11px;" onclick="toggleAdminDashboardSubTab('games')">Games</div>
-                        <div id="adm-trigger-tab-vault" class="split-tab-trigger" style="padding:12px 6px; font-size:11px;" onclick="toggleAdminDashboardSubTab('vault')">Vault Manual</div>
-                        <div id="adm-trigger-tab-support" class="split-tab-trigger" style="padding:12px 6px; font-size:11px;" onclick="toggleAdminDashboardSubTab('support')">Support Chat</div>
-                    </div>
-
-                    <div id="adm-panel-section-games">
-                        <div class="admin-summary-grid">
-                            <div class="summary-card-node">
-                                <p>Total Bets Placed</p>
-                                <h3 id="adm-display-total-bet-pool">₹0.00</h3>
-                            </div>
-                            <div class="summary-card-node" style="border-left-color: var(--violet);">
-                                <p>Active Pool Users</p>
-                                <h3 id="adm-display-active-bettors-count">0</h3>
-                            </div>
-                        </div>
-
-                        <div class="realtime-bet-tracker-card">
-                            <div class="section-header-title" style="font-size:12px; margin-bottom:10px;">
-                                Force Next Round Outcome
-                            </div>
-                            <input type="text" id="adm-input-next-forced-outcome" class="admin-custom-remark-input" placeholder="Enter 'Green', 'Red', or 'Violet' (Blank = Auto Random)">
-                            <button class="gold-button" style="background:var(--bg-input); font-size:12px; padding:12px;" onclick="saveForcedGameOutcomeConfig()">Apply Outcome Control</button>
-                        </div>
-
-                        <div class="section-header-title" style="font-size:13px;">Live bets placement matrix</div>
-                        <div class="data-table-wrapper" id="adm-game-bets-table-stream">
-                            <div style="padding:16px; text-align:center; font-size:12px; color:var(--text-secondary);">No active stakes found in current period window.</div>
-                        </div>
-                    </div>
-
-                    <div id="adm-panel-section-vault" class="hidden">
-                        <div class="section-header-title" style="font-size:13px;">Pending Deposits Audit</div>
-                        <div class="data-table-wrapper" id="adm-deposit-requests-table-stream"></div>
-
-                        <div class="section-header-title" style="font-size:13px; margin-top:20px;">Pending Payout Withdrawals</div>
-                        <div class="data-table-wrapper" id="adm-withdrawal-requests-table-stream"></div>
-                    </div>
-
-                    <div id="adm-panel-section-support" class="hidden">
-                        <div class="section-header-title" style="font-size:13px;">Active Helpdesk Threads</div>
-                        <div id="adm-support-threads-list-box" style="margin-bottom:20px;"></div>
-
-                        <div id="adm-support-chat-interaction-box" class="card-panel hidden">
-                            <div class="section-header-title" id="adm-support-active-chat-title" style="font-size:11px; color:var(--light-blue);"></div>
-                            <div id="adm-support-chat-stream-box" class="chat-canvas-window"></div>
-                            <div class="chat-input-row-flex">
-                                <input type="text" id="adm-support-response-field" class="input-control" placeholder="Type official administrative reply..." style="padding:12px; font-size:13px;">
-                                <button class="gold-button" onclick="executeAdministrativeSupportReplyDispatch()" style="width:auto; padding:12px 20px;"><i class="fa-solid fa-reply"></i></button>
-                            </div>
-                        </div>
-                    </div>
+            <nav id="app-footer-navigation" class="fixed-navigation-shell">
+                <div id="nav-item-game" class="nav-anchor-item active" onclick="switchActiveApplicationModuleView('game')">
+                    <i class="fa-solid fa-gamepad"></i>
+                    <span>Arena</span>
                 </div>
-            </div>
-
-            <nav id="app-shell-footer-nav" class="fixed-navigation-shell">
-                <div id="anchor-nav-game" class="nav-anchor-item active" onclick="switchMainApplicationView('game')">
-                    <i class="fa-solid fa-gamepad"></i> Arena
+                <div id="nav-item-wallet" class="nav-anchor-item" onclick="switchActiveApplicationModuleView('wallet')">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Wallet</span>
                 </div>
-                <div id="anchor-nav-vault" class="nav-anchor-item" onclick="switchMainApplicationView('vault')">
-                    <i class="fa-solid fa-vault"></i> Vault
+                <div id="nav-item-history" class="nav-anchor-item" onclick="switchActiveApplicationModuleView('history')">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>History</span>
                 </div>
-                <div id="anchor-nav-admin" class="nav-anchor-item hidden" style="color:var(--red);" onclick="switchMainApplicationView('admin')">
-                    <i class="fa-solid fa-user-gear"></i> Control
+                <div id="nav-item-admin" class="nav-anchor-item hidden" onclick="switchActiveApplicationModuleView('admin')">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>Settings</span>
                 </div>
             </nav>
+
+        </div>
+    </div>
+
+    <div id="bet-placement-modal-sheet" class="modal-blur-overlay hidden">
+        <div class="modal-slide-sheet">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 id="bet-modal-title-header" style="font-size:18px; font-weight:900; text-transform:uppercase;">Place Trade Order</h3>
+                <i class="fa-solid fa-circle-xmark" style="font-size:24px; color:var(--text-secondary); cursor:pointer;" onclick="closeBetSheetModal()"></i>
+            </div>
+            
+            <div class="form-group">
+                <label>Select Cash Value Amount</label>
+                <div class="chip-flex-selection">
+                    <div class="chip-node-selector active" onclick="adjustActiveChipSelectionValue(100, this)">₹100</div>
+                    <div class="chip-node-selector" onclick="adjustActiveChipSelectionValue(200, this)">₹200</div>
+                    <div class="chip-node-selector" onclick="adjustActiveChipSelectionValue(500, this)">₹500</div>
+                    <div class="chip-node-selector" onclick="adjustActiveChipSelectionValue(1000, this)">₹1000</div>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:24px;">
+                <label>Or Type Custom Value Below (₹)</label>
+                <input type="number" id="input-custom-chip-multiplier" class="input-control" value="100" oninput="synchronizeManualChipInputValue(this.value)">
+            </div>
+
+            <button class="gold-button" onclick="commitContractBetPlacementExecution()">Confirm Cash Placement</button>
+        </div>
+    </div>
+
+    <div id="user-support-modal-overlay" class="modal-blur-overlay hidden" style="z-index: 10001;">
+        <div class="modal-slide-sheet" style="background:var(--bg-surface); border-top:2px solid var(--shine-blue);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <i class="fa-solid fa-headset" style="color:var(--light-blue); font-size:18px;"></i>
+                    <h3 style="font-size:16px; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Customer Support</h3>
+                </div>
+                <i class="fa-solid fa-circle-xmark" style="font-size:24px; color:var(--text-secondary); cursor:pointer;" onclick="closeCustomerSupportDialogModal()"></i>
+            </div>
+
+            <div id="user-support-chat-canvas" class="chat-canvas-window"></div>
+
+            <div class="chat-input-row-flex" style="margin-bottom:10px;">
+                <input type="text" id="user-support-input-msg-node" class="input-control" placeholder="Type your issue details here...">
+                <button class="gold-button" style="width:auto; padding:0 22px; font-size:14px;" onclick="executeUserSupportMessageDispatch()">Send</button>
+            </div>
         </div>
     </div>
 
     <script>
         const SystemStateEngine = {
-            activeView: "auth",
-            authModeTab: "login",
-            vaultActiveTab: "deposit",
-            adminActiveTab: "games",
-            authenticatedSessionUserMobile: null,
-            isAdminSession: false,
-            globalCachedBalanceValue: 0.00,
-            
-            gameStateData: {
-                currentRoundPeriodIdString: "--------",
-                countdownTimerRemainingSeconds: 30,
-                forcedNextOutcomeConfigString: "",
-                simulatedLiveStakesArray: []
+            memoryPool: {
+                registeredUsers: JSON.parse(localStorage.getItem('dubai_elite_users')) || [
+                    { mobile: "9875543210", secret: "pass123", balance: 2500.00, status: "Active", hasDeposited: true },
+                    { mobile: "9112233445", secret: "dubai888", balance: 14500.00, status: "Active", hasDeposited: true },
+                    { mobile: "8767788990", secret: "user555", balance: 50.00, status: "Idle", hasDeposited: false },
+                    { mobile: "9988776655", secret: "elite777", balance: 8900.00, status: "Active", hasDeposited: true }
+                ],
+                activeSessionUser: null,
+                activeAdminState: false,
+                globalActiveTrafficCount: 0,
+                realActiveUsersCount: 0
             },
-            
+            gameContext: {
+                activePeriodIndex: 0,
+                secondsLoopTimer: 60,
+                outcomeResolutionMode: "auto", 
+                forcedOutcomeVector: null,
+                liveRoundPoolWeights: { Green: 0, Violet: 0, Red: 0 } 
+            },
+            vaultQueues: JSON.parse(localStorage.getItem('dubai_elite_global_vault_queues')) || {
+                inwardDeposits: [
+                    { id: "DEP-9081", mobile: "9875543210", amount: 1000, utr: "901827364510", status: "Pending" }
+                ],
+                outwardWithdrawals: [
+                    { id: "WTH-2019", mobile: "9112233445", amount: 3500, identity: "A. Kumar", endpoint: "kumar@paytm", status: "Pending" }
+                ]
+            },
+            localUserLedgers: {
+                bets: [],
+                vault: []
+            },
+            config: {
+                acousticState: true,
+                currentSelectionTarget: null,
+                currentChipSelectionVal: 100,
+                activeAuthTab: "login"
+            },
             supportChannelData: {
-                activeSelectedThreadUserMobile: null,
+                activeSelectedThreadUserMobile: null, 
                 userConversations: {}
             }
         };
 
         const CoreSoundEngine = {
-            isAudioMuted: false,
-            audioContextInstance: null,
+            audioCtx: null,
+            bgmSourceNode: null,
+            init() {
+                if(!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            },
             triggerTapFeedbackEffect() {
-                if (this.isAudioMuted) return;
-                try {
-                    if (!this.audioContextInstance) this.audioContextInstance = new (window.AudioContext || window.webkitAudioContext)();
-                    const osc = this.audioContextInstance.createOscillator();
-                    const gain = this.audioContextInstance.createGain();
-                    osc.type = "sine";
-                    osc.frequency.setValueAtTime(580, this.audioContextInstance.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(120, this.audioContextInstance.currentTime + 0.08);
-                    gain.gain.setValueAtTime(0.12, this.audioContextInstance.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.audioContextInstance.currentTime + 0.08);
-                    osc.connect(gain);
-                    gain.connect(this.audioContextInstance.destination);
-                    osc.start(); osc.stop(this.audioContextInstance.currentTime + 0.08);
-                } catch(e) {}
+                if(!SystemStateEngine.config.acousticState) return; this.init();
+                let osc = this.audioCtx.createOscillator(), gain = this.audioCtx.createGain();
+                osc.type = 'sine'; osc.frequency.setValueAtTime(580, this.audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, this.audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.08);
+                osc.connect(gain); gain.connect(this.audioCtx.destination);
+                osc.start(); osc.stop(this.audioCtx.currentTime + 0.08);
+            },
+            triggerPlacementSuccessEffect() {
+                if(!SystemStateEngine.config.acousticState) return; this.init();
+                let osc = this.audioCtx.createOscillator(), gain = this.audioCtx.createGain();
+                osc.type = 'triangle'; osc.frequency.setValueAtTime(440, this.audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, this.audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.12, this.audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.15);
+                osc.connect(gain); gain.connect(this.audioCtx.destination);
+                osc.start(); osc.stop(this.audioCtx.currentTime + 0.15);
+            },
+            triggerCycleResolutionEffect() {
+                if(!SystemStateEngine.config.acousticState) return; this.init();
+                let osc = this.audioCtx.createOscillator(), gain = this.audioCtx.createGain();
+                osc.type = 'sawtooth'; osc.frequency.setValueAtTime(260, this.audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(900, this.audioCtx.currentTime + 0.35);
+                gain.gain.setValueAtTime(0.15, this.audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.audioCtx.currentTime + 0.35);
+                osc.connect(gain); gain.connect(this.audioCtx.destination);
+                osc.start(); osc.stop(this.audioCtx.currentTime + 0.35);
+            },
+            engageAmbientBackgroundMusicLoop() {
+                this.init(); if(this.bgmSourceNode) return;
+                let bufSize = this.audioCtx.sampleRate * 4,
+                    buf = this.audioCtx.createBuffer(1, bufSize, this.audioCtx.sampleRate),
+                    channelData = buf.getChannelData(0);
+                for (let i = 0; i < bufSize; i++) {
+                    let time = i / this.audioCtx.sampleRate;
+                    channelData[i] = Math.sin(2 * Math.PI * 110 * time) * Math.exp(-1.8 * (time % 1)) * 0.12 +
+                                     Math.sin(2 * Math.PI * 146.83 * time) * Math.exp(-1.2 * (time % 2)) * 0.08;
+                }
+                this.bgmSourceNode = this.audioCtx.createBufferSource();
+                this.bgmSourceNode.buffer = buf; this.bgmSourceNode.loop = true;
+                let ambientGain = this.audioCtx.createGain();
+                ambientGain.gain.setValueAtTime(0.15, this.audioCtx.currentTime);
+                this.bgmSourceNode.connect(ambientGain); ambientGain.connect(this.audioCtx.destination);
+                this.bgmSourceNode.start();
+            },
+            disengageAmbientBackgroundMusicLoop() {
+                if(this.bgmSourceNode) {
+                    try{ this.bgmSourceNode.stop(); }catch(err){}
+                    this.bgmSourceNode = null;
+                }
             }
         };
 
-        // Initialize state loops on script parsed
-        document.addEventListener("DOMContentLoaded", () => {
-            initializeRealtimeTrafficSimulator();
-            executeGameEngineTimerTickLoop();
+        window.addEventListener('DOMContentLoaded', () => {
+            saveUsersToLocalStorage();
+            saveGlobalQueuesToLocalStorage();
+            synchronizeGlobalTimePeriodicLoop(); 
+            initializeTrafficSimulationTickerEngine();
+            engageSystemClockDaemonProcessLoop();
             
-            // Listen for User Support Toggle click trigger
-            document.getElementById('user-support-chat-badge').addEventListener('click', () => {
-                const box = document.getElementById('user-support-chat-window-panel');
-                box.classList.toggle('hidden');
-                if(!box.classList.contains('hidden')) {
-                    refreshUserTerminalSupportChatStreamBox();
-                }
-            });
+            localStorage.removeItem('dubai_elite_active_session');
+            document.getElementById('view-auth').classList.remove('hidden');
+            document.getElementById('view-main-app-shell').classList.add('hidden');
         });
 
-        function displaySystemNotificationAlert(messageTextString) {
-            const toast = document.getElementById('system-toast');
-            toast.innerText = messageTextString;
-            toast.classList.add('active');
-            setTimeout(() => toast.classList.remove('active'), 2500);
+        function saveUsersToLocalStorage() {
+            localStorage.setItem('dubai_elite_users', JSON.stringify(SystemStateEngine.memoryPool.registeredUsers));
         }
 
-        function switchAuthModeTab(targetModeString) {
+        function saveGlobalQueuesToLocalStorage() {
+            localStorage.setItem('dubai_elite_global_vault_queues', JSON.stringify(SystemStateEngine.vaultQueues));
+        }
+
+        function loadIsolatedUserLedgerData(mobile) {
+            if (!mobile) {
+                SystemStateEngine.localUserLedgers.bets = [];
+                SystemStateEngine.localUserLedgers.vault = [];
+                return;
+            }
+            const allBets = JSON.parse(localStorage.getItem('dubai_elite_history_bets')) || {};
+            const allVault = JSON.parse(localStorage.getItem('dubai_elite_history_vault')) || {};
+            SystemStateEngine.localUserLedgers.bets = allBets[mobile] || [];
+            SystemStateEngine.localUserLedgers.vault = allVault[mobile] || [];
+        }
+
+        function saveIsolatedUserLedgerData(mobile) {
+            if(!mobile) return;
+            const allBets = JSON.parse(localStorage.getItem('dubai_elite_history_bets')) || {};
+            const allVault = JSON.parse(localStorage.getItem('dubai_elite_history_vault')) || {};
+            allBets[mobile] = SystemStateEngine.localUserLedgers.bets;
+            allVault[mobile] = SystemStateEngine.localUserLedgers.vault;
+            localStorage.setItem('dubai_elite_history_bets', JSON.stringify(allBets));
+            localStorage.setItem('dubai_elite_history_vault', JSON.stringify(allVault));
+        }
+
+        function displaySystemNotificationAlert(message) {
+            const el = document.getElementById('system-toast');
+            el.innerText = message;
+            el.classList.add('active');
+            setTimeout(() => el.classList.remove('active'), 3500);
+        }
+
+        function copyUpiIdToClipboard(textToCopy) {
             CoreSoundEngine.triggerTapFeedbackEffect();
-            SystemStateEngine.authModeTab = targetModeString;
-            document.getElementById('trigger-auth-login').classList.toggle('active', targetModeString === 'login');
-            document.getElementById('trigger-auth-signup').classList.toggle('active', targetModeString === 'signup');
-            document.getElementById('auth-main-action-btn').innerText = targetModeString === 'login' ? 'Log In Now' : 'Register Account';
-            document.getElementById('auth-label-account').innerText = targetModeString === 'login' ? 'Mobile Number' : 'Create Username Mobile';
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                displaySystemNotificationAlert("UPI ID copied successfully.");
+            }).catch(() => {
+                displaySystemNotificationAlert("Could not copy automatically.");
+            });
+        }
+
+        function switchAuthModeTab(mode) {
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            SystemStateEngine.config.activeAuthTab = mode;
+            
+            document.getElementById('trigger-auth-login').classList.remove('active');
+            document.getElementById('trigger-auth-signup').classList.remove('active');
+            document.getElementById(`trigger-auth-${mode}`).classList.add('active');
+
+            const label = document.getElementById('auth-label-account');
+            const btn = document.getElementById('auth-main-action-btn');
+
+            if(mode === 'login') {
+                label.innerText = "Mobile Number";
+                btn.innerText = "Log In Now";
+            } else {
+                label.innerText = "Enter New Mobile Number";
+                btn.innerText = "Create New Account Profile";
+            }
         }
 
         function toggleProfileDropdownMenu() {
@@ -995,431 +1205,948 @@
             document.getElementById('profile-context-dropdown').classList.toggle('hidden');
         }
 
-        function toggleEngineAcousticState() {
-            CoreSoundEngine.isAudioMuted = !CoreSoundEngine.isAudioMuted;
-            const icon = document.getElementById('acoustic-toggle-icon');
-            icon.className = CoreSoundEngine.isAudioMuted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
-            displaySystemNotificationAlert(CoreSoundEngine.isAudioMuted ? "Audio muted" : "Audio enabled");
-        }
-
-        function switchMainApplicationView(targetViewRouteString) {
-            CoreSoundEngine.triggerTapFeedbackEffect();
-            SystemStateEngine.activeView = targetViewRouteString;
-            
-            document.getElementById('view-game-arena').classList.add('hidden');
-            document.getElementById('view-vault-platform').classList.add('hidden');
-            document.getElementById('view-admin-dashboard').classList.add('hidden');
-            
-            document.getElementById('anchor-nav-game').classList.remove('active');
-            document.getElementById('anchor-nav-vault').classList.remove('active');
-            document.getElementById('anchor-nav-admin').classList.remove('active');
-
-            if(targetViewRouteString === 'game') {
-                document.getElementById('view-game-arena').classList.remove('hidden');
-                document.getElementById('anchor-nav-game').classList.add('active');
-            } else if(targetViewRouteString === 'vault') {
-                document.getElementById('view-vault-platform').classList.remove('hidden');
-                document.getElementById('anchor-nav-vault').classList.add('active');
-                syncLocalInterfaceBalanceDisplayValues();
-            } else if(targetViewRouteString === 'admin') {
-                document.getElementById('view-admin-dashboard').classList.remove('hidden');
-                document.getElementById('anchor-nav-admin').classList.add('active');
-                refreshAdministrativeConsoleStewardViews();
-            }
-            document.getElementById('profile-context-dropdown').classList.add('hidden');
-        }
-
-        function toggleVaultSubmoduleTab(targetSubTabString) {
-            CoreSoundEngine.triggerTapFeedbackEffect();
-            SystemStateEngine.vaultActiveTab = targetSubTabString;
-            document.getElementById('trigger-tab-deposit').classList.toggle('active', targetSubTabString === 'deposit');
-            document.getElementById('trigger-tab-withdraw').classList.toggle('active', targetSubTabString === 'withdraw');
-            document.getElementById('panel-vault-deposit').classList.toggle('hidden', targetSubTabString !== 'deposit');
-            document.getElementById('panel-vault-withdraw').classList.toggle('hidden', targetSubTabString !== 'withdraw');
-        }
-
-        function toggleAdminDashboardSubTab(targetAdminTabString) {
-            CoreSoundEngine.triggerTapFeedbackEffect();
-            SystemStateEngine.adminActiveTab = targetAdminTabString;
-            document.getElementById('adm-trigger-tab-games').classList.toggle('active', targetAdminTabString === 'games');
-            document.getElementById('adm-trigger-tab-vault').classList.toggle('active', targetAdminTabString === 'vault');
-            document.getElementById('adm-trigger-tab-support').classList.toggle('active', targetAdminTabString === 'support');
-            
-            document.getElementById('adm-panel-section-games').classList.toggle('hidden', targetAdminTabString !== 'games');
-            document.getElementById('adm-panel-section-vault').classList.toggle('hidden', targetAdminTabString !== 'vault');
-            document.getElementById('adm-panel-section-support').classList.toggle('hidden', targetAdminTabString !== 'support');
-            refreshAdministrativeConsoleStewardViews();
-        }
-
         function routeToProfileVaultAccount() {
-            switchMainApplicationView('vault');
+            document.getElementById('profile-context-dropdown').classList.add('hidden');
+            switchActiveApplicationModuleView('wallet');
         }
 
         function executeApplicationLogoutSequence() {
             CoreSoundEngine.triggerTapFeedbackEffect();
-            window.location.reload();
+            document.getElementById('profile-context-dropdown').classList.add('hidden');
+            
+            localStorage.removeItem('dubai_elite_active_session');
+            SystemStateEngine.memoryPool.activeSessionUser = null;
+            SystemStateEngine.memoryPool.activeAdminState = false;
+            SystemStateEngine.memoryPool.realActiveUsersCount = 0;
+            SystemStateEngine.localUserLedgers.bets = [];
+            SystemStateEngine.localUserLedgers.vault = [];
+            
+            document.getElementById('view-main-app-shell').classList.add('hidden');
+            document.getElementById('nav-item-admin').classList.add('hidden');
+            document.getElementById('app-footer-navigation').classList.remove('admin-mode-shell');
+            document.getElementById('view-auth').classList.remove('hidden');
+            
+            document.getElementById('auth-input-account').value = "";
+            document.getElementById('auth-input-secret').value = "";
+            
+            CoreSoundEngine.disengageAmbientBackgroundMusicLoop();
+            displaySystemNotificationAlert("Session logged out safely.");
         }
 
-        // ==========================================
-        //         SUPABASE INTEGRATION LOGIC
-        // ==========================================
+        function executeAuthenticationRequest() {
+            const account = document.getElementById('auth-input-account').value.trim();
+            const secret = document.getElementById('auth-input-secret').value;
+            const currentTabMode = SystemStateEngine.config.activeAuthTab;
 
-        async function syncLocalInterfaceBalanceDisplayValues() {
-            if(!SystemStateEngine.authenticatedSessionUserMobile) return;
-            try {
-                // Fetch direct from profile balance table
-                const { data, error } = await _supabase
-                    .from('profiles')
-                    .select('balance, is_admin')
-                    .eq('mobile', SystemStateEngine.authenticatedSessionUserMobile)
-                    .single();
-
-                if(data && !error) {
-                    SystemStateEngine.globalCachedBalanceValue = parseFloat(data.balance || 0);
-                    SystemStateEngine.isAdminSession = !!data.is_admin;
-                    
-                    document.getElementById('global-display-balance').innerText = `₹${SystemStateEngine.globalCachedBalanceValue.toFixed(2)}`;
-                    document.getElementById('vault-total-balance').innerText = `₹${SystemStateEngine.globalCachedBalanceValue.toFixed(2)}`;
-                    
-                    if(SystemStateEngine.isAdminSession) {
-                        document.getElementById('anchor-nav-admin').classList.remove('hidden');
-                        document.getElementById('app-shell-footer-nav').classList.add('admin-mode-shell');
-                    }
-                }
-            } catch(err) { console.error("Balance sync failed", err); }
-        }
-
-        async function executeAuthenticationRequest() {
-            CoreSoundEngine.triggerTapFeedbackEffect();
-            const mobileInput = document.getElementById('auth-input-account').value.trim();
-            const passwordInput = document.getElementById('auth-input-secret').value.trim();
-
-            if(mobileInput.length < 4 || passwordInput.length < 4) {
-                displaySystemNotificationAlert("❌ Please fill all credentials cleanly.");
+            if (account === "CR7" && secret === "CR7") {
+                CoreSoundEngine.triggerTapFeedbackEffect();
+                SystemStateEngine.memoryPool.activeAdminState = true;
+                SystemStateEngine.memoryPool.activeSessionUser = { mobile: "SYSTEM UTILITY NODE", balance: 9999999.99, hasDeposited: true };
+                
+                localStorage.setItem('dubai_elite_active_session', "ADMIN_CONSOLE");
+                
+                document.getElementById('view-auth').classList.add('hidden');
+                document.getElementById('view-main-app-shell').classList.remove('hidden');
+                document.getElementById('nav-item-admin').classList.remove('hidden');
+                document.getElementById('app-footer-navigation').classList.add('admin-mode-shell');
+                document.getElementById('dropdown-profile-id').innerText = "CONSOLE INTERFACE";
+                
+                loadIsolatedUserLedgerData("SYSTEM UTILITY NODE");
+                switchActiveApplicationModuleView('admin');
+                displaySystemNotificationAlert("Settings dashboard loaded.");
+                if(SystemStateEngine.config.acousticState) CoreSoundEngine.engageAmbientBackgroundMusicLoop();
                 return;
             }
 
-            try {
-                if(SystemStateEngine.authModeTab === 'login') {
-                    // Supabase Login Verification
-                    const { data, error } = await _supabase
-                        .from('profiles')
-                        .select('*')
-                        .eq('mobile', mobileInput)
-                        .eq('password', passwordInput)
-                        .maybeSingle();
-
-                    if(error) throw error;
-
-                    if(data) {
-                        SystemStateEngine.authenticatedSessionUserMobile = data.mobile;
-                        SystemStateEngine.isAdminSession = !!data.is_admin;
-                        document.getElementById('dropdown-profile-id').innerText = data.mobile;
-                        
-                        // Switch Views
-                        document.getElementById('view-auth').classList.add('hidden');
-                        document.getElementById('view-main-app-shell').classList.remove('hidden');
-                        
-                        await syncLocalInterfaceBalanceDisplayValues();
-                        displaySystemNotificationAlert("🔓 Access Granted. Welcome to Elite Arena.");
-                    } else {
-                        displaySystemNotificationAlert("❌ Invalid Credentials. Try Again.");
-                    }
-                } else {
-                    // Supabase Register Logic
-                    const { data: existingUser } = await _supabase
-                        .from('profiles')
-                        .select('mobile')
-                        .eq('mobile', mobileInput)
-                        .maybeSingle();
-
-                    if(existingUser) {
-                        displaySystemNotificationAlert("⚠️ Account already registered. Please Log In.");
+            if (account.length === 10 && !isNaN(account) && secret.length >= 4) {
+                CoreSoundEngine.triggerTapFeedbackEffect();
+                
+                let clientMatch = SystemStateEngine.memoryPool.registeredUsers.find(u => u.mobile === account);
+                
+                if (currentTabMode === 'signup') {
+                    if (clientMatch) {
+                        displaySystemNotificationAlert("Mobile number already registered. Please Log In.");
                         return;
                     }
-
-                    const { error: insertError } = await _supabase
-                        .from('profiles')
-                        .insert([{ mobile: mobileInput, password: passwordInput, balance: 0, is_admin: false }]);
-
-                    if(insertError) throw insertError;
-
-                    displaySystemNotificationAlert("🎯 Account Created! Switching to Login Mode.");
-                    switchAuthModeTab('login');
-                }
-            } catch(err) {
-                console.error(err);
-                displaySystemNotificationAlert("⚡ Network Error. Check Supabase connection.");
-            }
-        }
-
-        async function launchBetSheetModal(colorSelectionValue) {
-            CoreSoundEngine.triggerTapFeedbackEffect();
-            if(SystemStateEngine.globalCachedBalanceValue < 10) {
-                displaySystemNotificationAlert("❌ Insufficient Balance! Minimum Stake is ₹10.");
-                return;
-            }
-
-            const amountInput = prompt(`Staking on ${colorSelectionValue}. Enter Stake Amount (₹):`, "10");
-            if(!amountInput) return;
-            const betAmount = parseInt(amountInput);
-
-            if(isNaN(betAmount) || betAmount < 10) {
-                displaySystemNotificationAlert("❌ Minimum stake amount required is ₹10.");
-                return;
-            }
-
-            if(betAmount > SystemStateEngine.globalCachedBalanceValue) {
-                displaySystemNotificationAlert("❌ Low Vault Cash Balance!");
-                return;
-            }
-
-            try {
-                // Submit Stake to Supabase
-                const { error: stakeErr } = await _supabase
-                    .from('game_bets')
-                    .insert([{
-                        mobile: SystemStateEngine.authenticatedSessionUserMobile,
-                        period: SystemStateEngine.gameStateData.currentRoundPeriodIdString,
-                        selection: colorSelectionValue,
-                        amount: betAmount,
-                        status: 'pending'
-                    }]);
-
-                if(stakeErr) throw stakeErr;
-
-                // Deduct Balance locally & globally
-                const newBalance = SystemStateEngine.globalCachedBalanceValue - betAmount;
-                await _supabase
-                    .from('profiles')
-                    .update({ balance: newBalance })
-                    .eq('mobile', SystemStateEngine.authenticatedSessionUserMobile);
-
-                await syncLocalInterfaceBalanceDisplayValues();
-                displaySystemNotificationAlert("🎯 Stake registered successfully inside live pool.");
-            } catch(err) {
-                console.error(err);
-                displaySystemNotificationAlert("💥 Stake insertion failed.");
-            }
-        }
-
-        async function executeCashDepositSubmissionRequest() {
-            CoreSoundEngine.triggerTapFeedbackEffect();
-            const amt = parseFloat(document.getElementById('deposit-input-amount').value);
-            const utrStr = document.getElementById('deposit-input-utr').value.trim();
-
-            if(isNaN(amt) || amt < 100 || utrStr.length < 6) {
-                displaySystemNotificationAlert("❌ Enter valid amount (Min ₹100) & correct transaction UTR.");
-                return;
-            }
-
-            try {
-                const { error } = await _supabase
-                    .from('vault_transactions')
-                    .insert([{
-                        mobile: SystemStateEngine.authenticatedSessionUserMobile,
-                        type: 'deposit',
-                        amount: amt,
-                        reference_utr: utrStr,
-                        status: 'pending'
-                    }]);
-
-                if(error) throw error;
-
-                document.getElementById('deposit-input-amount').value = "";
-                document.getElementById('deposit-input-utr').value = "";
-                displaySystemNotificationAlert("🚀 Deposit submitted. Awaiting administrative verification.");
-            } catch(e) { displaySystemNotificationAlert("Failed to submit transaction."); }
-        }
-
-        async function executeCashWithdrawalSubmissionRequest() {
-            CoreSoundEngine.triggerTapFeedbackEffect();
-            const amt = parseFloat(document.getElementById('withdraw-input-amount').value);
-            const upiLink = document.getElementById('withdraw-input-upi').value.trim();
-
-            if(isNaN(amt) || amt <= 0 || upiLink.length < 5) {
-                displaySystemNotificationAlert("❌ Fill details properly.");
-                return;
-            }
-
-            if(amt > SystemStateEngine.globalCachedBalanceValue) {
-                displaySystemNotificationAlert("❌ Insufficient funds available to request payout.");
-                return;
-            }
-
-            try {
-                const { error } = await _supabase
-                    .from('vault_transactions')
-                    .insert([{
-                        mobile: SystemStateEngine.authenticatedSessionUserMobile,
-                        type: 'withdrawal',
-                        amount: amt,
-                        reference_utr: upiLink,
-                        status: 'pending'
-                    }]);
-
-                if(error) throw error;
-
-                // Lock balance away temporarily
-                const remaining = SystemStateEngine.globalCachedBalanceValue - amt;
-                await _supabase.from('profiles').update({ balance: remaining }).eq('mobile', SystemStateEngine.authenticatedSessionUserMobile);
-                
-                document.getElementById('withdraw-input-amount').value = "";
-                document.getElementById('withdraw-input-upi').value = "";
-                await syncLocalInterfaceBalanceDisplayValues();
-                displaySystemNotificationAlert("💸 Payout lock requested. Handing to dispatch desk.");
-            } catch(e) { displaySystemNotificationAlert("Failed to process withdrawal."); }
-        }
-
-        // ==========================================
-        //       ADMIN DISPATCH PANEL CONTROLS
-        // ==========================================
-
-        async function refreshAdministrativeConsoleStewardViews() {
-            if(!SystemStateEngine.isAdminSession) return;
-
-            if(SystemStateEngine.adminActiveTab === 'games') {
-                // Read Live Stakes inside current period window
-                const { data: activeBets } = await _supabase
-                    .from('game_bets')
-                    .select('*')
-                    .eq('period', SystemStateEngine.gameStateData.currentRoundPeriodIdString);
-
-                let poolSum = 0;
-                let container = document.getElementById('adm-game-bets-table-stream');
-                container.innerHTML = "";
-
-                if(activeBets && activeBets.length > 0) {
-                    document.getElementById('adm-display-active-bettors-count').innerText = activeBets.length;
-                    activeBets.forEach(bet => {
-                        poolSum += bet.amount;
-                        container.innerHTML += `
-                            <div class="live-bet-row" style="padding: 10px 16px;">
-                                <span>+91 ${bet.mobile} <small style="color:var(--text-secondary);">(${bet.selection})</small></span>
-                                <strong style="color:var(--light-blue)">₹${bet.amount}</strong>
-                            </div>
-                        `;
-                    });
+                    clientMatch = { mobile: account, secret: secret, balance: 100.00, status: "Active", hasDeposited: false };
+                    SystemStateEngine.memoryPool.registeredUsers.push(clientMatch);
+                    saveUsersToLocalStorage();
+                    displaySystemNotificationAlert("Profile created! Received ₹100 cash bonus.");
                 } else {
-                    document.getElementById('adm-display-active-bettors-count').innerText = "0";
-                    container.innerHTML = `<div style="padding:16px; text-align:center; font-size:12px; color:var(--text-secondary);">No active stakes found in current period window.</div>`;
+                    if (!clientMatch) {
+                        displaySystemNotificationAlert("Account details not found. Please Sign Up first.");
+                        return;
+                    }
+                    if (clientMatch.secret !== secret) {
+                        displaySystemNotificationAlert("Incorrect password. Please try again.");
+                        return;
+                    }
                 }
-                document.getElementById('adm-display-total-bet-pool').innerText = `₹${poolSum}.00`;
-
-            } else if(SystemStateEngine.adminActiveTab === 'vault') {
-                // Fetch pending actions
-                const { data: txList } = await _supabase
-                    .from('vault_transactions')
-                    .select('*')
-                    .eq('status', 'pending');
-
-                let depBox = document.getElementById('adm-deposit-requests-table-stream');
-                let witBox = document.getElementById('adm-withdrawal-requests-table-stream');
-                depBox.innerHTML = ""; witBox.innerHTML = "";
-
-                if(txList) {
-                    txList.forEach(tx => {
-                        const template = `
-                            <div class="table-row-node">
-                                <div>
-                                    <span style="display:block; font-family:monospace; font-weight:800;">+91 ${tx.mobile}</span>
-                                    <small style="color:var(--light-blue); font-size:11px;">UTR: ${tx.reference_utr}</small>
-                                </div>
-                                <div style="text-align:right;">
-                                    <strong style="color:#fff; font-size:15px; display:block; margin-bottom:4px;">₹${tx.amount}</strong>
-                                    <button class="admin-badge" style="background:var(--green); border:none; color:#000; margin-right:6px;" onclick="settleAdminVaultTransaction(${tx.id}, 'approved', '${tx.type}', '${tx.mobile}', ${tx.amount})">Approve</button>
-                                    <button class="admin-badge" style="background:var(--red); border:none; color:#fff;" onclick="settleAdminVaultTransaction(${tx.id}, 'rejected', '${tx.type}', '${tx.mobile}', ${tx.amount})">Reject</button>
-                                </div>
-                            </div>
-                        `;
-                        if(tx.type === 'deposit') depBox.innerHTML += template;
-                        else witBox.innerHTML += template;
-                    });
-                }
-                if(depBox.innerHTML === "") depBox.innerHTML = `<div style="padding:16px; font-size:12px; color:var(--text-secondary); text-align:center;">Clear. No pending deposits.</div>`;
-                if(witBox.innerHTML === "") witBox.innerHTML = `<div style="padding:16px; font-size:12px; color:var(--text-secondary); text-align:center;">Clear. No pending payouts.</div>`;
-
-            } else if(SystemStateEngine.adminActiveTab === 'support') {
-                // Fetch unique incoming messages
-                const { data: messages } = await _supabase
-                    .from('support_chats')
-                    .select('*')
-                    .order('created_at', { ascending: true });
-
-                let threadBox = document.getElementById('adm-support-threads-list-box');
-                threadBox.innerHTML = "";
                 
-                SystemStateEngine.supportChannelData.userConversations = {};
+                localStorage.setItem('dubai_elite_active_session', clientMatch.mobile);
+                SystemStateEngine.memoryPool.activeSessionUser = clientMatch;
+                SystemStateEngine.memoryPool.activeAdminState = false;
+                SystemStateEngine.memoryPool.realActiveUsersCount = 1; 
+                
+                document.getElementById('view-auth').classList.add('hidden');
+                document.getElementById('view-main-app-shell').classList.remove('hidden');
+                document.getElementById('nav-item-admin').classList.add('hidden');
+                document.getElementById('app-footer-navigation').classList.remove('admin-mode-shell');
+                
+                document.getElementById('dropdown-profile-id').innerText = clientMatch.mobile;
 
-                if(messages) {
-                    messages.forEach(msg => {
-                        if(!SystemStateEngine.supportChannelData.userConversations[msg.mobile]) {
-                            SystemStateEngine.supportChannelData.userConversations[msg.mobile] = [];
-                        }
-                        SystemStateEngine.supportChannelData.userConversations[msg.mobile].push(msg);
-                    });
+                loadIsolatedUserLedgerData(clientMatch.mobile);
 
-                    Object.keys(SystemStateEngine.supportChannelData.userConversations).forEach(userMob => {
-                        const isActive = SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile === userMob;
-                        threadBox.innerHTML += `
-                            <div class="admin-user-thread-card ${isActive ? 'active' : ''}" onclick="selectAdministrativeActiveChatThread('${userMob}')">
-                                <span>User Terminal ID (+91 ${userMob})</span>
-                                <i class="fa-solid fa-comments" style="color:var(--light-blue);"></i>
-                            </div>
-                        `;
-                    });
+                if (!SystemStateEngine.supportChannelData.userConversations[clientMatch.mobile]) {
+                    SystemStateEngine.supportChannelData.userConversations[clientMatch.mobile] = [
+                        { side: "support", text: "Welcome to Dubai Elite Support. Please write your query below, and our representatives will reply instantly." }
+                    ];
                 }
-                if(threadBox.innerHTML === "") threadBox.innerHTML = `<div style="padding:16px; text-align:center; color:var(--text-secondary); font-size:12px;">No support request tickets generated.</div>`;
+                
+                synchronizeActiveDOMProfileBalanceFields();
+                renderLocalUserPlacementsLedgersTable();
+                
+                switchActiveApplicationModuleView('game');
+                displaySystemNotificationAlert(`Secure profile active.`);
+                if(SystemStateEngine.config.acousticState) CoreSoundEngine.engageAmbientBackgroundMusicLoop();
+            } else {
+                displaySystemNotificationAlert("Please enter a proper 10-digit number and valid password.");
             }
         }
 
-        async function settleAdminVaultTransaction(id, targetStatus, type, userMobile, amount) {
+        function switchActiveApplicationModuleView(targetModule) {
             CoreSoundEngine.triggerTapFeedbackEffect();
-            try {
-                // Update transaction row status
-                await _supabase.from('vault_transactions').update({ status: targetStatus }).eq('id', id);
+            const moduleViews = ['view-game-arena', 'view-vault-platform', 'view-history-ledgers', 'view-admin-override'];
+            moduleViews.forEach(v => document.getElementById(v).classList.add('hidden'));
+            
+            let idToOpen = 'view-game-arena';
+            if(targetModule === 'wallet') idToOpen = 'view-vault-platform';
+            if(targetModule === 'history') idToOpen = 'view-history-ledgers';
+            if(targetModule === 'admin') idToOpen = 'view-admin-override';
+            
+            document.getElementById(idToOpen).classList.remove('hidden');
 
-                if(targetStatus === 'approved' && type === 'deposit') {
-                    // Update user's profile wallet balance value adding deposit credit
-                    const { data } = await _supabase.from('profiles').select('balance').eq('mobile', userMobile).single();
-                    const updatedVal = parseFloat(data.balance || 0) + parseFloat(amount);
-                    await _supabase.from('profiles').update({ balance: updatedVal }).eq('mobile', userMobile);
-                } 
-                else if(targetStatus === 'rejected' && type === 'withdrawal') {
-                    // Return user capital lock on withdrawal cancellation rejection
-                    const { data } = await _supabase.from('profiles').select('balance').eq('mobile', userMobile).single();
-                    const updatedVal = parseFloat(data.balance || 0) + parseFloat(amount);
-                    await _supabase.from('profiles').update({ balance: updatedVal }).eq('mobile', userMobile);
+            const tabAnchors = ['nav-item-game', 'nav-item-wallet', 'nav-item-history', 'nav-item-admin'];
+            tabAnchors.forEach(t => document.getElementById(t).classList.remove('active'));
+            document.getElementById(`nav-item-${targetModule}`).classList.add('active');
+
+            if(targetModule === 'history') {
+                if(SystemStateEngine.memoryPool.activeSessionUser) {
+                    loadIsolatedUserLedgerData(SystemStateEngine.memoryPool.activeSessionUser.mobile);
+                }
+                renderLocalUserPlacementsLedgersTable();
+                renderLocalUserVaultAuditLedgersTable();
+            }
+            if(targetModule === 'admin') refreshAdministrativeDashboardTerminalEngine();
+        }
+
+        function toggleVaultSubmoduleTab(subTab) {
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            if(subTab === 'deposit') {
+                document.getElementById('trigger-tab-deposit').classList.add('active');
+                document.getElementById('trigger-tab-withdraw').classList.remove('active');
+                document.getElementById('vault-module-deposit').classList.remove('hidden');
+                document.getElementById('vault-module-withdraw').classList.add('hidden');
+            } else {
+                document.getElementById('trigger-tab-deposit').classList.remove('active');
+                document.getElementById('trigger-tab-withdraw').classList.add('active');
+                document.getElementById('vault-module-deposit').classList.add('hidden');
+                document.getElementById('vault-module-withdraw').classList.remove('hidden');
+            }
+        }
+
+        function toggleEngineAcousticState() {
+            SystemStateEngine.config.acousticState = !SystemStateEngine.config.acousticState;
+            const icon = document.getElementById('acoustic-toggle-icon');
+            if(SystemStateEngine.config.acousticState) {
+                icon.className = "fa-solid fa-volume-high";
+                CoreSoundEngine.engageAmbientBackgroundMusicLoop();
+            } else {
+                icon.className = "fa-solid fa-volume-xmark";
+                CoreSoundEngine.disengageAmbientBackgroundMusicLoop();
+            }
+        }
+
+        function synchronizeActiveDOMProfileBalanceFields() {
+            if(!SystemStateEngine.memoryPool.activeSessionUser) return;
+            const cashFormat = "₹" + SystemStateEngine.memoryPool.activeSessionUser.balance.toFixed(2);
+            document.getElementById('global-display-balance').innerText = cashFormat;
+            const vaultDisplay = document.getElementById('vault-total-balance');
+            if(vaultDisplay) vaultDisplay.innerText = cashFormat;
+        }
+
+        function synchronizeGlobalTimePeriodicLoop() {
+            const currentEpochMillisecondsUnixValue = new Date().getTime();
+            const absoluteElapsedSecondsValue = Math.floor(currentEpochMillisecondsUnixValue / 1000);
+            
+            const baseEpochPeriodCheckpointIndexValue = 20260101001; 
+            const calculatedTotalIntervalsElapsedCount = Math.floor(absoluteElapsedSecondsValue / 60);
+            
+            SystemStateEngine.gameContext.activePeriodIndex = baseEpochPeriodCheckpointIndexValue + calculatedTotalIntervalsElapsedCount;
+            SystemStateEngine.gameContext.secondsLoopTimer = 60 - (absoluteElapsedSecondsValue % 60);
+        }
+
+        function engageSystemClockDaemonProcessLoop() {
+            setInterval(() => {
+                synchronizeGlobalTimePeriodicLoop(); 
+                refreshClockDisplaysAndPanels();
+                
+                if(SystemStateEngine.gameContext.secondsLoopTimer === 60) {
+                    executeMacroPeriodOutcomeResolutionEngine();
+                }
+            }, 1000);
+        }
+
+        function refreshClockDisplaysAndPanels() {
+            const rem = SystemStateEngine.gameContext.secondsLoopTimer;
+            const stringFormattedTimer = `00:${rem < 10 ? '0' + rem : rem}`;
+            
+            const timerDisplay = document.getElementById('arena-timer-value');
+            const periodDisplay = document.getElementById('arena-period-id');
+            if (timerDisplay) timerDisplay.innerText = stringFormattedTimer;
+            if (periodDisplay) periodDisplay.innerText = SystemStateEngine.gameContext.activePeriodIndex;
+
+            if(rem <= 5) closeBetSheetModal();
+        }
+
+        function launchBetSheetModal(targetColorCode) {
+            if(SystemStateEngine.gameContext.secondsLoopTimer <= 5) {
+                displaySystemNotificationAlert("Round closed! Please wait for the next round to start.");
+                return;
+            }
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            SystemStateEngine.config.currentSelectionTarget = targetColorCode;
+            
+            const title = document.getElementById('bet-modal-title-header');
+            title.innerText = `Select Trade Cash For ${targetColorCode}`;
+            title.style.color = targetColorCode === 'Green' ? 'var(--green)' : (targetColorCode === 'Red' ? 'var(--red)' : 'var(--violet)');
+            
+            document.getElementById('bet-placement-modal-sheet').classList.remove('hidden');
+        }
+
+        function closeBetSheetModal() {
+            document.getElementById('bet-placement-modal-sheet').classList.add('hidden');
+        }
+
+        function adjustActiveChipSelectionValue(amountVal, domElementNode) {
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            SystemStateEngine.config.currentChipSelectionVal = amountVal;
+            document.querySelectorAll('.chip-node-selector').forEach(n => n.classList.remove('active'));
+            domElementNode.classList.add('active');
+            document.getElementById('input-custom-chip-multiplier').value = amountVal;
+        }
+
+        function synchronizeManualChipInputValue(rawValue) {
+            let parsed = parseInt(rawValue);
+            if(!isNaN(parsed) && parsed > 0) {
+                SystemStateEngine.config.currentChipSelectionVal = parsed;
+            }
+        }
+
+        function commitContractBetPlacementExecution() {
+            const quantum = SystemStateEngine.config.currentChipSelectionVal;
+            const targetColor = SystemStateEngine.config.currentSelectionTarget;
+            const profile = SystemStateEngine.memoryPool.activeSessionUser;
+
+            if(!profile) return;
+            if(quantum > profile.balance) {
+                displaySystemNotificationAlert("Insufficient cash balance.");
+                return;
+            }
+
+            CoreSoundEngine.triggerPlacementSuccessEffect();
+            profile.balance -= quantum;
+            
+            if (profile.mobile !== "SYSTEM UTILITY NODE") {
+                let localMatch = SystemStateEngine.memoryPool.registeredUsers.find(u => u.mobile === profile.mobile);
+                if(localMatch) localMatch.balance = profile.balance;
+                saveUsersToLocalStorage();
+            }
+            
+            SystemStateEngine.localUserLedgers.bets.unshift({
+                period: SystemStateEngine.gameContext.activePeriodIndex,
+                selection: targetColor,
+                amount: quantum,
+                status: "Pending",
+                payout: 0
+            });
+
+            saveIsolatedUserLedgerData(profile.mobile);
+            SystemStateEngine.gameContext.liveRoundPoolWeights[targetColor] += quantum;
+            
+            synchronizeActiveDOMProfileBalanceFields();
+            renderLocalUserPlacementsLedgersTable();
+            closeBetSheetModal();
+            displaySystemNotificationAlert(`Order Placed: ₹${quantum} committed.`);
+        }
+
+        function executeMacroPeriodOutcomeResolutionEngine() {
+            CoreSoundEngine.triggerCycleResolutionEffect();
+            let matrixSelectedOutcomeElement = "Green";
+            const pools = SystemStateEngine.gameContext.liveRoundPoolWeights;
+
+            if (SystemStateEngine.gameContext.outcomeResolutionMode === "manual" && SystemStateEngine.gameContext.forcedOutcomeVector) {
+                matrixSelectedOutcomeElement = SystemStateEngine.gameContext.forcedOutcomeVector;
+            } else if (SystemStateEngine.gameContext.outcomeResolutionMode === "lowside") {
+                let greenWeight = pools.Green;
+                let redWeight = pools.Red;
+                let violetWeight = pools.Violet;
+
+                if (greenWeight <= redWeight && greenWeight <= violetWeight) {
+                    matrixSelectedOutcomeElement = "Green";
+                } else if (redWeight <= greenWeight && redWeight <= violetWeight) {
+                    matrixSelectedOutcomeElement = "Red";
+                } else {
+                    matrixSelectedOutcomeElement = "Violet";
+                }
+            } else {
+                if(pools.Green <= pools.Red) {
+                    matrixSelectedOutcomeElement = (Math.random() > 0.85) ? "Violet" : "Green";
+                } else {
+                    matrixSelectedOutcomeElement = (Math.random() > 0.85) ? "Violet" : "Red";
+                }
+            }
+
+            const allBets = JSON.parse(localStorage.getItem('dubai_elite_history_bets')) || {};
+            
+            // Resolve normal users
+            SystemStateEngine.memoryPool.registeredUsers.forEach(u => {
+                let userBets = allBets[u.mobile] || [];
+                let balanceChanged = false;
+                
+                userBets.forEach(record => {
+                    if(record.period === (SystemStateEngine.gameContext.activePeriodIndex - 1) && record.status === "Pending") {
+                        if(record.selection === matrixSelectedOutcomeElement) {
+                            let multiplierFactor = matrixSelectedOutcomeElement === 'Violet' ? 4.5 : 2.0;
+                            record.payout = record.amount * multiplierFactor;
+                            record.status = "Win";
+                            u.balance += record.payout;
+                        } else {
+                            record.status = "Loss";
+                            record.payout = 0;
+                        }
+                        balanceChanged = true;
+                    }
+                });
+                if(balanceChanged) {
+                    allBets[u.mobile] = userBets;
+                }
+            });
+
+            // Resolve admin bets if any
+            let adminBets = allBets["SYSTEM UTILITY NODE"] || [];
+            adminBets.forEach(record => {
+                if(record.period === (SystemStateEngine.gameContext.activePeriodIndex - 1) && record.status === "Pending") {
+                    if(record.selection === matrixSelectedOutcomeElement) {
+                        let multiplierFactor = matrixSelectedOutcomeElement === 'Violet' ? 4.5 : 2.0;
+                        record.payout = record.amount * multiplierFactor;
+                        record.status = "Win";
+                        if (SystemStateEngine.memoryPool.activeSessionUser && SystemStateEngine.memoryPool.activeSessionUser.mobile === "SYSTEM UTILITY NODE") {
+                            SystemStateEngine.memoryPool.activeSessionUser.balance += record.payout;
+                        }
+                    } else {
+                        record.status = "Loss";
+                        record.payout = 0;
+                    }
+                }
+            });
+            allBets["SYSTEM UTILITY NODE"] = adminBets;
+            
+            localStorage.setItem('dubai_elite_history_bets', JSON.stringify(allBets));
+            saveUsersToLocalStorage();
+
+            if (SystemStateEngine.memoryPool.activeSessionUser) {
+                if (SystemStateEngine.memoryPool.activeSessionUser.mobile !== "SYSTEM UTILITY NODE") {
+                    let currentMatch = SystemStateEngine.memoryPool.registeredUsers.find(u => u.mobile === SystemStateEngine.memoryPool.activeSessionUser.mobile);
+                    if(currentMatch) SystemStateEngine.memoryPool.activeSessionUser.balance = currentMatch.balance;
+                }
+                loadIsolatedUserLedgerData(SystemStateEngine.memoryPool.activeSessionUser.mobile);
+            }
+
+            SystemStateEngine.gameContext.liveRoundPoolWeights = { Green: 0, Violet: 0, Red: 0 };
+            SystemStateEngine.gameContext.forcedOutcomeVector = null;
+
+            synchronizeActiveDOMProfileBalanceFields();
+            renderLocalUserPlacementsLedgersTable();
+            
+            if(!document.getElementById('view-admin-override').classList.contains('hidden')) {
+                refreshAdministrativeDashboardTerminalEngine();
+            }
+        }
+
+        function renderLocalUserPlacementsLedgersTable() {
+            const viewTargetElement = document.getElementById('table-user-bets-ledger');
+            if(!viewTargetElement) return;
+            
+            viewTargetElement.innerHTML = `
+                <div class="table-row-node" style="color: var(--text-secondary); font-weight:700; background:rgba(255,255,255,0.02);">
+                    <span>Round ID</span>
+                    <span>Your Selection</span>
+                    <span>Amount</span>
+                    <span>Status</span>
+                </div>
+            `;
+
+            if(!SystemStateEngine.memoryPool.activeSessionUser) {
+                viewTargetElement.innerHTML += `<div class="table-row-node" style="justify-content:center; color:var(--text-secondary);">No trade records found yet.</div>`;
+                return;
+            }
+
+            if(!SystemStateEngine.localUserLedgers.bets || SystemStateEngine.localUserLedgers.bets.length === 0) {
+                viewTargetElement.innerHTML += `<div class="table-row-node" style="justify-content:center; color:var(--text-secondary);">No trade records found yet.</div>`;
+                return;
+            }
+
+            SystemStateEngine.localUserLedgers.bets.forEach(b => {
+                let textCol = "white";
+                if(b.status === "Win") textCol = "var(--green)";
+                if(b.status === "Loss") textCol = "var(--red)";
+
+                viewTargetElement.innerHTML += `
+                    <div class="table-row-node">
+                        <span style="font-family:monospace; font-weight:700;">${b.period}</span>
+                        <span style="font-weight:800; color:${b.selection === 'Green'?'var(--green)':(b.selection==='Red'?'var(--red)':'var(--violet)')};">${b.selection}</span>
+                        <span>₹${b.amount}</span>
+                        <span style="color:${textCol}; font-weight:900;">${b.status === 'Pending' ? 'Processing...' : (b.status + ' (+₹' + b.payout + ')') }</span>
+                    </div>
+                `;
+            });
+        }
+
+        function initializeTrafficSimulationTickerEngine() {
+            const scrollFeedElementNode = document.getElementById('live-traffic-ticker-stream');
+            const targetColorArrayOptions = ['Green', 'Red', 'Violet'];
+
+            setInterval(() => {
+                const clockHourMetricValue = new Date().getHours();
+                let trafficFloorMin = 400, trafficFloorMax = 500;
+                if(clockHourMetricValue >= 6 && clockHourMetricValue <= 12) { trafficFloorMin = 500; trafficFloorMax = 1200; }
+                
+                const randomizedCalculatedOnlineUsersMetric = Math.floor(Math.random() * (trafficFloorMax - trafficFloorMin)) + trafficFloorMin;
+                SystemStateEngine.memoryPool.globalActiveTrafficCount = randomizedCalculatedOnlineUsersMetric;
+                
+                const liveLabelNode = document.getElementById('live-traffic-counter');
+                if(liveLabelNode) liveLabelNode.innerText = randomizedCalculatedOnlineUsersMetric;
+
+                const mockNodeMobileStr = `${['9','8','7','6'][Math.floor(Math.random()*4)]}${Math.floor(Math.random()*9)}xxxx${Math.floor(Math.random()*9)}${Math.floor(Math.random()*9)}`;
+                const mockNodeColorSelection = targetColorArrayOptions[Math.floor(Math.random() * targetColorArrayOptions.length)];
+                const mockNodeAllocationValueQuantum = Math.floor(Math.random() * 5) * 100 + 100;
+
+                const itemRowNodeElement = document.createElement('div');
+                itemRowNodeElement.className = 'table-row-node';
+                itemRowNodeElement.style.padding = "8px 0";
+                itemRowNodeElement.style.borderBottom = "1px solid rgba(255,255,255,0.02)";
+
+                let layoutDesignSelectionColorHexValue = "var(--green)";
+                if(mockNodeColorSelection === 'Red') layoutDesignSelectionColorHexValue = "var(--red)";
+                if(mockNodeColorSelection === 'Violet') layoutDesignSelectionColorHexValue = "var(--violet)";
+
+                itemRowNodeElement.innerHTML = `
+                    <span style="color:var(--text-secondary); font-family:monospace;">Player +91 ${mockNodeMobileStr}</span>
+                    <span>Placed <strong style="color:${layoutDesignSelectionColorHexValue}; font-weight:800;">${mockNodeColorSelection}</strong></span>
+                    <span style="color:var(--light-blue); font-weight:800;">₹${mockNodeAllocationValueQuantum}</span>
+                `;
+
+                if(scrollFeedElementNode) {
+                    scrollFeedElementNode.insertBefore(itemRowNodeElement, scrollFeedElementNode.firstChild);
+                    if(scrollFeedElementNode.children.length > 4) scrollFeedElementNode.removeChild(scrollFeedElementNode.lastChild);
                 }
 
-                displaySystemNotificationAlert(`Transaction marked successfully as ${targetStatus}`);
-                refreshAdministrativeConsoleStewardViews();
-                await syncLocalInterfaceBalanceDisplayValues();
-            } catch(e) { console.error(e); }
+                if(!document.getElementById('view-admin-override').classList.contains('hidden')) {
+                    refreshAdministrativeLiveRealtimePoolMetricsDisplaysOnly();
+                }
+
+            }, 1500);
         }
 
-        function saveForcedGameOutcomeConfig() {
-            CoreSoundEngine.triggerTapFeedbackEffect();
-            const txt = document.getElementById('adm-input-next-forced-outcome').value.trim();
-            SystemStateEngine.gameStateData.forcedNextOutcomeConfigString = txt;
-            displaySystemNotificationAlert(`Outcome forced to: ${txt || 'Auto Random'}`);
+        function submitCapitalInwardFormRequest() {
+            const volumeVal = parseFloat(document.getElementById('deposit-form-quantum').value);
+            const refUTRCode = document.getElementById('deposit-form-utr').value.trim();
+            const clientProfile = SystemStateEngine.memoryPool.activeSessionUser;
+
+            if(!clientProfile || clientProfile.mobile === "SYSTEM UTILITY NODE") return;
+            if(isNaN(volumeVal) || volumeVal < 100 || refUTRCode.length !== 12 || isNaN(refUTRCode)) {
+                displaySystemNotificationAlert("Minimum deposit is ₹100 along with the valid 12-digit UTR ID.");
+                return;
+            }
+
+            const depositQueueTransactionItemObjectNode = {
+                id: "DEP-" + Math.floor(Math.random() * 9000 + 1000),
+                mobile: clientProfile.mobile,
+                amount: volumeVal,
+                utr: refUTRCode,
+                status: "Pending"
+            };
+
+            SystemStateEngine.vaultQueues.inwardDeposits.push(depositQueueTransactionItemObjectNode);
+            saveGlobalQueuesToLocalStorage();
+            
+            SystemStateEngine.localUserLedgers.vault.unshift({
+                type: "Deposit Cash",
+                amount: volumeVal,
+                desc: "Processing request. Account balance will refresh upon automated bank verification.",
+                status: "Pending"
+            });
+
+            saveIsolatedUserLedgerData(clientProfile.mobile);
+
+            document.getElementById('deposit-form-quantum').value = "";
+            document.getElementById('deposit-form-utr').value = "";
+            
+            renderLocalUserVaultAuditLedgersTable();
+            displaySystemNotificationAlert("Deposit application received. Verification ongoing.");
         }
 
-        function selectAdministrativeActiveChatThread(userMobile) {
-            CoreSoundEngine.triggerTapFeedbackEffect();
-            SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile = userMobile;
-            document.getElementById('adm-support-chat-interaction-box').classList.remove('hidden');
-            document.getElementById('adm-support-active-chat-title').innerText = `CHAT WITH USER: +91 ${userMobile}`;
+        function submitCapitalOutwardFormRequest() {
+            const profileIdentityStr = document.getElementById('withdraw-form-identity').value.trim();
+            const destinationEndpointStr = document.getElementById('withdraw-form-endpoint').value.trim();
+            const extractionQuantumVal = parseFloat(document.getElementById('withdraw-form-quantum').value);
+            const clientProfile = SystemStateEngine.memoryPool.activeSessionUser;
+
+            if(!clientProfile || clientProfile.mobile === "SYSTEM UTILITY NODE") return;
+
+            if(isNaN(extractionQuantumVal) || extractionQuantumVal < 300) {
+                displaySystemNotificationAlert("Minimum withdrawal threshold limit is ₹300.");
+                return;
+            }
+
+            if(!clientProfile.hasDeposited) {
+                displaySystemNotificationAlert("Withdrawal Locked: A cash deposit of at least ₹100 is mandatory before processing profit payouts.");
+                return;
+            }
+
+            if(profileIdentityStr.length < 3 || !destinationEndpointStr.includes('@')) {
+                displaySystemNotificationAlert("Please type accurate operational account details.");
+                return;
+            }
+
+            if(extractionQuantumVal > clientProfile.balance) {
+                displaySystemNotificationAlert("Insufficient available cash balance.");
+                return;
+            }
+
+            clientProfile.balance -= extractionQuantumVal;
+            let localMatch = SystemStateEngine.memoryPool.registeredUsers.find(u => u.mobile === clientProfile.mobile);
+            if(localMatch) localMatch.balance = clientProfile.balance;
+            saveUsersToLocalStorage();
+            synchronizeActiveDOMProfileBalanceFields();
+
+            const withdrawalQueueTransactionItemObjectNode = {
+                id: "WTH-" + Math.floor(Math.random() * 9000 + 1000),
+                mobile: clientProfile.mobile,
+                amount: extractionQuantumVal,
+                name: profileIdentityStr,
+                upi: destinationEndpointStr,
+                status: "Pending"
+            };
+
+            SystemStateEngine.vaultQueues.outwardWithdrawals.push(withdrawalQueueTransactionItemObjectNode);
+            saveGlobalQueuesToLocalStorage();
+            
+            SystemStateEngine.localUserLedgers.vault.unshift({
+                type: "Withdraw Cash",
+                amount: extractionQuantumVal,
+                desc: "Payout order initiated. Funds routing via network settlement gateways.",
+                status: "Pending"
+            });
+
+            saveIsolatedUserLedgerData(clientProfile.mobile);
+
+            document.getElementById('withdraw-form-identity').value = "";
+            document.getElementById('withdraw-form-endpoint').value = "";
+            document.getElementById('withdraw-form-quantum').value = "";
+
+            renderLocalUserVaultAuditLedgersTable();
+            displaySystemNotificationAlert("Withdrawal parameters accepted. Reviewing payment channel.");
+        }
+
+        function renderLocalUserVaultAuditLedgersTable() {
+            const targetDOMElementTableWrapperNode = document.getElementById('table-user-vault-ledger');
+            if(!targetDOMElementTableWrapperNode) return;
+            
+            targetDOMElementTableWrapperNode.innerHTML = "";
+
+            if(!SystemStateEngine.memoryPool.activeSessionUser || SystemStateEngine.memoryPool.activeSessionUser.mobile === "SYSTEM UTILITY NODE") {
+                targetDOMElementTableWrapperNode.innerHTML = `<div class="table-row-node" style="justify-content:center; color:var(--text-secondary);">No transaction metrics found.</div>`;
+                return;
+            }
+
+            if(!SystemStateEngine.localUserLedgers.vault || SystemStateEngine.localUserLedgers.vault.length === 0) {
+                targetDOMElementTableWrapperNode.innerHTML = `<div class="table-row-node" style="justify-content:center; color:var(--text-secondary);">No transaction metrics found.</div>`;
+                return;
+            }
+
+            SystemStateEngine.localUserLedgers.vault.forEach(vLog => {
+                let badgeStyleClass = "chip-node-selector";
+                let currentStatusDisplay = vLog.status;
+                
+                if(vLog.status !== "Pending" && vLog.status !== "Processing") {
+                    if(vLog.status.toLowerCase().includes("approve") || vLog.status.toLowerCase().includes("settle") || vLog.status.toLowerCase().includes("success") || vLog.status.toLowerCase().includes("sent")) {
+                        badgeStyleClass = "m-green";
+                    } else {
+                        badgeStyleClass = "m-red";
+                    }
+                }
+                
+                targetDOMElementTableWrapperNode.innerHTML += `
+                    <div class="table-row-node" style="flex-direction:column; align-items:flex-start; gap:6px;">
+                        <div style="display:flex; justify-content:space-between; width:100%; font-weight:700;">
+                            <span>${vLog.type}</span>
+                            <span style="color:var(--light-blue);">₹${vLog.amount.toFixed(2)}</span>
+                        </div>
+                        <p style="font-size:12px; color:var(--text-secondary); font-weight:500;">${vLog.desc}</p>
+                        <span class="admin-badge ${badgeStyleClass}" style="padding:3px 8px; font-size:10px;">${currentStatusDisplay}</span>
+                    </div>
+                `;
+            });
+        }
+
+        function refreshAdministrativeDashboardTerminalEngine() {
+            document.getElementById('adm-metric-total-users').innerText = SystemStateEngine.memoryPool.registeredUsers.length;
+            document.getElementById('adm-metric-active-users').innerText = SystemStateEngine.memoryPool.realActiveUsersCount;
+            document.getElementById('adm-live-sync-period').innerText = SystemStateEngine.gameContext.activePeriodIndex;
+
+            refreshAdministrativeLiveRealtimePoolMetricsDisplaysOnly();
+            renderAdministrativeUserAnalyticsRegistryTable();
+            renderAdministrativeVerificationQueuesDisplayCards();
+            renderAdministrativeSupportUserThreadsList();
             refreshAdministrativeSupportChatCanvasStream();
-            refreshAdministrativeConsoleStewardViews();
+        }
+
+        function refreshAdministrativeLiveRealtimePoolMetricsDisplaysOnly() {
+            const weights = SystemStateEngine.gameContext.liveRoundPoolWeights;
+            document.getElementById('adm-pool-weight-green').innerText = "₹" + weights.Green.toFixed(2);
+            document.getElementById('adm-pool-weight-violet').innerText = "₹" + weights.Violet.toFixed(2);
+            document.getElementById('adm-pool-weight-red').innerText = "₹" + weights.Red.toFixed(2);
+        }
+
+        function adjustAdminOutcomeSelectionMode(targetSelectedModeStr) {
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            SystemStateEngine.gameContext.outcomeResolutionMode = targetSelectedModeStr;
+            
+            document.getElementById('adm-mode-btn-auto').className = "split-tab-trigger";
+            document.getElementById('adm-mode-btn-lowside').className = "split-tab-trigger";
+            document.getElementById('adm-mode-btn-manual').className = "split-tab-trigger";
+            
+            document.getElementById(`adm-mode-btn-${targetSelectedModeStr}`).className = "split-tab-trigger active";
+
+            if(targetSelectedModeStr === 'manual') {
+                document.getElementById('adm-manual-action-tray').classList.remove('hidden');
+            } else {
+                document.getElementById('adm-manual-action-tray').classList.add('hidden');
+            }
+        }
+
+        function forceAdminOutcomeVector(targetColorSelectionParameterCodeStr) {
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            SystemStateEngine.gameContext.forcedOutcomeVector = targetColorSelectionParameterCodeStr;
+            displaySystemNotificationAlert(`Forced Target Matrix Node -> ${targetColorSelectionParameterCodeStr}`);
+        }
+
+        function executeSilentBalanceModification(targetMobile, amount, type) {
+            let user = SystemStateEngine.memoryPool.registeredUsers.find(u => u.mobile === targetMobile);
+            if(!user) return;
+            
+            let parseVal = parseFloat(amount);
+            if(isNaN(parseVal) || parseVal <= 0) return;
+            
+            if(type === 'credit') {
+                user.balance += parseVal;
+            } else {
+                user.balance = Math.max(0, user.balance - parseVal);
+            }
+            saveUsersToLocalStorage();
+            
+            if(SystemStateEngine.memoryPool.activeSessionUser && SystemStateEngine.memoryPool.activeSessionUser.mobile === targetMobile) {
+                SystemStateEngine.memoryPool.activeSessionUser.balance = user.balance;
+                synchronizeActiveDOMProfileBalanceFields();
+            }
+            renderAdministrativeUserAnalyticsRegistryTable();
+            displaySystemNotificationAlert("Balance updated silently.");
+        }
+
+        function renderAdministrativeUserAnalyticsRegistryTable() {
+            const targetWrapperNode = document.getElementById('table-adm-user-registry');
+            targetWrapperNode.innerHTML = `
+                <div class="table-row-node" style="font-weight:700; color:var(--text-secondary); background: rgba(0,0,0,0.3);">
+                    <span>User Profile ID / Password</span>
+                    <span>Cash Balance</span>
+                    <span>Direct Hidden Balance Action Controls</span>
+                </div>
+            `;
+
+            SystemStateEngine.memoryPool.registeredUsers.forEach(userNode => {
+                targetWrapperNode.innerHTML += `
+                    <div class="table-row-node" style="flex-direction: column; align-items: flex-start; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <div style="display:flex; justify-content:space-between; width:100%;">
+                            <div>
+                                <span style="font-family:monospace; font-weight:700; color:var(--light-blue); display:block;">+91 ${userNode.mobile}</span>
+                                <span style="font-family:monospace; font-size:11px; color:var(--text-secondary); font-weight:600;">Pass: ${userNode.secret || 'N/A'}</span>
+                            </div>
+                            <span style="font-family:monospace; font-weight:700; color:#fff;">₹${userNode.balance.toFixed(2)}</span>
+                        </div>
+                        <div class="admin-direct-balance-control" style="width: 100%; display: flex; gap: 6px; align-items: center; background: rgba(0,0,0,0.2);">
+                            <input type="number" id="direct-amt-${userNode.mobile}" placeholder="Amount" class="input-control" style="padding: 6px 10px; font-size: 12px; width: 40%;">
+                            <button class="gold-button" style="padding: 6px 10px; font-size:11px; background: var(--green); width: 30%;" onclick="executeSilentBalanceModification('${userNode.mobile}', document.getElementById('direct-amt-${userNode.mobile}').value, 'credit')">Credit</button>
+                            <button class="gold-button" style="padding: 6px 10px; font-size:11px; background: var(--red); width: 30%;" onclick="executeSilentBalanceModification('${userNode.mobile}', document.getElementById('direct-amt-${userNode.mobile}').value, 'debit')">Debit</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderAdministrativeVerificationQueuesDisplayCards() {
+            const depositsBox = document.getElementById('container-adm-deposit-cards');
+            const withdrawalsBox = document.getElementById('container-adm-withdrawal-cards');
+
+            depositsBox.innerHTML = "";
+            if(SystemStateEngine.vaultQueues.inwardDeposits.length === 0) {
+                depositsBox.innerHTML = `<div style="font-size:12px; color:var(--text-secondary); padding:10px; text-align:center; font-weight:600;">Queue completely processed.</div>`;
+            } else {
+                SystemStateEngine.vaultQueues.inwardDeposits.forEach(dItem => {
+                    depositsBox.innerHTML += `
+                        <div class="card-panel" style="padding:16px; background:#0b0f19; margin-bottom:10px; border:1px solid rgba(56, 189, 248, 0.15);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; font-size:14px; margin-bottom:6px;">
+                                <span>User: <strong style="color:var(--light-blue); font-family:monospace;">+91 ${dItem.mobile}</strong></span>
+                                <strong style="color:var(--green); font-size:16px;">₹${dItem.amount.toFixed(2)}</strong>
+                            </div>
+                            <div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px; font-family:monospace; background:rgba(0,0,0,0.4); padding:4px 8px; border-radius:4px;">UTR Ref: ${dItem.utr}</div>
+                            
+                            <input type="text" id="remark-dep-${dItem.id}" class="admin-custom-remark-input" placeholder="Type custom message to user (Leave empty for default)">
+                            
+                            <div style="display:flex; gap:10px;">
+                                <button class="gold-button" style="padding:10px 14px; font-size:12px; background:linear-gradient(135deg, #22c55e 0%, #15803d 100%); color:#fff; font-weight:800;" onclick="resolveInwardDepositTransactionItemCall('${dItem.id}', true)">Approve & Credit</button>
+                                <button class="gold-button" style="padding:10px 14px; font-size:12px; background:linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color:#fff; font-weight:800;" onclick="resolveInwardDepositTransactionItemCall('${dItem.id}', false)">Reject Order</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            withdrawalsBox.innerHTML = "";
+            if(SystemStateEngine.vaultQueues.outwardWithdrawals.length === 0) {
+                withdrawalsBox.innerHTML = `<div style="font-size:12px; color:var(--text-secondary); padding:10px; text-align:center; font-weight:600;">Queue completely processed.</div>`;
+            } else {
+                SystemStateEngine.vaultQueues.outwardWithdrawals.forEach(wItem => {
+                    withdrawalsBox.innerHTML += `
+                        <div class="card-panel" style="padding:16px; background:#0b0f19; margin-bottom:10px; border:1px solid rgba(56, 189, 248, 0.15);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; font-size:14px; margin-bottom:6px;">
+                                <span>User: <strong style="color:var(--light-blue); font-family:monospace;">+91 ${wItem.mobile}</strong></span>
+                                <strong style="color:var(--red); font-size:16px;">₹${wItem.amount.toFixed(2)}</strong>
+                            </div>
+                            <div style="font-size:12px; color:#fff; margin-bottom:4px;">Bank Registered Name: <strong>${wItem.identity}</strong></div>
+                            <div style="font-size:12px; color:var(--text-secondary); margin-bottom:12px; font-family:monospace; background:rgba(0,0,0,0.4); padding:4px 8px; border-radius:4px;">Channel UPI: ${wItem.endpoint || wItem.upi}</div>
+                            
+                            <input type="text" id="remark-wth-${wItem.id}" class="admin-custom-remark-input" placeholder="Type custom message to user (Leave empty for default)">
+                            
+                            <div style="display:flex; gap:10px;">
+                                <button class="gold-button" style="padding:10px 14px; font-size:12px; background:linear-gradient(135deg, #22c55e 0%, #15803d 100%); color:#fff; font-weight:800;" onclick="resolveOutwardWithdrawalTransactionItemCall('${wItem.id}', true)">Settle Payout</button>
+                                <button class="gold-button" style="padding:10px 14px; font-size:12px; background:linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); color:#fff; font-weight:800;" onclick="resolveOutwardWithdrawalTransactionItemCall('${wItem.id}', false)">Reject & Return</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function resolveInwardDepositTransactionItemCall(targetIdStr, authorizationDecisionBool) {
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            const targetIndex = SystemStateEngine.vaultQueues.inwardDeposits.findIndex(d => d.id === targetIdStr);
+            if(targetIndex === -1) return;
+
+            const transactionObjectReference = SystemStateEngine.vaultQueues.inwardDeposits[targetIndex];
+            const profileNodeMatch = SystemStateEngine.memoryPool.registeredUsers.find(u => u.mobile === transactionObjectReference.mobile);
+            
+            const inputField = document.getElementById(`remark-dep-${targetIdStr}`);
+            let customStatusMessage = inputField ? inputField.value.trim() : "";
+
+            if(authorizationDecisionBool) {
+                if(profileNodeMatch) {
+                    profileNodeMatch.balance += transactionObjectReference.amount;
+                    profileNodeMatch.hasDeposited = true; 
+                }
+                let finalReason = customStatusMessage !== "" ? customStatusMessage : "Approved";
+                updateInternalUserLedgerLogStatusFieldTraceText(transactionObjectReference.mobile, "Deposit Cash", transactionObjectReference.amount, finalReason, `Cash balance updated. Ref ID: ${transactionObjectReference.utr}`);
+            } else {
+                let finalReason = customStatusMessage !== "" ? customStatusMessage : "Rejected";
+                updateInternalUserLedgerLogStatusFieldTraceText(transactionObjectReference.mobile, "Deposit Cash", transactionObjectReference.amount, finalReason, "Cash deposit rejected by bank processor network channel.");
+            }
+
+            SystemStateEngine.vaultQueues.inwardDeposits.splice(targetIndex, 1);
+            saveGlobalQueuesToLocalStorage();
+            saveUsersToLocalStorage();
+            
+            if(SystemStateEngine.memoryPool.activeSessionUser && SystemStateEngine.memoryPool.activeSessionUser.mobile === transactionObjectReference.mobile) {
+                SystemStateEngine.memoryPool.activeSessionUser.balance = profileNodeMatch.balance;
+                SystemStateEngine.memoryPool.activeSessionUser.hasDeposited = true;
+                synchronizeActiveDOMProfileBalanceFields();
+            }
+            
+            refreshAdministrativeDashboardTerminalEngine();
+            displaySystemNotificationAlert("Deposit parameter processed.");
+        }
+
+        function resolveOutwardWithdrawalTransactionItemCall(targetIdStr, authorizationDecisionBool) {
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            const targetIndex = SystemStateEngine.vaultQueues.outwardWithdrawals.findIndex(w => w.id === targetIdStr);
+            if(targetIndex === -1) return;
+
+            const transactionObjectReference = SystemStateEngine.vaultQueues.outwardWithdrawals[targetIndex];
+            const profileNodeMatch = SystemStateEngine.memoryPool.registeredUsers.find(u => u.mobile === transactionObjectReference.mobile);
+
+            const inputField = document.getElementById(`remark-wth-${targetIdStr}`);
+            let customStatusMessage = inputField ? inputField.value.trim() : "";
+
+            if(authorizationDecisionBool) {
+                let finalReason = customStatusMessage !== "" ? customStatusMessage : "Success";
+                updateInternalUserLedgerLogStatusFieldTraceText(transactionObjectReference.mobile, "Withdraw Cash", transactionObjectReference.amount, finalReason, `Cash successfully transferred to ${transactionObjectReference.upi}`);
+            } else {
+                if(profileNodeMatch) profileNodeMatch.balance += transactionObjectReference.amount;
+                let finalReason = customStatusMessage !== "" ? customStatusMessage : "Failed";
+                updateInternalUserLedgerLogStatusFieldTraceText(transactionObjectReference.mobile, "Withdraw Cash", transactionObjectReference.amount, finalReason, "Cash payout declined. Amount added back safely to your wallet.");
+            }
+
+            SystemStateEngine.vaultQueues.outwardWithdrawals.splice(targetIndex, 1);
+            saveGlobalQueuesToLocalStorage();
+            saveUsersToLocalStorage();
+            
+            if(SystemStateEngine.memoryPool.activeSessionUser && SystemStateEngine.memoryPool.activeSessionUser.mobile === transactionObjectReference.mobile) {
+                SystemStateEngine.memoryPool.activeSessionUser.balance = profileNodeMatch.balance;
+                synchronizeActiveDOMProfileBalanceFields();
+            }
+            
+            refreshAdministrativeDashboardTerminalEngine();
+            displaySystemNotificationAlert("Withdrawal parameter processed.");
+        }
+
+        function updateInternalUserLedgerLogStatusFieldTraceText(mobile, typeKeyword, targetVal, targetStatusText, updatingStatusDescriptionStr) {
+            const allVault = JSON.parse(localStorage.getItem('dubai_elite_history_vault')) || {};
+            let userVault = allVault[mobile] || [];
+            
+            const historyLogRecordMatch = userVault.find(v => v.type === typeKeyword && v.amount === targetVal && v.status === "Pending");
+            if(historyLogRecordMatch) {
+                historyLogRecordMatch.status = targetStatusText;
+                historyLogRecordMatch.desc = updatingStatusDescriptionStr;
+                allVault[mobile] = userVault;
+                localStorage.setItem('dubai_elite_history_vault', JSON.stringify(allVault));
+            }
+            if(SystemStateEngine.memoryPool.activeSessionUser && SystemStateEngine.memoryPool.activeSessionUser.mobile === mobile) {
+                loadIsolatedUserLedgerData(mobile);
+            }
+        }
+
+        function openCustomerSupportDialogModal() {
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            document.getElementById('user-support-modal-overlay').classList.remove('hidden');
+            renderUserSideSupportChatCanvasWindow();
+        }
+
+        function closeCustomerSupportDialogModal() {
+            document.getElementById('user-support-modal-overlay').classList.add('hidden');
+        }
+
+        function renderUserSideSupportChatCanvasWindow() {
+            const canvasNode = document.getElementById('user-support-chat-canvas');
+            if(!canvasNode) return;
+
+            const profile = SystemStateEngine.memoryPool.activeSessionUser;
+            if(!profile) return;
+
+            canvasNode.innerHTML = "";
+            const currentFeed = SystemStateEngine.supportChannelData.userConversations[profile.mobile] || [];
+            
+            currentFeed.forEach(msg => {
+                const isUser = msg.side === "user";
+                canvasNode.innerHTML += `
+                    <div class="chat-bubble-node ${isUser ? 'bubble-user' : 'bubble-support'}">
+                        <strong style="display:block; font-size:10px; color: ${isUser ? 'var(--light-blue)' : 'var(--text-secondary)'}; margin-bottom:2px;">
+                            ${isUser ? 'You' : 'Customer Support'}
+                        </strong>
+                        <span>${msg.text}</span>
+                    </div>
+                `;
+            });
+            canvasNode.scrollTop = canvasNode.scrollHeight;
+        }
+
+        function executeUserSupportMessageDispatch() {
+            const msgInput = document.getElementById('user-support-input-msg-node');
+            const messageTxt = msgInput.value.trim();
+            const profile = SystemStateEngine.memoryPool.activeSessionUser;
+
+            if(messageTxt === "" || !profile) return;
+
+            CoreSoundEngine.triggerTapFeedbackEffect();
+            
+            if (!SystemStateEngine.supportChannelData.userConversations[profile.mobile]) {
+                SystemStateEngine.supportChannelData.userConversations[profile.mobile] = [];
+            }
+
+            SystemStateEngine.supportChannelData.userConversations[profile.mobile].push({
+                side: "user",
+                text: messageTxt
+            });
+
+            msgInput.value = "";
+            renderUserSideSupportChatCanvasWindow();
+            displaySystemNotificationAlert("Message sent to support team.");
+        }
+
+        function renderAdministrativeSupportUserThreadsList() {
+            const container = document.getElementById('adm-support-threads-list');
+            if (!container) return;
+
+            container.innerHTML = "";
+            const activeKeys = Object.keys(SystemStateEngine.supportChannelData.userConversations);
+
+            if (activeKeys.length === 0) {
+                container.innerHTML = `<div style="font-size:12px; color:var(--text-secondary); text-align:center; font-weight:600;">No active messages.</div>`;
+                return;
+            }
+
+            activeKeys.forEach(mobileNum => {
+                const isActive = SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile === mobileNum;
+                const threadMessages = SystemStateEngine.supportChannelData.userConversations[mobileNum];
+                const lastMsg = threadMessages[threadMessages.length - 1]?.text || "";
+                
+                const card = document.createElement('div');
+                card.className = `admin-user-thread-card ${isActive ? 'active' : ''}`;
+                card.onclick = () => {
+                    CoreSoundEngine.triggerTapFeedbackEffect();
+                    SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile = mobileNum;
+                    refreshAdministrativeDashboardTerminalEngine();
+                };
+
+                card.innerHTML = `
+                    <div>
+                        <strong style="color:var(--light-blue); font-family:monospace;">+91 ${mobileNum}</strong>
+                        <p style="font-size:11px; color:var(--text-secondary); margin-top:2px; max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${lastMsg}</p>
+                    </div>
+                    <i class="fa-solid fa-angle-right" style="color:var(--text-secondary); font-size:12px;"></i>
+                `;
+                container.appendChild(card);
+            });
         }
 
         function refreshAdministrativeSupportChatCanvasStream() {
+            const noticeEl = document.getElementById('adm-support-empty-notice');
+            const boxEl = document.getElementById('adm-support-active-container');
+            const streamEl = document.getElementById('adm-support-chat-stream');
             const targetUser = SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile;
-            const streamEl = document.getElementById('adm-support-chat-stream-box');
+
+            if(!targetUser || !SystemStateEngine.supportChannelData.userConversations[targetUser]) {
+                noticeEl.innerText = "Select an active user chat stream thread from above.";
+                noticeEl.classList.remove('hidden');
+                boxEl.classList.add('hidden');
+                return;
+            }
+
+            noticeEl.classList.add('hidden');
+            boxEl.classList.remove('hidden');
+
             streamEl.innerHTML = "";
-            
-            const currentFeed = SystemStateEngine.supportChannelData.userConversations[targetUser] || [];
+            const currentFeed = SystemStateEngine.supportChannelData.userConversations[targetUser];
+
             currentFeed.forEach(msg => {
                 const isUser = msg.side === "user";
                 streamEl.innerHTML += `
@@ -1427,199 +2154,30 @@
                         <strong style="display:block; font-size:10px; color: ${isUser ? 'var(--light-blue)' : 'var(--text-secondary)'}; margin-bottom:2px;">
                             ${isUser ? ('User Profile (+91 ' + targetUser + ')') : 'Customer Support'}
                         </strong>
-                        <span>${msg.message}</span>
+                        <span>${msg.text}</span>
                     </div>
                 `;
             });
             streamEl.scrollTop = streamEl.scrollHeight;
         }
 
-        async function executeAdministrativeSupportReplyDispatch() {
+        function executeAdministrativeSupportReplyDispatch() {
             const replyInput = document.getElementById('adm-support-response-field');
             const textStr = replyInput.value.trim();
             const targetUser = SystemStateEngine.supportChannelData.activeSelectedThreadUserMobile;
 
             if(textStr === "" || !targetUser) return;
+
             CoreSoundEngine.triggerTapFeedbackEffect();
-
-            try {
-                await _supabase.from('support_chats').insert([{
-                    mobile: targetUser,
-                    message: textStr,
-                    side: 'support'
-                }]);
-                
-                replyInput.value = "";
-                // Live reload views
-                const { data: messages } = await _supabase.from('support_chats').select('*').order('created_at', { ascending: true });
-                SystemStateEngine.supportChannelData.userConversations = {};
-                if(messages) {
-                    messages.forEach(msg => {
-                        if(!SystemStateEngine.supportChannelData.userConversations[msg.mobile]) SystemStateEngine.supportChannelData.userConversations[msg.mobile] = [];
-                        SystemStateEngine.supportChannelData.userConversations[msg.mobile].push(msg);
-                    });
-                }
-                refreshAdministrativeSupportChatCanvasStream();
-            } catch(e) {}
-        }
-
-        // ==========================================
-        //       USER PLATFORM CHAT TERMINAL
-        // ==========================================
-
-        async function refreshUserTerminalSupportChatStreamBox() {
-            if(!SystemStateEngine.authenticatedSessionUserMobile) return;
-            try {
-                const { data: chats } = await _supabase
-                    .from('support_chats')
-                    .select('*')
-                    .eq('mobile', SystemStateEngine.authenticatedSessionUserMobile)
-                    .order('created_at', { ascending: true });
-
-                let box = document.getElementById('user-support-chat-stream-box');
-                box.innerHTML = "";
-                
-                if(chats) {
-                    chats.forEach(c => {
-                        const isUser = c.side === 'user';
-                        box.innerHTML += `
-                            <div class="chat-bubble-node ${isUser ? 'bubble-user' : 'bubble-support'}">
-                                <strong style="display:block; font-size:10px; color:${isUser ? 'var(--light-blue)':'var(--text-secondary)'}; margin-bottom:2px;">
-                                    ${isUser ? 'You' : 'Agent Response'}
-                                </strong>
-                                <span>${c.message}</span>
-                            </div>
-                        `;
-                    });
-                }
-                box.scrollTop = box.scrollHeight;
-            } catch(e){}
-        }
-
-        async function executeUserSupportMessageTransmission() {
-            const inp = document.getElementById('user-support-chat-msg-field');
-            const txt = inp.value.trim();
-            if(txt === "") return;
-            CoreSoundEngine.triggerTapFeedbackEffect();
-
-            try {
-                await _supabase.from('support_chats').insert([{
-                    mobile: SystemStateEngine.authenticatedSessionUserMobile,
-                    message: txt,
-                    side: 'user'
-                }]);
-                inp.value = "";
-                await refreshUserTerminalSupportChatStreamBox();
-            } catch(e){}
-        }
-
-        // ==========================================
-        //       CORE TIMERS AND SIMULATED MOTORS
-        // ==========================================
-
-        function executeGameEngineTimerTickLoop() {
-            setInterval(async () => {
-                if(SystemStateEngine.activeView === 'auth') return;
-
-                SystemStateEngine.gameStateData.countdownTimerRemainingSeconds--;
-                if(SystemStateEngine.gameStateData.countdownTimerRemainingSeconds <= 0) {
-                    // Reset game clock cycle sequence & resolve final outcome computations
-                    SystemStateEngine.gameStateData.countdownTimerRemainingSeconds = 30;
-                    await processActiveGameBetsPeriodResolution();
-                }
-
-                // Format Render Output
-                const secs = SystemStateEngine.gameStateData.countdownTimerRemainingSeconds;
-                document.getElementById('arena-timer-value').innerText = `00:${secs < 10 ? '0' + secs : secs}`;
-                
-                // Realtime synchronization calls
-                if(secs % 5 === 0) {
-                    await syncLocalInterfaceBalanceDisplayValues();
-                    if(SystemStateEngine.activeView === 'admin') refreshAdministrativeConsoleStewardViews();
-                    if(!document.getElementById('user-support-chat-window-panel').classList.contains('hidden')) {
-                        await refreshUserTerminalSupportChatStreamBox();
-                    }
-                }
-            }, 1000);
-
-            // Generate period reference key
-            const now = new Date();
-            SystemStateEngine.gameStateData.currentRoundPeriodIdString = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}${String(now.getHours()).padStart(2,'0')}${String(now.getMinutes()).padStart(2,'0')}`;
-            document.getElementById('arena-period-id').innerText = SystemStateEngine.gameStateData.currentRoundPeriodIdString;
-        }
-
-        async function processActiveGameBetsPeriodResolution() {
-            const choices = ["Green", "Red", "Violet"];
-            let finalWinningColor = choices[Math.floor(Math.random() * choices.length)];
             
-            // Check Admin Overrides
-            if(SystemStateEngine.gameStateData.forcedNextOutcomeConfigString !== "") {
-                finalWinningColor = SystemStateEngine.gameStateData.forcedNextOutcomeConfigString;
-            }
+            SystemStateEngine.supportChannelData.userConversations[targetUser].push({
+                side: "support",
+                text: textStr
+            });
 
-            displaySystemNotificationAlert(`🎰 Period Result declared: ${finalWinningColor.toUpperCase()}`);
-
-            try {
-                if(SystemStateEngine.authenticatedSessionUserMobile) {
-                    // Fetch users stakes to award credit instantly
-                    const { data: userBets } = await _supabase
-                        .from('game_bets')
-                        .select('*')
-                        .eq('period', SystemStateEngine.gameStateData.currentRoundPeriodIdString)
-                        .eq('mobile', SystemStateEngine.authenticatedSessionUserMobile)
-                        .eq('status', 'pending');
-
-                    if(userBets) {
-                        for(let bet of userBets) {
-                            let status = 'lost';
-                            let payout = 0;
-                            if(bet.selection === finalWinningColor) {
-                                status = 'won';
-                                payout = bet.amount * (finalWinningColor === 'Violet' ? 4.5 : 2.0);
-                                
-                                const { data: currentProf } = await _supabase.from('profiles').select('balance').eq('mobile', bet.mobile).single();
-                                await _supabase.from('profiles').update({ balance: parseFloat(currentProf.balance || 0) + payout }).eq('mobile', bet.mobile);
-                            }
-                            await _supabase.from('game_bets').update({ status: status }).eq('id', bet.id);
-                        }
-                    }
-                }
-            } catch(e) { console.error("Resolution engine error", e); }
-
-            // Increment forward period structure
-            const currentPeriodNum = BigInt(SystemStateEngine.gameStateData.currentRoundPeriodIdString);
-            SystemStateEngine.gameStateData.currentRoundPeriodIdString = (currentPeriodNum + 1n).toString();
-            document.getElementById('arena-period-id').innerText = SystemStateEngine.gameStateData.currentRoundPeriodIdString;
-            
-            // Wipe control flags clean
-            SystemStateEngine.gameStateData.forcedNextOutcomeConfigString = "";
-            document.getElementById('adm-input-next-forced-outcome').value = "";
-            
-            await syncLocalInterfaceBalanceDisplayValues();
-        }
-
-        function initializeRealtimeTrafficSimulator() {
-            setInterval(() => {
-                if(SystemStateEngine.activeView === 'auth') return;
-                const container = document.getElementById('live-traffic-ticker-stream');
-                const randomMobile = "9" + Math.floor(100000000 + Math.random() * 900000000);
-                const options = ["Green", "Violet", "Red"];
-                const selection = options[Math.floor(Math.random() * options.length)];
-                const amounts = [50, 100, 200, 500, 1000, 2000, 5000];
-                const cash = amounts[Math.floor(Math.random() * amounts.length)];
-                
-                const element = document.createElement('div');
-                element.className = "table-row-node";
-                element.style.padding = "8px 0";
-                element.style.borderBottom = "1px solid rgba(255,255,255,0.02)";
-                element.innerHTML = `
-                    <span style="font-size:12px; color:var(--text-secondary);">User +91 ${randomMobile.substring(0,3)}***${randomMobile.substring(7)} placed <strong style="color:#fff;">${selection}</strong></span>
-                    <span style="font-family:monospace; color:#fff;">₹${cash}.00</span>
-                `;
-                container.prepend(element);
-                if(container.children.length > 4) container.removeChild(container.lastChild);
-                document.getElementById('live-traffic-counter').innerText = Math.floor(120 + Math.random() * 45);
-            }, 3000);
+            replyInput.value = "";
+            refreshAdministrativeSupportChatCanvasStream();
+            displaySystemNotificationAlert("Reply dispatched to user terminal.");
         }
     </script>
 </body>
