@@ -1279,32 +1279,55 @@ of leaving them fully open.
         }
 
         async function sbLoadSupport(mobile) {
-            const { data, error } = await db.from('dubai_elite_support').select('*').eq('user_id', mobile).order('created_at', { ascending: true });
-            if (error) { console.error('sbLoadSupport:', error); return []; }
-            return (data || []).map(m => ({ side: m.sender, text: m.message }));
+            // FIXED: use 'mobile' column — 'user_id' does not exist in dubai_elite_support
+            try {
+                const { data, error } = await db
+                    .from('dubai_elite_support')
+                    .select('mobile, message, sender, created_at')
+                    .eq('mobile', mobile)
+                    .order('created_at', { ascending: true });
+                if (error) { console.error('sbLoadSupport:', error); return []; }
+                return (data || []).map(m => ({ side: m.sender, text: m.message }));
+            } catch (err) {
+                console.error('sbLoadSupport exception:', err);
+                return [];
+            }
         }
 
         async function sbLoadAllSupportThreads() {
-            // Fetch all messages from dubai_elite_support ordered by created_at ascending
-            const { data, error } = await db.from('dubai_elite_support').select('*').order('created_at', { ascending: true });
-            if (error) { console.error('sbLoadAllSupportThreads:', error); return {}; }
-            // Group messages by user_id (mobile)
-            const conversations = {};
-            for (const row of (data || [])) {
-                const mobile = row.user_id;
-                if (!conversations[mobile]) conversations[mobile] = [];
-                conversations[mobile].push({ side: row.sender, text: row.message });
+            // FIXED: use 'mobile' column — 'user_id' does not exist in dubai_elite_support
+            try {
+                const { data, error } = await db
+                    .from('dubai_elite_support')
+                    .select('mobile, message, sender, created_at')
+                    .order('created_at', { ascending: true });
+                if (error) { console.error('sbLoadAllSupportThreads:', error); return {}; }
+                // Group messages by mobile number
+                const conversations = {};
+                for (const row of (data || [])) {
+                    const mob = row.mobile;
+                    if (!conversations[mob]) conversations[mob] = [];
+                    conversations[mob].push({ side: row.sender, text: row.message });
+                }
+                return conversations;
+            } catch (err) {
+                console.error('sbLoadAllSupportThreads exception:', err);
+                return {};
             }
-            return conversations;
         }
 
         async function sbInsertSupportMsg(mobile, sender, message) {
-            const { error } = await db.from('dubai_elite_support').insert({
-                user_id: mobile,
-                message: message,
-                sender: sender
-            });
-            if (error) console.error('sbInsertSupportMsg:', error);
+            // FIXED: use 'mobile' column — 'user_id' does not exist in dubai_elite_support
+            try {
+                const { error } = await db.from('dubai_elite_support').insert({
+                    mobile: mobile,
+                    message: message,
+                    sender: sender
+                });
+                if (error) console.error('sbInsertSupportMsg:', error);
+            } catch (err) {
+                console.error('sbInsertSupportMsg exception:', err);
+            }
         }
 
         // ===== CORE SOUND ENGINE =====
@@ -1449,8 +1472,13 @@ of leaving them fully open.
                 SystemStateEngine.memoryPool.activeSessionUser = { mobile: "SYSTEM UTILITY NODE", balance: 9999999.99, hasDeposited: true };
                 SystemStateEngine.memoryPool.registeredUsers = await sbLoadAllUsers();
                 await sbLoadQueues();
-                // Load all support threads for admin
-                SystemStateEngine.supportChannelData.userConversations = await sbLoadAllSupportThreads();
+                // Load all support threads for admin — wrapped so schema issues don't crash admin login
+                try {
+                    SystemStateEngine.supportChannelData.userConversations = await sbLoadAllSupportThreads();
+                } catch (err) {
+                    console.error('Admin login: sbLoadAllSupportThreads failed (non-fatal):', err);
+                    SystemStateEngine.supportChannelData.userConversations = {};
+                }
                 document.getElementById('view-auth').classList.add('hidden');
                 document.getElementById('view-main-app-shell').classList.remove('hidden');
                 document.getElementById('nav-item-admin').classList.remove('hidden');
@@ -1514,15 +1542,34 @@ of leaving them fully open.
                 SystemStateEngine.memoryPool.activeAdminState = false;
                 SystemStateEngine.memoryPool.realActiveUsersCount = 1;
 
-                // Load ledger data
-                SystemStateEngine.localUserLedgers.bets = await sbLoadUserBets(clientMatch.mobile);
-                SystemStateEngine.localUserLedgers.vault = await sbLoadUserVault(clientMatch.mobile);
+                // Load ledger data — each wrapped individually so a DB error in one
+                // does NOT block the entire login flow or show "Server error" to user.
+                try {
+                    SystemStateEngine.localUserLedgers.bets = await sbLoadUserBets(clientMatch.mobile);
+                } catch (err) {
+                    console.error('Login: sbLoadUserBets failed (non-fatal):', err);
+                    SystemStateEngine.localUserLedgers.bets = [];
+                }
 
-                // Load support convo
-                const convo = await sbLoadSupport(clientMatch.mobile);
-                SystemStateEngine.supportChannelData.userConversations[clientMatch.mobile] = convo.length ? convo : [
-                    { side: "support", text: "Welcome to Dubai Elite Support. Please write your query below, and our representatives will reply instantly." }
-                ];
+                try {
+                    SystemStateEngine.localUserLedgers.vault = await sbLoadUserVault(clientMatch.mobile);
+                } catch (err) {
+                    console.error('Login: sbLoadUserVault failed (non-fatal):', err);
+                    SystemStateEngine.localUserLedgers.vault = [];
+                }
+
+                // Load support convo — wrapped so a schema error never crashes login
+                try {
+                    const convo = await sbLoadSupport(clientMatch.mobile);
+                    SystemStateEngine.supportChannelData.userConversations[clientMatch.mobile] = convo.length ? convo : [
+                        { side: "support", text: "Welcome to Dubai Elite Support. Please write your query below, and our representatives will reply instantly." }
+                    ];
+                } catch (err) {
+                    console.error('Login: sbLoadSupport failed (non-fatal):', err);
+                    SystemStateEngine.supportChannelData.userConversations[clientMatch.mobile] = [
+                        { side: "support", text: "Welcome to Dubai Elite Support. Please write your query below, and our representatives will reply instantly." }
+                    ];
+                }
 
                 document.getElementById('view-auth').classList.add('hidden');
                 document.getElementById('view-main-app-shell').classList.remove('hidden');
@@ -1885,7 +1932,12 @@ of leaving them fully open.
             // Reload fresh data from Supabase
             SystemStateEngine.memoryPool.registeredUsers = await sbLoadAllUsers();
             await sbLoadQueues();
-            SystemStateEngine.supportChannelData.userConversations = await sbLoadAllSupportThreads();
+            try {
+                SystemStateEngine.supportChannelData.userConversations = await sbLoadAllSupportThreads();
+            } catch (err) {
+                console.error('refreshAdminDashboard: sbLoadAllSupportThreads failed (non-fatal):', err);
+                SystemStateEngine.supportChannelData.userConversations = {};
+            }
 
             document.getElementById('adm-metric-total-users').innerText = SystemStateEngine.memoryPool.registeredUsers.length;
             document.getElementById('adm-metric-active-users').innerText = SystemStateEngine.memoryPool.realActiveUsersCount;
