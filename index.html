@@ -2256,11 +2256,3 @@
     </script>
 </body>
 </html>
-
-  - Cause: The application relied entirely on synchronous localStorage which
-    isolated game state (like the admin's forced manual result) to the local
-    device, causing PC and Android clients to resolve different outcomes.
-  - Solution: Integrated the Supabase JS SDK to persist localStorage data to a
-    cloud app_data table and implemented a Supabase Realtime Broadcast channel
-    (game_sync) to instantly synchronize the admin's forced outcome vector
-    across all connected clients.
