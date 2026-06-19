@@ -1076,8 +1076,8 @@
         const gameSync = supabase.channel('game_sync');
         gameSync.on('broadcast', { event: 'state_update' }, (payload) => {
             if (payload.payload.period === SystemStateEngine.gameContext.activePeriodIndex) {
-                SystemStateEngine.gameContext.forcedOutcomeVector = payload.payload.forcedOutcomeVector;
-                SystemStateEngine.gameContext.outcomeResolutionMode = payload.payload.outcomeResolutionMode;
+                SystemStateEngine.gameContext.forcedOutcomeVector = payload.payload.vector;
+                SystemStateEngine.gameContext.outcomeResolutionMode = payload.payload.mode;
             }
         }).subscribe();
 
