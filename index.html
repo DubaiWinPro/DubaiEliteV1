@@ -1,1 +1,853 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DUBAI ELITE - VIP PLATFORM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SUPABASE LIBRARY -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-main: #020617; --bg-surface: #0b0f19; --bg-card: #0f172a; --bg-input: #1e293b;
+            --primary-blue: #2563eb; --light-blue: #38bdf8; --shine-blue: #06b6d4;
+            --blue-gradient: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
+            --shine-gradient: linear-gradient(135deg, #38bdf8 0%, #06b6d4 100%);
+            --red: #ef4444; --green: #22c55e; --violet: #8b5cf6;
+            --text-primary: #ffffff; --text-secondary: #94a3b8;
+            --radius-lg: 16px; --radius-md: 12px;
+            --glow: 0 0 25px rgba(6, 182, 212, 0.35);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Space Grotesk',sans-serif; outline:none; -webkit-tap-highlight-color:transparent; }
+        body { background-color:var(--bg-main); color:var(--text-primary); overflow-x:hidden; display:flex; justify-content:center; min-height:100vh; }
+        .phone-wrapper { width:100%; max-width:480px; background-color:var(--bg-surface); min-height:100vh; display:flex; flex-direction:column; position:relative; box-shadow:0 0 60px rgba(0,0,0,0.95); border-left:1px solid rgba(56,189,248,0.1); border-right:1px solid rgba(56,189,248,0.1); padding-bottom:74px; }
+        .hidden { display:none !important; }
+        ::-webkit-scrollbar { width:4px; } ::-webkit-scrollbar-thumb { background:var(--light-blue); border-radius:10px; }
+        .toast-notification { position:fixed; top:24px; left:50%; transform:translateX(-50%) translateY(-20px); background:#0f172a; border:2px solid var(--shine-blue); padding:14px 28px; border-radius:30px; box-shadow:var(--glow),0 10px 40px rgba(0,0,0,0.8); z-index:99999; font-weight:800; font-size:14px; text-align:center; backdrop-filter:blur(10px); opacity:0; transition:transform 0.3s ease,opacity 0.3s ease; }
+        .toast-notification.active { transform:translateX(-50%) translateY(0); opacity:1; }
+        .auth-container { padding:40px 24px; display:flex; flex-direction:column; justify-content:center; min-height:100vh; }
+        .luxury-logo { text-align:center; margin-bottom:35px; }
+        .luxury-logo h1 { font-weight:900; font-size:46px; letter-spacing:-1px; text-transform:uppercase; background:var(--blue-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 4px 15px rgba(29,78,216,0.6)); }
+        .luxury-logo p { color:var(--light-blue); font-size:12px; text-transform:uppercase; letter-spacing:4px; margin-top:6px; font-weight:800; }
+        .card-panel { background:var(--bg-card); border-radius:var(--radius-lg); padding:28px; border:1px solid rgba(56,189,248,0.08); box-shadow:0 15px 35px rgba(0,0,0,0.5); }
+        .form-group { margin-bottom:22px; }
+        .form-group label { display:block; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:1px; color:var(--text-secondary); margin-bottom:8px; }
+        .input-control { width:100%; background:var(--bg-input); border:1px solid rgba(255,255,255,0.08); padding:16px 18px; border-radius:var(--radius-md); color:#fff; font-size:15px; font-weight:600; transition:var(--transition); }
+        .input-control:focus { border-color:var(--light-blue); box-shadow:0 0 12px rgba(56,189,248,0.25); }
+        .gold-button { width:100%; background:var(--blue-gradient); color:#fff; border:none; padding:18px; border-radius:var(--radius-md); font-size:16px; font-weight:900; text-transform:uppercase; letter-spacing:1px; cursor:pointer; transition:var(--transition); box-shadow:0 4px 20px rgba(29,78,216,0.4); border:1px solid rgba(56,189,248,0.2); }
+        .gold-button:active { transform:scale(0.97); }
+        .app-header { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; background:var(--bg-card); border-bottom:1px solid rgba(56,189,248,0.12); position:sticky; top:0; z-index:1000; }
+        .header-brand { font-weight:900; font-size:26px; letter-spacing:-0.5px; background:var(--blue-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .header-actions { display:flex; align-items:center; gap:12px; }
+        .header-icon-btn { background:var(--bg-input); border:none; color:var(--text-primary); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:var(--transition); }
+        .header-icon-btn:hover { color:var(--light-blue); }
+        .balance-chip { background:var(--bg-input); padding:10px 18px; border-radius:24px; display:flex; align-items:center; gap:8px; border:2px solid var(--shine-blue); font-weight:900; color:#fff; background:linear-gradient(rgba(30,41,59,0.9),rgba(30,41,59,0.9)); box-shadow:0 0 10px rgba(6,182,212,0.2); }
+        .profile-menu { position:absolute; top:70px; right:20px; background:var(--bg-card); border:2px solid var(--shine-blue); border-radius:var(--radius-md); width:220px; box-shadow:0 10px 35px rgba(0,0,0,0.6); z-index:2000; overflow:hidden; }
+        .profile-menu-header { padding:14px 16px; background:rgba(255,255,255,0.03); border-bottom:1px solid rgba(56,189,248,0.1); font-size:13px; }
+        .profile-menu-item { display:flex; align-items:center; gap:12px; padding:14px 16px; font-size:14px; font-weight:700; color:var(--text-primary); cursor:pointer; transition:var(--transition); }
+        .profile-menu-item:hover { background:var(--bg-input); color:var(--light-blue); }
+        .arena-padding { padding:20px 16px; }
+        .period-card-panel { background:linear-gradient(145deg,#0f172a 0%,#0b0f19 100%); border-radius:var(--radius-lg); padding:22px; display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border:1px solid rgba(56,189,248,0.1); }
+        .period-title { font-size:12px; color:var(--text-secondary); text-transform:uppercase; letter-spacing:1px; font-weight:700; }
+        .period-value { font-size:24px; font-weight:800; margin-top:4px; color:#fff; font-family:monospace; }
+        .countdown-value { font-size:36px; font-weight:900; color:var(--light-blue); font-family:monospace; text-shadow:0 0 15px rgba(56,189,248,0.5); }
+        .color-matrix-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:22px; }
+        .matrix-btn { border:none; padding:18px 0; border-radius:var(--radius-md); font-size:16px; font-weight:900; color:#fff; cursor:pointer; transition:var(--transition); box-shadow:0 6px 20px rgba(0,0,0,0.4); text-shadow:0 2px 4px rgba(0,0,0,0.5); text-transform:uppercase; }
+        .matrix-btn:active { transform:scale(0.95); }
+        .m-green { background:linear-gradient(135deg,#22c55e 0%,#15803d 100%); }
+        .m-violet { background:linear-gradient(135deg,#a855f7 0%,#6b21a8 100%); }
+        .m-red { background:linear-gradient(135deg,#ef4444 0%,#b91c1c 100%); }
+        .section-header-title { font-size:15px; font-weight:800; text-transform:uppercase; letter-spacing:1px; margin-bottom:14px; display:flex; align-items:center; gap:8px; color:var(--text-primary); }
+        .data-table-wrapper { background:var(--bg-card); border-radius:var(--radius-lg); overflow:hidden; border:1px solid rgba(56,189,248,0.08); margin-bottom:24px; }
+        .table-row-node { display:flex; justify-content:space-between; align-items:center; padding:16px; border-bottom:1px solid rgba(255,255,255,0.04); font-size:14px; font-weight:600; }
+        .table-row-node:last-child { border-bottom:none; }
+        .guide-box { background:rgba(6,182,212,0.04); border:1px solid rgba(6,182,212,0.2); border-radius:var(--radius-md); padding:16px; margin-bottom:20px; }
+        .guide-step { display:flex; align-items:flex-start; gap:12px; font-size:14px; line-height:1.5; margin-bottom:12px; color:#fff; font-weight:500; }
+        .guide-step:last-child { margin-bottom:0; }
+        .guide-number { background:var(--shine-blue); color:#000; font-weight:900; font-size:12px; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+        .copy-chip-btn { background:var(--bg-input); border:1px solid rgba(56,189,248,0.2); color:var(--light-blue); padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer; margin-left:8px; display:inline-flex; align-items:center; gap:6px; }
+        .live-traffic-box { background:rgba(15,23,42,0.6); border-radius:var(--radius-lg); padding:18px; border:1px solid rgba(56,189,248,0.08); margin-bottom:24px; }
+        .traffic-header { display:flex; justify-content:space-between; font-size:12px; color:var(--text-secondary); margin-bottom:14px; font-weight:700; text-transform:uppercase; }
+        .pulse-node { width:10px; height:10px; background-color:var(--green); border-radius:50%; display:inline-block; box-shadow:0 0 10px var(--green); animation:pulse-fx 2s infinite; }
+        @keyframes pulse-fx { 0%{transform:scale(0.9);opacity:0.6;} 50%{transform:scale(1.3);opacity:1;} 100%{transform:scale(0.9);opacity:0.6;} }
+        .feed-container-box { height:120px; overflow:hidden; position:relative; }
+        .fixed-navigation-shell { position:fixed; bottom:0; width:100%; max-width:480px; background:rgba(11,15,25,0.96); backdrop-filter:blur(20px); display:grid; grid-template-columns:repeat(3,1fr); padding:14px 0; border-top:1px solid rgba(56,189,248,0.15); z-index:9999; }
+        .fixed-navigation-shell.admin-mode-shell { grid-template-columns:repeat(4,1fr) !important; }
+        .nav-anchor-item { display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-secondary); cursor:pointer; font-size:12px; font-weight:700; gap:6px; transition:var(--transition); }
+        .nav-anchor-item.active { color:var(--light-blue); }
+        .nav-anchor-item i { font-size:22px; }
+        .vault-card { background:linear-gradient(135deg,#0f172a 0%,#020617 100%); border-radius:var(--radius-lg); padding:26px; text-align:center; border:2px solid rgba(6,182,212,0.25); margin-bottom:22px; box-shadow:var(--glow); }
+        .tab-split-wrapper { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:22px; }
+        .admin-tab-wrapper { display:grid; grid-template-columns:repeat(3,1fr) !important; gap:8px; margin-bottom:20px; }
+        .split-tab-trigger { background:var(--bg-card); padding:16px; text-align:center; border-radius:var(--radius-md); cursor:pointer; font-weight:700; font-size:14px; border:1px solid transparent; transition:var(--transition); color:#fff; }
+        .split-tab-trigger.active { border-color:var(--light-blue); background:var(--bg-input); color:var(--light-blue); }
+        .modal-blur-overlay { position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:10000; display:flex; align-items:flex-end; }
+        .modal-slide-sheet { width:100%; background:var(--bg-card); border-top-left-radius:24px; border-top-right-radius:24px; padding:28px 24px; border-top:2px solid var(--shine-blue); }
+        .chip-flex-selection { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:22px; }
+        .chip-node-selector { background:var(--bg-input); border:1px solid rgba(255,255,255,0.08); padding:14px 0; text-align:center; border-radius:var(--radius-md); cursor:pointer; font-weight:800; font-size:15px; transition:var(--transition); color:#fff; }
+        .chip-node-selector.active { border-color:var(--light-blue); background:rgba(6,182,212,0.15); color:var(--light-blue); }
+        .admin-view-container { padding:20px; background:#020617; min-height:100vh; }
+        .admin-summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:22px; }
+        .summary-card-node { background:var(--bg-card); border-radius:var(--radius-md); padding:16px; border-left:4px solid var(--primary-blue); }
+        .summary-card-node p { font-size:11px; color:var(--text-secondary); text-transform:uppercase; font-weight:700; }
+        .summary-card-node h3 { font-size:22px; font-weight:800; margin-top:4px; }
+        .realtime-bet-tracker-card { background:#0f172a; border-radius:var(--radius-lg); padding:18px; margin-bottom:22px; border:1px solid rgba(56,189,248,0.1); }
+        .live-bet-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-weight:600; }
+        .live-bet-row:last-child { border-bottom:none; }
+        .admin-badge { padding:6px 10px; border-radius:6px; font-size:11px; font-weight:800; text-transform:uppercase; }
+        .admin-custom-remark-input { width:100%; background:var(--bg-main); border:1px solid rgba(56,189,248,0.25); padding:12px; border-radius:8px; color:#fff; font-size:13px; font-weight:600; margin-bottom:12px; }
+        .admin-custom-remark-input:focus { border-color:var(--light-blue); }
+        .support-trigger-badge { background:rgba(6,182,212,0.06); border:1px solid rgba(6,182,212,0.25); border-radius:var(--radius-md); padding:14px 18px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; margin-bottom:22px; transition:var(--transition); }
+        .support-trigger-badge:hover { background:rgba(6,182,212,0.12); }
+        .chat-canvas-window { height:240px; overflow-y:auto; background:var(--bg-main); border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius-md); padding:14px; margin-bottom:16px; display:flex; flex-direction:column; gap:12px; }
+        .chat-bubble-node { max-width:80%; padding:12px 16px; border-radius:14px; font-size:14px; line-height:1.4; word-wrap:break-word; font-weight:500; }
+        .bubble-user { background:var(--bg-input); color:#fff; align-self:flex-end; border-bottom-right-radius:2px; }
+        .bubble-support { background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.2); color:#fff; align-self:flex-start; border-bottom-left-radius:2px; }
+        .chat-input-row-flex { display:flex; gap:8px; }
+        .admin-user-thread-card { background:var(--bg-input); border:1px solid rgba(255,255,255,0.06); padding:12px 16px; border-radius:var(--radius-md); cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-size:14px; transition:var(--transition); margin-bottom:8px; }
+        .admin-user-thread-card.active { border-color:var(--light-blue); background:rgba(6,182,212,0.12); }
+        .admin-direct-balance-control { background:rgba(255,255,255,0.02); border:1px solid rgba(56,189,248,0.1); border-radius:var(--radius-md); padding:12px; margin-top:10px; }
+        /* Result overlay */
+        .result-overlay { position:fixed; top:0; left:0; right:0; bottom:0; z-index:50000; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); }
+        .result-card { background:var(--bg-card); border-radius:24px; padding:36px 32px; text-align:center; border:3px solid; max-width:320px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.8); animation:pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+        @keyframes pop-in { from{transform:scale(0.6);opacity:0;} to{transform:scale(1);opacity:1;} }
+        .result-icon { font-size:64px; margin-bottom:12px; }
+        .result-title { font-size:28px; font-weight:900; margin-bottom:6px; }
+        .result-sub { font-size:14px; color:var(--text-secondary); font-weight:600; margin-bottom:20px; }
+        .result-outcome-badge { display:inline-block; padding:8px 24px; border-radius:30px; font-size:16px; font-weight:900; margin-bottom:20px; }
+    </style>
+</head>
+<body>
+<div class="phone-wrapper">
+    <div id="system-toast" class="toast-notification">Notification</div>
+
+    <!-- AUTH -->
+    <div id="view-auth" class="auth-container">
+        <div class="luxury-logo"><h1>DUBAI ELITE</h1><p>High Stakes Cash Arena</p></div>
+        <div class="tab-split-wrapper">
+            <div id="trigger-auth-login" class="split-tab-trigger active" onclick="switchAuthModeTab('login')">Log In</div>
+            <div id="trigger-auth-signup" class="split-tab-trigger" onclick="switchAuthModeTab('signup')">Sign Up</div>
+        </div>
+        <div class="card-panel">
+            <div class="form-group">
+                <label id="auth-label-account">Mobile Number</label>
+                <input type="text" id="auth-input-account" class="input-control" placeholder="Enter 10-digit mobile number" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="auth-input-secret" class="input-control" placeholder="Enter account password">
+            </div>
+            <button id="auth-main-action-btn" class="gold-button" onclick="executeAuthenticationRequest()">Log In Now</button>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="view-main-app-shell" class="hidden">
+        <header class="app-header">
+            <div class="header-brand">DUBAI ELITE</div>
+            <div class="header-actions">
+                <button class="header-icon-btn" onclick="toggleEngineAcousticState()"><i id="acoustic-toggle-icon" class="fa-solid fa-volume-high"></i></button>
+                <div class="balance-chip"><i class="fa-solid fa-wallet" style="color:var(--light-blue);"></i><span id="global-display-balance">₹0.00</span></div>
+                <button class="header-icon-btn" onclick="toggleProfileDropdownMenu()"><i class="fa-solid fa-user"></i></button>
+            </div>
+            <div id="profile-context-dropdown" class="profile-menu hidden">
+                <div class="profile-menu-header">
+                    <span style="color:var(--text-secondary);display:block;font-size:10px;text-transform:uppercase;font-weight:700;">Account Profile</span>
+                    <strong id="dropdown-profile-id" style="color:var(--light-blue);font-family:monospace;">9999999999</strong>
+                </div>
+                <div class="profile-menu-item" onclick="routeToProfileVaultAccount()"><i class="fa-solid fa-wallet" style="color:var(--light-blue);"></i> Wallet</div>
+                <div class="profile-menu-item" style="color:var(--red);" onclick="executeApplicationLogoutSequence()"><i class="fa-solid fa-power-off"></i> Log Out</div>
+            </div>
+        </header>
+
+        <!-- GAME ARENA -->
+        <div id="view-game-arena" class="arena-padding">
+            <div class="period-card-panel">
+                <div><div class="period-title">Active Round Number</div><div id="arena-period-id" class="period-value">--------</div></div>
+                <div style="text-align:right;"><div class="period-title">Time Left</div><div id="arena-timer-value" class="countdown-value">00:00</div></div>
+            </div>
+            <div class="color-matrix-grid">
+                <button class="matrix-btn m-green" onclick="launchBetSheetModal('Green')">Green<br><small>2.0x Payout</small></button>
+                <button class="matrix-btn m-violet" onclick="launchBetSheetModal('Violet')">Violet<br><small>4.5x Payout</small></button>
+                <button class="matrix-btn m-red" onclick="launchBetSheetModal('Red')">Red<br><small>2.0x Payout</small></button>
+            </div>
+            <div class="live-traffic-box">
+                <div class="traffic-header">
+                    <div style="display:flex;align-items:center;gap:6px;font-weight:800;color:#fff;"><span class="pulse-node"></span><span id="live-traffic-counter">0</span> Users Playing</div>
+                    <div>Live Trade Activity</div>
+                </div>
+                <div id="live-traffic-ticker-stream" class="feed-container-box"></div>
+            </div>
+        </div>
+
+        <!-- WALLET -->
+        <div id="view-vault-platform" class="arena-padding hidden">
+            <div class="vault-card">
+                <p style="color:var(--text-secondary);font-size:12px;text-transform:uppercase;margin-bottom:6px;font-weight:700;">Your Available Cash Balance</p>
+                <h2 id="vault-total-balance" style="font-size:38px;font-weight:900;color:#fff;font-family:monospace;">₹0.00</h2>
+            </div>
+            <div class="support-trigger-badge" onclick="openCustomerSupportDialogModal()">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <i class="fa-solid fa-headset" style="color:var(--light-blue);font-size:20px;"></i>
+                    <div><span style="display:block;font-size:14px;font-weight:700;">Customer Support</span><span style="display:block;font-size:11px;color:var(--text-secondary);font-weight:600;">24/7 Live Assistance Channel</span></div>
+                </div>
+                <i class="fa-solid fa-angle-right" style="color:var(--text-secondary);"></i>
+            </div>
+            <div class="tab-split-wrapper">
+                <div id="trigger-tab-deposit" class="split-tab-trigger active" onclick="toggleVaultSubmoduleTab('deposit')">Deposit Cash</div>
+                <div id="trigger-tab-withdraw" class="split-tab-trigger" onclick="toggleVaultSubmoduleTab('withdraw')">Withdraw Cash</div>
+            </div>
+            <div id="vault-module-deposit">
+                <div class="card-panel" style="margin-bottom:24px;">
+                    <div class="guide-box">
+                        <div class="guide-step"><span class="guide-number">1</span><div>Copy this UPI ID: <strong style="color:#fff;font-family:monospace;background:rgba(255,255,255,0.1);padding:2px 6px;border-radius:4px;">apple444@axl</strong><button class="copy-chip-btn" onclick="copyUpiIdToClipboard('apple444@axl')"><i class="fa-regular fa-copy"></i> Copy ID</button></div></div>
+                        <div class="guide-step"><span class="guide-number">2</span><div>Open your payment app (PhonePe, Google Pay, Paytm) and pay your amount to this UPI.</div></div>
+                        <div class="guide-step"><span class="guide-number">3</span><div>Copy the 12-digit UTR / Transaction ID from your payment history.</div></div>
+                        <div class="guide-step"><span class="guide-number">4</span><div>Paste that UTR ID below and click submit to verify your cash deposit.</div></div>
+                    </div>
+                    <div class="form-group"><label>Deposit Amount (₹) <span style="color:var(--light-blue);text-transform:none;">(Min ₹100)</span></label><input type="number" id="deposit-form-quantum" class="input-control" placeholder="Enter amount you paid"></div>
+                    <div class="form-group"><label>12-Digit UTR ID / Reference Number</label><input type="text" id="deposit-form-utr" class="input-control" placeholder="Paste your 12-digit UTR ID here"></div>
+                    <button class="gold-button" onclick="submitCapitalInwardFormRequest()">Submit Deposit Form</button>
+                </div>
+            </div>
+            <div id="vault-module-withdraw" class="hidden">
+                <div class="card-panel" style="margin-bottom:24px;">
+                    <div class="form-group"><label>Account Holder Name</label><input type="text" id="withdraw-form-identity" class="input-control" placeholder="Enter your official bank name"></div>
+                    <div class="form-group"><label>Receiving UPI ID</label><input type="text" id="withdraw-form-endpoint" class="input-control" placeholder="example@upi"></div>
+                    <div class="form-group"><label>Withdrawal Amount (₹) <span style="color:var(--light-blue);text-transform:none;">(Min ₹300)</span></label><input type="number" id="withdraw-form-quantum" class="input-control" placeholder="Enter amount to withdraw to bank"></div>
+                    <button class="gold-button" onclick="submitCapitalOutwardFormRequest()">Send Withdrawal Request</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORY -->
+        <div id="view-history-ledgers" class="arena-padding hidden">
+            <div class="section-header-title"><i class="fa-solid fa-receipt" style="color:var(--light-blue);"></i> Game Play History</div>
+            <div class="data-table-wrapper"><div id="table-user-bets-ledger"></div></div>
+            <div class="section-header-title"><i class="fa-solid fa-money-bill-transfer" style="color:var(--light-blue);"></i> Wallet Transaction History</div>
+            <div class="data-table-wrapper"><div id="table-user-vault-ledger"></div></div>
+        </div>
+
+        <!-- ADMIN -->
+        <div id="view-admin-override" class="admin-view-container hidden">
+            <div class="luxury-logo" style="text-align:left;margin-bottom:24px;"><h1 style="font-size:26px;">SYSTEM SETTINGS</h1><p style="letter-spacing:2px;font-weight:700;">Real-time Performance Metrics & Balance Parameters</p></div>
+            <div class="realtime-bet-tracker-card" style="border:2px solid var(--light-blue);">
+                <h4 style="font-size:13px;text-transform:uppercase;color:var(--light-blue);margin-bottom:10px;font-weight:800;"><i class="fa-solid fa-shield-halved"></i> Quick Admin Bet Placement</h4>
+                <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">Place quick testing trades using Admin balance directly onto the active matrix pool vectors.</p>
+                <div class="color-matrix-grid" style="margin-bottom:0;">
+                    <button class="matrix-btn m-green" onclick="launchBetSheetModal('Green')" style="padding:12px 0;font-size:12px;">Bet Green</button>
+                    <button class="matrix-btn m-violet" onclick="launchBetSheetModal('Violet')" style="padding:12px 0;font-size:12px;">Bet Violet</button>
+                    <button class="matrix-btn m-red" onclick="launchBetSheetModal('Red')" style="padding:12px 0;font-size:12px;">Bet Red</button>
+                </div>
+            </div>
+            <div class="admin-summary-grid">
+                <div class="summary-card-node"><p>Total Real Users</p><h3 id="adm-metric-total-users">--</h3></div>
+                <div class="summary-card-node"><p>Real Active Load</p><h3 id="adm-metric-active-users">0</h3></div>
+            </div>
+            <div class="realtime-bet-tracker-card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;border-bottom:1px solid rgba(56,189,248,0.15);padding-bottom:8px;">
+                    <h4 style="font-size:12px;text-transform:uppercase;color:var(--text-secondary);letter-spacing:1px;font-weight:700;">Real User Bets (No Bots)</h4>
+                    <span style="font-size:11px;color:var(--light-blue);font-weight:800;">Round: <span id="adm-live-sync-period" style="font-family:monospace;">--------</span></span>
+                </div>
+                <div class="live-bet-row"><span><i class="fa-solid fa-circle" style="color:var(--green);"></i> Real Green Bet:</span><strong id="adm-pool-weight-green" style="font-family:monospace;color:var(--green);">₹0.00</strong></div>
+                <div class="live-bet-row"><span><i class="fa-solid fa-circle" style="color:var(--violet);"></i> Real Violet Bet:</span><strong id="adm-pool-weight-violet" style="font-family:monospace;color:var(--violet);">₹0.00</strong></div>
+                <div class="live-bet-row"><span><i class="fa-solid fa-circle" style="color:var(--red);"></i> Real Red Bet:</span><strong id="adm-pool-weight-red" style="font-family:monospace;color:var(--red);">₹0.00</strong></div>
+                <div class="form-group" style="margin-top:16px;margin-bottom:0;">
+                    <label>Protocol Execution Rule</label>
+                    <div class="admin-tab-wrapper" style="margin-bottom:0;margin-top:6px;">
+                        <button id="adm-mode-btn-auto" class="split-tab-trigger active" onclick="adjustAdminOutcomeSelectionMode('auto')">Auto Mode</button>
+                        <button id="adm-mode-btn-lowside" class="split-tab-trigger" onclick="adjustAdminOutcomeSelectionMode('lowside')">Low Side Win</button>
+                        <button id="adm-mode-btn-manual" class="split-tab-trigger" onclick="adjustAdminOutcomeSelectionMode('manual')">Manual</button>
+                    </div>
+                </div>
+                <div id="adm-manual-action-tray" class="hidden" style="margin-top:14px;border-top:1px solid rgba(255,255,255,0.05);padding-top:14px;">
+                    <label style="display:block;font-size:11px;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;font-weight:700;">Enforce Forced Destination Result</label>
+                    <div class="color-matrix-grid" style="margin-bottom:0;">
+                        <button class="matrix-btn m-green" onclick="forceAdminOutcomeVector('Green')" style="padding:10px 0;font-size:13px;">Force Green</button>
+                        <button class="matrix-btn m-violet" onclick="forceAdminOutcomeVector('Violet')" style="padding:10px 0;font-size:13px;">Force Violet</button>
+                        <button class="matrix-btn m-red" onclick="forceAdminOutcomeVector('Red')" style="padding:10px 0;font-size:13px;">Force Red</button>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header-title"><i class="fa-solid fa-headset" style="color:var(--light-blue);"></i> Customer Support Operational Inbox</div>
+            <div class="card-panel" style="padding:16px;margin-bottom:24px;">
+                <label style="display:block;font-size:11px;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;font-weight:700;">Select User Live Conversation Thread</label>
+                <div id="adm-support-threads-list" style="margin-bottom:14px;max-height:120px;overflow-y:auto;"></div>
+                <div id="adm-support-empty-notice" style="font-size:12px;color:var(--text-secondary);text-align:center;padding:10px;font-weight:600;">No communication logs submitted yet.</div>
+                <div id="adm-support-active-container" class="hidden">
+                    <div id="adm-support-chat-stream" class="chat-canvas-window" style="height:180px;"></div>
+                    <div class="chat-input-row-flex">
+                        <input type="text" id="adm-support-response-field" class="input-control" placeholder="Write reply message as Support..." style="padding:12px;">
+                        <button class="gold-button" style="width:auto;padding:0 20px;font-size:14px;" onclick="executeAdministrativeSupportReplyDispatch()">Reply</button>
+                    </div>
+                </div>
+            </div>
+            <div class="section-header-title"><i class="fa-solid fa-users" style="color:var(--light-blue);"></i> Connected Users Registry Hub & Silent Balance Controller</div>
+            <div class="data-table-wrapper" style="max-height:280px;overflow-y:auto;margin-bottom:20px;"><div id="table-adm-user-registry"></div></div>
+            <div class="section-header-title"><i class="fa-solid fa-square-poll-horizontal" style="color:var(--light-blue);"></i> Inward Cash Settlement Requests (Deposits)</div>
+            <div id="container-adm-deposit-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
+            <div class="section-header-title"><i class="fa-solid fa-money-bill-transfer" style="color:var(--light-blue);"></i> Outward Cash Remittance Requests (Withdrawals)</div>
+            <div id="container-adm-withdrawal-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
+        </div>
+
+        <nav id="app-footer-navigation" class="fixed-navigation-shell">
+            <div id="nav-item-game" class="nav-anchor-item active" onclick="switchActiveApplicationModuleView('game')"><i class="fa-solid fa-gamepad"></i><span>Arena</span></div>
+            <div id="nav-item-wallet" class="nav-anchor-item" onclick="switchActiveApplicationModuleView('wallet')"><i class="fa-solid fa-wallet"></i><span>Wallet</span></div>
+            <div id="nav-item-history" class="nav-anchor-item" onclick="switchActiveApplicationModuleView('history')"><i class="fa-solid fa-clock-rotate-left"></i><span>History</span></div>
+            <div id="nav-item-admin" class="nav-anchor-item hidden" onclick="switchActiveApplicationModuleView('admin')"><i class="fa-solid fa-sliders"></i><span>Settings</span></div>
+        </nav>
+    </div>
+</div>
+
+<!-- BET MODAL -->
+<div id="bet-placement-modal-sheet" class="modal-blur-overlay hidden">
+    <div class="modal-slide-sheet">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h3 id="bet-modal-title-header" style="font-size:18px;font-weight:900;text-transform:uppercase;">Place Trade Order</h3>
+            <i class="fa-solid fa-circle-xmark" style="font-size:24px;color:var(--text-secondary);cursor:pointer;" onclick="closeBetSheetModal()"></i>
+        </div>
+        <div class="form-group">
+            <label>Select Cash Value Amount</label>
+            <div class="chip-flex-selection">
+                <div class="chip-node-selector active" onclick="adjustActiveChipSelectionValue(100,this)">₹100</div>
+                <div class="chip-node-selector" onclick="adjustActiveChipSelectionValue(200,this)">₹200</div>
+                <div class="chip-node-selector" onclick="adjustActiveChipSelectionValue(500,this)">₹500</div>
+                <div class="chip-node-selector" onclick="adjustActiveChipSelectionValue(1000,this)">₹1000</div>
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom:24px;">
+            <label>Or Type Custom Value Below (₹)</label>
+            <input type="number" id="input-custom-chip-multiplier" class="input-control" value="100" oninput="synchronizeManualChipInputValue(this.value)">
+        </div>
+        <button class="gold-button" onclick="commitContractBetPlacementExecution()">Confirm Cash Placement</button>
+    </div>
+</div>
+
+<!-- SUPPORT MODAL -->
+<div id="user-support-modal-overlay" class="modal-blur-overlay hidden" style="z-index:10001;">
+    <div class="modal-slide-sheet" style="background:var(--bg-surface);border-top:2px solid var(--shine-blue);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;"><i class="fa-solid fa-headset" style="color:var(--light-blue);font-size:18px;"></i><h3 style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:1px;">Customer Support</h3></div>
+            <i class="fa-solid fa-circle-xmark" style="font-size:24px;color:var(--text-secondary);cursor:pointer;" onclick="closeCustomerSupportDialogModal()"></i>
+        </div>
+        <div id="user-support-chat-canvas" class="chat-canvas-window"></div>
+        <div class="chat-input-row-flex" style="margin-bottom:10px;">
+            <input type="text" id="user-support-input-msg-node" class="input-control" placeholder="Type your issue details here...">
+            <button class="gold-button" style="width:auto;padding:0 22px;font-size:14px;" onclick="executeUserSupportMessageDispatch()">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// SUPABASE INITIALIZATION
+// ============================================================
+const { createClient } = supabase;
+const _supabase = createClient(
+    'https://ofwpdybibavhajlqlcok.supabase.co',
+    'sb_publishable_sxqMDh1cMxndSc8Nefr8hA_PZI98wye'
+);
+
+// ============================================================
+// STATE ENGINE
+// ============================================================
+const SystemStateEngine = {
+    memoryPool: {
+        registeredUsers: JSON.parse(localStorage.getItem('dubai_elite_users')) || [
+            { mobile:"9875543210", secret:"pass123",  balance:2500.00,  status:"Active", hasDeposited:true },
+            { mobile:"9112233445", secret:"dubai888", balance:14500.00, status:"Active", hasDeposited:true }
+        ],
+        activeSessionUser: null,
+        activeAdminState: false,
+        globalActiveTrafficCount: 0,
+        realActiveUsersCount: 0
+    },
+    gameContext: {
+        currentRoundPeriod: 0,
+        activePeriodIndex: 0,
+        secondsLoopTimer: 60,
+        outcomeResolutionMode: "auto",
+        forcedOutcomeVector: null,
+        liveRoundPoolWeights: { Green:0, Violet:0, Red:0 }
+    },
+    vaultQueues: JSON.parse(localStorage.getItem('dubai_elite_global_vault_queues')) || {
+        inwardDeposits:[],
+        outwardWithdrawals:[]
+    },
+    localUserLedgers: { bets:[], vault:[] },
+    config: {
+        acousticState:true,
+        currentSelectionTarget:null,
+        currentChipSelectionVal:100,
+        activeAuthTab:"login"
+    },
+    supportChannelData: {
+        activeSelectedThreadUserMobile:null,
+        userConversations:{}
+    }
+};
+
+// ============================================================
+// SOUND ENGINE
+// ============================================================
+const CoreSoundEngine = {
+    audioCtx:null, bgmSourceNode:null,
+    init(){ if(!this.audioCtx) this.audioCtx=new(window.AudioContext||window.webkitAudioContext)(); },
+    triggerTapFeedbackEffect(){
+        if(!SystemStateEngine.config.acousticState) return; this.init();
+        let o=this.audioCtx.createOscillator(),g=this.audioCtx.createGain();
+        o.type='sine'; o.frequency.setValueAtTime(580,this.audioCtx.currentTime);
+        g.gain.setValueAtTime(0.08,this.audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001,this.audioCtx.currentTime+0.08);
+        o.connect(g); g.connect(this.audioCtx.destination); o.start(); o.stop(this.audioCtx.currentTime+0.08);
+    },
+    triggerPlacementSuccessEffect(){
+        if(!SystemStateEngine.config.acousticState) return; this.init();
+        let o=this.audioCtx.createOscillator(),g=this.audioCtx.createGain();
+        o.type='triangle'; o.frequency.setValueAtTime(440,this.audioCtx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(880,this.audioCtx.currentTime+0.15);
+        g.gain.setValueAtTime(0.12,this.audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001,this.audioCtx.currentTime+0.15);
+        o.connect(g); g.connect(this.audioCtx.destination); o.start(); o.stop(this.audioCtx.currentTime+0.15);
+    },
+    triggerCycleResolutionEffect(){
+        if(!SystemStateEngine.config.acousticState) return; this.init();
+        let o=this.audioCtx.createOscillator(),g=this.audioCtx.createGain();
+        o.type='sawtooth'; o.frequency.setValueAtTime(260,this.audioCtx.currentTime);
+        o.frequency.linearRampToValueAtTime(900,this.audioCtx.currentTime+0.35);
+        g.gain.setValueAtTime(0.15,this.audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001,this.audioCtx.currentTime+0.35);
+        o.connect(g); g.connect(this.audioCtx.destination); o.start(); o.stop(this.audioCtx.currentTime+0.35);
+    },
+    engageAmbientBackgroundMusicLoop(){
+        this.init(); if(this.bgmSourceNode) return;
+        let s=this.audioCtx.sampleRate*4, buf=this.audioCtx.createBuffer(1,s,this.audioCtx.sampleRate), d=buf.getChannelData(0);
+        for(let i=0;i<s;i++){ let t=i/this.audioCtx.sampleRate; d[i]=Math.sin(2*Math.PI*110*t)*Math.exp(-1.8*(t%1))*0.12+Math.sin(2*Math.PI*146.83*t)*Math.exp(-1.2*(t%2))*0.08; }
+        this.bgmSourceNode=this.audioCtx.createBufferSource();
+        this.bgmSourceNode.buffer=buf; this.bgmSourceNode.loop=true;
+        let ag=this.audioCtx.createGain(); ag.gain.setValueAtTime(0.15,this.audioCtx.currentTime);
+        this.bgmSourceNode.connect(ag); ag.connect(this.audioCtx.destination); this.bgmSourceNode.start();
+    },
+    disengageAmbientBackgroundMusicLoop(){
+        if(this.bgmSourceNode){ try{this.bgmSourceNode.stop();}catch(e){} this.bgmSourceNode=null; }
+    }
+};
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded',()=>{
+    saveUsersToLocalStorage();
+    saveGlobalQueuesToLocalStorage();
+
+    const nowSec = Math.floor(Date.now()/1000);
+    const BASE = 20260101001;
+    SystemStateEngine.gameContext.currentRoundPeriod = BASE + Math.floor(nowSec/60);
+    SystemStateEngine.gameContext.activePeriodIndex  = SystemStateEngine.gameContext.currentRoundPeriod;
+    SystemStateEngine.gameContext.secondsLoopTimer   = 60 - (nowSec % 60);
+
+    initializeTrafficSimulationTickerEngine();
+    engageSystemClockDaemonProcessLoop();
+
+    localStorage.removeItem('dubai_elite_active_session');
+    document.getElementById('view-auth').classList.remove('hidden');
+    document.getElementById('view-main-app-shell').classList.add('hidden');
+});
+
+function saveUsersToLocalStorage(){ localStorage.setItem('dubai_elite_users',JSON.stringify(SystemStateEngine.memoryPool.registeredUsers)); }
+function saveGlobalQueuesToLocalStorage(){ localStorage.setItem('dubai_elite_global_vault_queues',JSON.stringify(SystemStateEngine.vaultQueues)); }
+
+function loadIsolatedUserLedgerData(mobile){
+    if(!mobile){ SystemStateEngine.localUserLedgers.bets=[]; SystemStateEngine.localUserLedgers.vault=[]; return; }
+    const ab=JSON.parse(localStorage.getItem('dubai_elite_history_bets'))||{};
+    const av=JSON.parse(localStorage.getItem('dubai_elite_history_vault'))||{};
+    SystemStateEngine.localUserLedgers.bets  = ab[mobile]||[];
+    SystemStateEngine.localUserLedgers.vault = av[mobile]||[];
+}
+
+function saveIsolatedUserLedgerData(mobile){
+    if(!mobile) return;
+    const ab=JSON.parse(localStorage.getItem('dubai_elite_history_bets'))||{};
+    const av=JSON.parse(localStorage.getItem('dubai_elite_history_vault'))||{};
+    ab[mobile]=SystemStateEngine.localUserLedgers.bets;
+    av[mobile]=SystemStateEngine.localUserLedgers.vault;
+    localStorage.setItem('dubai_elite_history_bets',JSON.stringify(ab));
+    localStorage.setItem('dubai_elite_history_vault',JSON.stringify(av));
+}
+
+function displaySystemNotificationAlert(msg){
+    const el=document.getElementById('system-toast');
+    el.innerText=msg; el.classList.add('active');
+    setTimeout(()=>el.classList.remove('active'),3500);
+}
+
+function copyUpiIdToClipboard(t){
+    CoreSoundEngine.triggerTapFeedbackEffect();
+    navigator.clipboard.writeText(t).then(()=>displaySystemNotificationAlert("UPI ID copied successfully.")).catch(()=>displaySystemNotificationAlert("Could not copy automatically."));
+}
+
+// ============================================================
+// CLOCK DAEMON
+// ============================================================
+function engageSystemClockDaemonProcessLoop(){
+    setInterval(()=>{
+        const nowSec = Math.floor(Date.now()/1000);
+        const BASE   = 20260101001;
+        const newPeriod = BASE + Math.floor(nowSec/60);
+        const rem       = 60 - (nowSec % 60);
+
+        const periodJustRolled = (newPeriod > SystemStateEngine.gameContext.currentRoundPeriod);
+
+        if(periodJustRolled){
+            executeMacroPeriodOutcomeResolutionEngine(SystemStateEngine.gameContext.currentRoundPeriod);
+            SystemStateEngine.gameContext.currentRoundPeriod = newPeriod;
+        }
+
+        SystemStateEngine.gameContext.activePeriodIndex  = newPeriod;
+        SystemStateEngine.gameContext.secondsLoopTimer   = rem;
+
+        refreshClockDisplaysAndPanels();
+
+        if(rem <= 5) closeBetSheetModal();
+    },1000);
+}
+
+function refreshClockDisplaysAndPanels(){
+    const rem = SystemStateEngine.gameContext.secondsLoopTimer;
+    const s   = `00:${rem<10?'0'+rem:rem}`;
+    const td  = document.getElementById('arena-timer-value');
+    const pd  = document.getElementById('arena-period-id');
+    if(td) td.innerText=s;
+    if(pd) pd.innerText=SystemStateEngine.gameContext.currentRoundPeriod;
+}
+
+// ============================================================
+// OUTCOME RESOLUTION (LINKED TO SUPABASE)
+// ============================================================
+async function executeMacroPeriodOutcomeResolutionEngine(resolvedPeriodId){
+    CoreSoundEngine.triggerCycleResolutionEffect();
+
+    let outcome = "Green";
+
+    if(SystemStateEngine.memoryPool.activeAdminState) {
+        // ADMIN CALCULATES AND PUSHES TO SUPABASE
+        const pools = SystemStateEngine.gameContext.liveRoundPoolWeights;
+        if(SystemStateEngine.gameContext.outcomeResolutionMode==="manual" && SystemStateEngine.gameContext.forcedOutcomeVector){
+            outcome = SystemStateEngine.gameContext.forcedOutcomeVector;
+        } else if(SystemStateEngine.gameContext.outcomeResolutionMode==="lowside"){
+            if(pools.Green<=pools.Red && pools.Green<=pools.Violet)      outcome="Green";
+            else if(pools.Red<=pools.Green && pools.Red<=pools.Violet)   outcome="Red";
+            else                                                           outcome="Violet";
+        } else {
+            if(pools.Green<=pools.Red) outcome = (Math.random()>0.85) ? "Violet" : "Green";
+            else outcome = (Math.random()>0.85) ? "Violet" : "Red";
+        }
+        
+        // PUSH TO SUPABASE
+        await _supabase.from('game_results').upsert({ period_id: resolvedPeriodId, outcome: outcome });
+    } else {
+        // USER FETCHES FROM SUPABASE (RETRY UNTIL ADMIN PUSHES)
+        let attempts = 0;
+        while(attempts < 10) {
+            const { data } = await _supabase.from('game_results').select('outcome').eq('period_id', resolvedPeriodId).single();
+            if(data) {
+                outcome = data.outcome;
+                break;
+            }
+            await new Promise(r => setTimeout(r, 1000));
+            attempts++;
+        }
+    }
+
+    const allBets = JSON.parse(localStorage.getItem('dubai_elite_history_bets'))||{};
+
+    SystemStateEngine.memoryPool.registeredUsers.forEach(u=>{
+        const userBets = allBets[u.mobile]||[];
+        let changed = false;
+        userBets.forEach(rec=>{
+            if(rec.period===resolvedPeriodId && rec.status==="Pending"){
+                if(rec.selection===outcome){
+                    const mult = outcome==='Violet' ? 4.5 : 2.0;
+                    rec.payout = parseFloat((rec.amount*mult).toFixed(2));
+                    rec.status = "Win";
+                    u.balance  = parseFloat((u.balance + rec.payout).toFixed(2));
+                } else {
+                    rec.status = "Loss";
+                    rec.payout = 0;
+                }
+                changed = true;
+            }
+        });
+        if(changed) allBets[u.mobile]=userBets;
+    });
+
+    const adminKey = "SYSTEM UTILITY NODE";
+    const adminBets = allBets[adminKey]||[];
+    adminBets.forEach(rec=>{
+        if(rec.period===resolvedPeriodId && rec.status==="Pending"){
+            if(rec.selection===outcome){
+                const mult = outcome==='Violet' ? 4.5 : 2.0;
+                rec.payout = parseFloat((rec.amount*mult).toFixed(2));
+                rec.status = "Win";
+                if(SystemStateEngine.memoryPool.activeSessionUser && SystemStateEngine.memoryPool.activeSessionUser.mobile===adminKey){
+                    SystemStateEngine.memoryPool.activeSessionUser.balance=parseFloat((SystemStateEngine.memoryPool.activeSessionUser.balance+rec.payout).toFixed(2));
+                }
+            } else {
+                rec.status="Loss"; rec.payout=0;
+            }
+        }
+    });
+    allBets[adminKey]=adminBets;
+
+    localStorage.setItem('dubai_elite_history_bets',JSON.stringify(allBets));
+    saveUsersToLocalStorage();
+
+    if(SystemStateEngine.memoryPool.activeSessionUser && SystemStateEngine.memoryPool.activeSessionUser.mobile!==adminKey){
+        const match=SystemStateEngine.memoryPool.registeredUsers.find(u=>u.mobile===SystemStateEngine.memoryPool.activeSessionUser.mobile);
+        if(match) SystemStateEngine.memoryPool.activeSessionUser.balance=match.balance;
+        loadIsolatedUserLedgerData(SystemStateEngine.memoryPool.activeSessionUser.mobile);
+    }
+
+    SystemStateEngine.gameContext.liveRoundPoolWeights={Green:0,Violet:0,Red:0};
+    SystemStateEngine.gameContext.forcedOutcomeVector=null;
+
+    synchronizeActiveDOMProfileBalanceFields();
+    renderLocalUserPlacementsLedgersTable();
+    showRoundResultPopup(outcome, resolvedPeriodId);
+
+    if(!document.getElementById('view-admin-override').classList.contains('hidden')){
+        refreshAdministrativeDashboardTerminalEngine();
+    }
+}
+
+function showRoundResultPopup(outcome, periodId){
+    const profile = SystemStateEngine.memoryPool.activeSessionUser;
+    if(!profile) return;
+    const allBets = JSON.parse(localStorage.getItem('dubai_elite_history_bets'))||{};
+    const userBets = allBets[profile.mobile]||[];
+    const myBet = userBets.find(b=>b.period===periodId && b.status!=="Pending");
+    const old = document.getElementById('round-result-popup');
+    if(old) old.remove();
+    const overlay = document.createElement('div');
+    overlay.id = 'round-result-popup';
+    overlay.className = 'result-overlay';
+    let icon='🎰', title='Round Ended', sub=`Result: <strong>${outcome}</strong>`, borderColor='var(--light-blue)', payout='';
+    const outcomeColor = outcome==='Green'?'var(--green)': outcome==='Red'?'var(--red)':'var(--violet)';
+    if(myBet){
+        if(myBet.status==='Win'){
+            icon='🏆'; title='You Won!'; borderColor='var(--green)';
+            payout=`<div style="font-size:22px;font-weight:900;color:var(--green);margin-bottom:8px;">+₹${myBet.payout}</div>`;
+        } else {
+            icon='😔'; title='You Lost'; borderColor='var(--red)';
+            payout=`<div style="font-size:18px;font-weight:700;color:var(--red);margin-bottom:8px;">-₹${myBet.amount}</div>`;
+        }
+        sub = `You picked <strong>${myBet.selection}</strong> · Result: <strong style="color:${outcomeColor}">${outcome}</strong>`;
+    }
+    overlay.innerHTML=`
+        <div class="result-card" style="border-color:${borderColor};">
+            <div class="result-icon">${icon}</div>
+            <div class="result-title" style="color:${borderColor};">${title}</div>
+            ${payout}
+            <div class="result-sub">${sub}</div>
+            <div class="result-outcome-badge" style="background:${outcomeColor}20;border:2px solid ${outcomeColor};color:${outcomeColor};">
+                ${outcome} Won · Round #${periodId}
+            </div>
+            <button class="gold-button" style="margin-top:4px;" onclick="document.getElementById('round-result-popup').remove()">Continue Playing</button>
+        </div>
+    `;
+    document.querySelector('.phone-wrapper').appendChild(overlay);
+    setTimeout(()=>{ const p=document.getElementById('round-result-popup'); if(p) p.remove(); },6000);
+}
+
+// ============================================================
+// AUTH / NAVIGATION / UI (REMAINING CODE)
+// ============================================================
+function switchAuthModeTab(mode){
+    CoreSoundEngine.triggerTapFeedbackEffect();
+    SystemStateEngine.config.activeAuthTab=mode;
+    document.getElementById('trigger-auth-login').classList.remove('active');
+    document.getElementById('trigger-auth-signup').classList.remove('active');
+    document.getElementById(`trigger-auth-${mode}`).classList.add('active');
+    const lbl=document.getElementById('auth-label-account');
+    const btn=document.getElementById('auth-main-action-btn');
+    if(mode==='login'){ lbl.innerText="Mobile Number"; btn.innerText="Log In Now"; }
+    else { lbl.innerText="Enter New Mobile Number"; btn.innerText="Create New Account Profile"; }
+}
+
+function toggleProfileDropdownMenu(){ CoreSoundEngine.triggerTapFeedbackEffect(); document.getElementById('profile-context-dropdown').classList.toggle('hidden'); }
+function routeToProfileVaultAccount(){ document.getElementById('profile-context-dropdown').classList.add('hidden'); switchActiveApplicationModuleView('wallet'); }
+
+function executeApplicationLogoutSequence(){
+    CoreSoundEngine.triggerTapFeedbackEffect();
+    document.getElementById('profile-context-dropdown').classList.add('hidden');
+    localStorage.removeItem('dubai_elite_active_session');
+    SystemStateEngine.memoryPool.activeSessionUser=null;
+    SystemStateEngine.memoryPool.activeAdminState=false;
+    document.getElementById('view-main-app-shell').classList.add('hidden');
+    document.getElementById('nav-item-admin').classList.add('hidden');
+    document.getElementById('app-footer-navigation').classList.remove('admin-mode-shell');
+    document.getElementById('view-auth').classList.remove('hidden');
+    CoreSoundEngine.disengageAmbientBackgroundMusicLoop();
+}
+
+function executeAuthenticationRequest(){
+    const account=document.getElementById('auth-input-account').value.trim();
+    const secret=document.getElementById('auth-input-secret').value;
+    const mode=SystemStateEngine.config.activeAuthTab;
+
+    if(account==="CR7" && secret==="CR7"){
+        SystemStateEngine.memoryPool.activeAdminState=true;
+        SystemStateEngine.memoryPool.activeSessionUser={mobile:"SYSTEM UTILITY NODE",balance:9999999.99,hasDeposited:true};
+        document.getElementById('view-auth').classList.add('hidden');
+        document.getElementById('view-main-app-shell').classList.remove('hidden');
+        document.getElementById('nav-item-admin').classList.remove('hidden');
+        document.getElementById('app-footer-navigation').classList.add('admin-mode-shell');
+        document.getElementById('dropdown-profile-id').innerText="CONSOLE INTERFACE";
+        loadIsolatedUserLedgerData("SYSTEM UTILITY NODE");
+        switchActiveApplicationModuleView('admin');
+        if(SystemStateEngine.config.acousticState) CoreSoundEngine.engageAmbientBackgroundMusicLoop();
+        return;
+    }
+
+    if(account.length===10 && !isNaN(account) && secret.length>=4){
+        let client=SystemStateEngine.memoryPool.registeredUsers.find(u=>u.mobile===account);
+        if(mode==='signup'){
+            if(client){ displaySystemNotificationAlert("Number exists. Log In."); return; }
+            client={mobile:account,secret:secret,balance:100.00,status:"Active",hasDeposited:false};
+            SystemStateEngine.memoryPool.registeredUsers.push(client);
+            saveUsersToLocalStorage();
+        } else {
+            if(!client || client.secret!==secret){ displaySystemNotificationAlert("Error."); return; }
+        }
+        SystemStateEngine.memoryPool.activeSessionUser=client;
+        document.getElementById('view-auth').classList.add('hidden');
+        document.getElementById('view-main-app-shell').classList.remove('hidden');
+        document.getElementById('dropdown-profile-id').innerText=client.mobile;
+        loadIsolatedUserLedgerData(client.mobile);
+        synchronizeActiveDOMProfileBalanceFields();
+        renderLocalUserPlacementsLedgersTable();
+        switchActiveApplicationModuleView('game');
+        if(SystemStateEngine.config.acousticState) CoreSoundEngine.engageAmbientBackgroundMusicLoop();
+    }
+}
+
+function switchActiveApplicationModuleView(t){
+    ['view-game-arena','view-vault-platform','view-history-ledgers','view-admin-override'].forEach(v=>document.getElementById(v).classList.add('hidden'));
+    let id='view-game-arena';
+    if(t==='wallet')  id='view-vault-platform';
+    if(t==='history') id='view-history-ledgers';
+    if(t==='admin')   id='view-admin-override';
+    document.getElementById(id).classList.remove('hidden');
+    ['nav-item-game','nav-item-wallet','nav-item-history','nav-item-admin'].forEach(n=>document.getElementById(n).classList.remove('active'));
+    document.getElementById(`nav-item-${t}`).classList.add('active');
+    if(t==='history') renderLocalUserPlacementsLedgersTable();
+    if(t==='admin') refreshAdministrativeDashboardTerminalEngine();
+}
+
+function toggleVaultSubmoduleTab(s){
+    if(s==='deposit'){
+        document.getElementById('trigger-tab-deposit').classList.add('active');
+        document.getElementById('trigger-tab-withdraw').classList.remove('active');
+        document.getElementById('vault-module-deposit').classList.remove('hidden');
+        document.getElementById('vault-module-withdraw').classList.add('hidden');
+    } else {
+        document.getElementById('trigger-tab-deposit').classList.remove('active');
+        document.getElementById('trigger-tab-withdraw').classList.add('active');
+        document.getElementById('vault-module-deposit').classList.add('hidden');
+        document.getElementById('vault-module-withdraw').classList.remove('hidden');
+    }
+}
+
+function toggleEngineAcousticState(){
+    SystemStateEngine.config.acousticState=!SystemStateEngine.config.acousticState;
+    if(SystemStateEngine.config.acousticState) CoreSoundEngine.engageAmbientBackgroundMusicLoop();
+    else CoreSoundEngine.disengageAmbientBackgroundMusicLoop();
+}
+
+function synchronizeActiveDOMProfileBalanceFields(){
+    if(!SystemStateEngine.memoryPool.activeSessionUser) return;
+    const v="₹"+SystemStateEngine.memoryPool.activeSessionUser.balance.toFixed(2);
+    document.getElementById('global-display-balance').innerText=v;
+    const vd=document.getElementById('vault-total-balance'); if(vd) vd.innerText=v;
+}
+
+function launchBetSheetModal(color){
+    if(SystemStateEngine.gameContext.secondsLoopTimer<=5) return;
+    SystemStateEngine.config.currentSelectionTarget=color;
+    document.getElementById('bet-modal-title-header').innerText=`Trade ${color}`;
+    document.getElementById('bet-placement-modal-sheet').classList.remove('hidden');
+}
+
+function closeBetSheetModal(){ document.getElementById('bet-placement-modal-sheet').classList.add('hidden'); }
+
+function adjustActiveChipSelectionValue(v,el){
+    SystemStateEngine.config.currentChipSelectionVal=v;
+    document.querySelectorAll('.chip-node-selector').forEach(n=>n.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('input-custom-chip-multiplier').value=v;
+}
+
+function commitContractBetPlacementExecution(){
+    const quantum=SystemStateEngine.config.currentChipSelectionVal;
+    const color=SystemStateEngine.config.currentSelectionTarget;
+    const profile=SystemStateEngine.memoryPool.activeSessionUser;
+    if(quantum>profile.balance) return;
+    profile.balance=parseFloat((profile.balance-quantum).toFixed(2));
+    const m=SystemStateEngine.memoryPool.registeredUsers.find(u=>u.mobile===profile.mobile);
+    if(m) m.balance=profile.balance;
+    SystemStateEngine.localUserLedgers.bets.unshift({period: SystemStateEngine.gameContext.currentRoundPeriod,selection: color,amount: quantum,status:"Pending",payout:0});
+    saveIsolatedUserLedgerData(profile.mobile);
+    SystemStateEngine.gameContext.liveRoundPoolWeights[color]+=quantum;
+    synchronizeActiveDOMProfileBalanceFields();
+    renderLocalUserPlacementsLedgersTable();
+    closeBetSheetModal();
+}
+
+function renderLocalUserPlacementsLedgersTable(){
+    const el=document.getElementById('table-user-bets-ledger'); if(!el) return;
+    el.innerHTML=`<div class="table-row-node"><span>Round</span><span>Pick</span><span>Amt</span><span>Status</span></div>`;
+    SystemStateEngine.localUserLedgers.bets.forEach(b=>{
+        el.innerHTML+=`<div class="table-row-node"><span>${b.period}</span><span style="color:${b.selection}">${b.selection}</span><span>₹${b.amount}</span><span>${b.status}</span></div>`;
+    });
+}
+
+function initializeTrafficSimulationTickerEngine(){
+    setInterval(()=>{
+        SystemStateEngine.memoryPool.globalActiveTrafficCount=Math.floor(Math.random()*500)+400;
+        const lc=document.getElementById('live-traffic-counter'); if(lc) lc.innerText=SystemStateEngine.memoryPool.globalActiveTrafficCount;
+    },1500);
+}
+
+function submitCapitalInwardFormRequest(){ displaySystemNotificationAlert("Processing."); }
+function submitCapitalOutwardFormRequest(){ displaySystemNotificationAlert("Processing."); }
+
+function refreshAdministrativeDashboardTerminalEngine(){
+    document.getElementById('adm-metric-total-users').innerText=SystemStateEngine.memoryPool.registeredUsers.length;
+    document.getElementById('adm-live-sync-period').innerText=SystemStateEngine.gameContext.currentRoundPeriod;
+    const w=SystemStateEngine.gameContext.liveRoundPoolWeights;
+    document.getElementById('adm-pool-weight-green').innerText="₹"+w.Green.toFixed(2);
+    document.getElementById('adm-pool-weight-violet').innerText="₹"+w.Violet.toFixed(2);
+    document.getElementById('adm-pool-weight-red').innerText="₹"+w.Red.toFixed(2);
+}
+
+function adjustAdminOutcomeSelectionMode(m){
+    SystemStateEngine.gameContext.outcomeResolutionMode=m;
+    ['auto','lowside','manual'].forEach(k=>document.getElementById(`adm-mode-btn-${k}`).className="split-tab-trigger");
+    document.getElementById(`adm-mode-btn-${m}`).className="split-tab-trigger active";
+    if(m==='manual') document.getElementById('adm-manual-action-tray').classList.remove('hidden');
+    else document.getElementById('adm-manual-action-tray').classList.add('hidden');
+}
+
+function forceAdminOutcomeVector(color){
+    SystemStateEngine.gameContext.forcedOutcomeVector=color;
+    displaySystemNotificationAlert(`Forced: ${color}`);
+}
+
+function openCustomerSupportDialogModal(){ document.getElementById('user-support-modal-overlay').classList.remove('hidden'); }
+function closeCustomerSupportDialogModal(){ document.getElementById('user-support-modal-overlay').classList.add('hidden'); }
+</script>
+</body>
+</html>
