@@ -1,4 +1,64 @@
 <!DOCTYPE html>
+<!--
+========================================================================
+ONE-TIME SUPABASE SETUP (do this once, before using the app)
+========================================================================
+If signup / login / support chat give "Server error" or silently fail
+on a fresh device, your Supabase tables almost certainly have RLS
+(Row Level Security) enabled with no policy, which blocks the anon key
+used by this app from reading/writing.
+
+FIX: Go to Supabase Dashboard -> SQL Editor -> New Query -> paste the
+block below -> Run. Takes under a minute.
+
+-- =====================================================
+-- 1. dubai_elite_users
+ALTER TABLE dubai_elite_users ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "allow_all_anon" ON dubai_elite_users;
+CREATE POLICY "allow_all_anon" ON dubai_elite_users
+  FOR ALL USING (true) WITH CHECK (true);
+
+-- 2. dubai_elite_deposits
+ALTER TABLE dubai_elite_deposits ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "allow_all_anon" ON dubai_elite_deposits;
+CREATE POLICY "allow_all_anon" ON dubai_elite_deposits
+  FOR ALL USING (true) WITH CHECK (true);
+
+-- 3. dubai_elite_withdrawals
+ALTER TABLE dubai_elite_withdrawals ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "allow_all_anon" ON dubai_elite_withdrawals;
+CREATE POLICY "allow_all_anon" ON dubai_elite_withdrawals
+  FOR ALL USING (true) WITH CHECK (true);
+
+-- 4. dubai_elite_bets
+ALTER TABLE dubai_elite_bets ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "allow_all_anon" ON dubai_elite_bets;
+CREATE POLICY "allow_all_anon" ON dubai_elite_bets
+  FOR ALL USING (true) WITH CHECK (true);
+
+-- 5. dubai_elite_vault
+ALTER TABLE dubai_elite_vault ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "allow_all_anon" ON dubai_elite_vault;
+CREATE POLICY "allow_all_anon" ON dubai_elite_vault
+  FOR ALL USING (true) WITH CHECK (true);
+
+-- 6. dubai_elite_support
+ALTER TABLE dubai_elite_support ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "allow_all_anon" ON dubai_elite_support;
+CREATE POLICY "allow_all_anon" ON dubai_elite_support
+  FOR ALL USING (true) WITH CHECK (true);
+-- =====================================================
+
+VERIFY (optional): run this after, should return 6 rows:
+SELECT tablename, policyname, cmd FROM pg_policies WHERE tablename LIKE 'dubai_elite%';
+
+NOTE on security: USING(true)/WITH CHECK(true) means anyone holding the
+anon key can read/write any row. Fine for a small app where the admin
+panel uses the same key. If this app grows public users, tighten these
+policies later (e.g. match auth.uid() or a mobile-based check) instead
+of leaving them fully open.
+========================================================================
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
