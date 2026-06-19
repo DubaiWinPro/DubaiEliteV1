@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,7 @@
     <title>DUBAI ELITE - VIP PLATFORM</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght=400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SUPABASE LIBRARY -->
+    <!-- SUPABASE SCRIPT -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -110,14 +109,6 @@
         .admin-user-thread-card { background:var(--bg-input); border:1px solid rgba(255,255,255,0.06); padding:12px 16px; border-radius:var(--radius-md); cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-size:14px; transition:var(--transition); margin-bottom:8px; }
         .admin-user-thread-card.active { border-color:var(--light-blue); background:rgba(6,182,212,0.12); }
         .admin-direct-balance-control { background:rgba(255,255,255,0.02); border:1px solid rgba(56,189,248,0.1); border-radius:var(--radius-md); padding:12px; margin-top:10px; }
-        /* Result overlay */
-        .result-overlay { position:fixed; top:0; left:0; right:0; bottom:0; z-index:50000; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); }
-        .result-card { background:var(--bg-card); border-radius:24px; padding:36px 32px; text-align:center; border:3px solid; max-width:320px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.8); animation:pop-in 0.35s cubic-bezier(0.34,1.56,0.64,1); }
-        @keyframes pop-in { from{transform:scale(0.6);opacity:0;} to{transform:scale(1);opacity:1;} }
-        .result-icon { font-size:64px; margin-bottom:12px; }
-        .result-title { font-size:28px; font-weight:900; margin-bottom:6px; }
-        .result-sub { font-size:14px; color:var(--text-secondary); font-weight:600; margin-bottom:20px; }
-        .result-outcome-badge { display:inline-block; padding:8px 24px; border-radius:30px; font-size:16px; font-weight:900; margin-bottom:20px; }
     </style>
 </head>
 <body>
@@ -234,15 +225,7 @@
         <!-- ADMIN -->
         <div id="view-admin-override" class="admin-view-container hidden">
             <div class="luxury-logo" style="text-align:left;margin-bottom:24px;"><h1 style="font-size:26px;">SYSTEM SETTINGS</h1><p style="letter-spacing:2px;font-weight:700;">Real-time Performance Metrics & Balance Parameters</p></div>
-            <div class="realtime-bet-tracker-card" style="border:2px solid var(--light-blue);">
-                <h4 style="font-size:13px;text-transform:uppercase;color:var(--light-blue);margin-bottom:10px;font-weight:800;"><i class="fa-solid fa-shield-halved"></i> Quick Admin Bet Placement</h4>
-                <p style="font-size:11px;color:var(--text-secondary);margin-bottom:12px;">Place quick testing trades using Admin balance directly onto the active matrix pool vectors.</p>
-                <div class="color-matrix-grid" style="margin-bottom:0;">
-                    <button class="matrix-btn m-green" onclick="launchBetSheetModal('Green')" style="padding:12px 0;font-size:12px;">Bet Green</button>
-                    <button class="matrix-btn m-violet" onclick="launchBetSheetModal('Violet')" style="padding:12px 0;font-size:12px;">Bet Violet</button>
-                    <button class="matrix-btn m-red" onclick="launchBetSheetModal('Red')" style="padding:12px 0;font-size:12px;">Bet Red</button>
-                </div>
-            </div>
+            
             <div class="admin-summary-grid">
                 <div class="summary-card-node"><p>Total Real Users</p><h3 id="adm-metric-total-users">--</h3></div>
                 <div class="summary-card-node"><p>Real Active Load</p><h3 id="adm-metric-active-users">0</h3></div>
@@ -285,12 +268,6 @@
                     </div>
                 </div>
             </div>
-            <div class="section-header-title"><i class="fa-solid fa-users" style="color:var(--light-blue);"></i> Connected Users Registry Hub & Silent Balance Controller</div>
-            <div class="data-table-wrapper" style="max-height:280px;overflow-y:auto;margin-bottom:20px;"><div id="table-adm-user-registry"></div></div>
-            <div class="section-header-title"><i class="fa-solid fa-square-poll-horizontal" style="color:var(--light-blue);"></i> Inward Cash Settlement Requests (Deposits)</div>
-            <div id="container-adm-deposit-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
-            <div class="section-header-title"><i class="fa-solid fa-money-bill-transfer" style="color:var(--light-blue);"></i> Outward Cash Remittance Requests (Withdrawals)</div>
-            <div id="container-adm-withdrawal-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
         </div>
 
         <nav id="app-footer-navigation" class="fixed-navigation-shell">
@@ -341,9 +318,12 @@
     </div>
 </div>
 
+<!-- RESULT POPUP -->
+<div id="round-result-popup-container"></div>
+
 <script>
 // ============================================================
-// SUPABASE INITIALIZATION
+// SUPABASE CLIENT
 // ============================================================
 const { createClient } = supabase;
 const _supabase = createClient(
@@ -356,10 +336,6 @@ const _supabase = createClient(
 // ============================================================
 const SystemStateEngine = {
     memoryPool: {
-        registeredUsers: JSON.parse(localStorage.getItem('dubai_elite_users')) || [
-            { mobile:"9875543210", secret:"pass123",  balance:2500.00,  status:"Active", hasDeposited:true },
-            { mobile:"9112233445", secret:"dubai888", balance:14500.00, status:"Active", hasDeposited:true }
-        ],
         activeSessionUser: null,
         activeAdminState: false,
         globalActiveTrafficCount: 0,
@@ -367,26 +343,15 @@ const SystemStateEngine = {
     },
     gameContext: {
         currentRoundPeriod: 0,
-        activePeriodIndex: 0,
         secondsLoopTimer: 60,
         outcomeResolutionMode: "auto",
         forcedOutcomeVector: null,
         liveRoundPoolWeights: { Green:0, Violet:0, Red:0 }
     },
-    vaultQueues: JSON.parse(localStorage.getItem('dubai_elite_global_vault_queues')) || {
-        inwardDeposits:[],
-        outwardWithdrawals:[]
-    },
-    localUserLedgers: { bets:[], vault:[] },
     config: {
         acousticState:true,
         currentSelectionTarget:null,
         currentChipSelectionVal:100,
-        activeAuthTab:"login"
-    },
-    supportChannelData: {
-        activeSelectedThreadUserMobile:null,
-        userConversations:{}
     }
 };
 
@@ -394,9 +359,9 @@ const SystemStateEngine = {
 // SOUND ENGINE
 // ============================================================
 const CoreSoundEngine = {
-    audioCtx:null, bgmSourceNode:null,
+    audioCtx:null,
     init(){ if(!this.audioCtx) this.audioCtx=new(window.AudioContext||window.webkitAudioContext)(); },
-    triggerTapFeedbackEffect(){
+    triggerTap(){
         if(!SystemStateEngine.config.acousticState) return; this.init();
         let o=this.audioCtx.createOscillator(),g=this.audioCtx.createGain();
         o.type='sine'; o.frequency.setValueAtTime(580,this.audioCtx.currentTime);
@@ -404,7 +369,7 @@ const CoreSoundEngine = {
         g.gain.exponentialRampToValueAtTime(0.001,this.audioCtx.currentTime+0.08);
         o.connect(g); g.connect(this.audioCtx.destination); o.start(); o.stop(this.audioCtx.currentTime+0.08);
     },
-    triggerPlacementSuccessEffect(){
+    triggerSuccess(){
         if(!SystemStateEngine.config.acousticState) return; this.init();
         let o=this.audioCtx.createOscillator(),g=this.audioCtx.createGain();
         o.type='triangle'; o.frequency.setValueAtTime(440,this.audioCtx.currentTime);
@@ -412,442 +377,292 @@ const CoreSoundEngine = {
         g.gain.setValueAtTime(0.12,this.audioCtx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.001,this.audioCtx.currentTime+0.15);
         o.connect(g); g.connect(this.audioCtx.destination); o.start(); o.stop(this.audioCtx.currentTime+0.15);
-    },
-    triggerCycleResolutionEffect(){
-        if(!SystemStateEngine.config.acousticState) return; this.init();
-        let o=this.audioCtx.createOscillator(),g=this.audioCtx.createGain();
-        o.type='sawtooth'; o.frequency.setValueAtTime(260,this.audioCtx.currentTime);
-        o.frequency.linearRampToValueAtTime(900,this.audioCtx.currentTime+0.35);
-        g.gain.setValueAtTime(0.15,this.audioCtx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001,this.audioCtx.currentTime+0.35);
-        o.connect(g); g.connect(this.audioCtx.destination); o.start(); o.stop(this.audioCtx.currentTime+0.35);
-    },
-    engageAmbientBackgroundMusicLoop(){
-        this.init(); if(this.bgmSourceNode) return;
-        let s=this.audioCtx.sampleRate*4, buf=this.audioCtx.createBuffer(1,s,this.audioCtx.sampleRate), d=buf.getChannelData(0);
-        for(let i=0;i<s;i++){ let t=i/this.audioCtx.sampleRate; d[i]=Math.sin(2*Math.PI*110*t)*Math.exp(-1.8*(t%1))*0.12+Math.sin(2*Math.PI*146.83*t)*Math.exp(-1.2*(t%2))*0.08; }
-        this.bgmSourceNode=this.audioCtx.createBufferSource();
-        this.bgmSourceNode.buffer=buf; this.bgmSourceNode.loop=true;
-        let ag=this.audioCtx.createGain(); ag.gain.setValueAtTime(0.15,this.audioCtx.currentTime);
-        this.bgmSourceNode.connect(ag); ag.connect(this.audioCtx.destination); this.bgmSourceNode.start();
-    },
-    disengageAmbientBackgroundMusicLoop(){
-        if(this.bgmSourceNode){ try{this.bgmSourceNode.stop();}catch(e){} this.bgmSourceNode=null; }
     }
 };
 
 // ============================================================
 // INIT
 // ============================================================
-window.addEventListener('DOMContentLoaded',()=>{
-    saveUsersToLocalStorage();
-    saveGlobalQueuesToLocalStorage();
-
+window.addEventListener('DOMContentLoaded', async () => {
     const nowSec = Math.floor(Date.now()/1000);
-    const BASE = 20260101001;
-    SystemStateEngine.gameContext.currentRoundPeriod = BASE + Math.floor(nowSec/60);
-    SystemStateEngine.gameContext.activePeriodIndex  = SystemStateEngine.gameContext.currentRoundPeriod;
+    SystemStateEngine.gameContext.currentRoundPeriod = 20260101001 + Math.floor(nowSec/60);
     SystemStateEngine.gameContext.secondsLoopTimer   = 60 - (nowSec % 60);
 
-    initializeTrafficSimulationTickerEngine();
-    engageSystemClockDaemonProcessLoop();
-
-    localStorage.removeItem('dubai_elite_active_session');
-    document.getElementById('view-auth').classList.remove('hidden');
-    document.getElementById('view-main-app-shell').classList.add('hidden');
+    engageSystemClockDaemon();
+    initializeTrafficSimulator();
 });
-
-function saveUsersToLocalStorage(){ localStorage.setItem('dubai_elite_users',JSON.stringify(SystemStateEngine.memoryPool.registeredUsers)); }
-function saveGlobalQueuesToLocalStorage(){ localStorage.setItem('dubai_elite_global_vault_queues',JSON.stringify(SystemStateEngine.vaultQueues)); }
-
-function loadIsolatedUserLedgerData(mobile){
-    if(!mobile){ SystemStateEngine.localUserLedgers.bets=[]; SystemStateEngine.localUserLedgers.vault=[]; return; }
-    const ab=JSON.parse(localStorage.getItem('dubai_elite_history_bets'))||{};
-    const av=JSON.parse(localStorage.getItem('dubai_elite_history_vault'))||{};
-    SystemStateEngine.localUserLedgers.bets  = ab[mobile]||[];
-    SystemStateEngine.localUserLedgers.vault = av[mobile]||[];
-}
-
-function saveIsolatedUserLedgerData(mobile){
-    if(!mobile) return;
-    const ab=JSON.parse(localStorage.getItem('dubai_elite_history_bets'))||{};
-    const av=JSON.parse(localStorage.getItem('dubai_elite_history_vault'))||{};
-    ab[mobile]=SystemStateEngine.localUserLedgers.bets;
-    av[mobile]=SystemStateEngine.localUserLedgers.vault;
-    localStorage.setItem('dubai_elite_history_bets',JSON.stringify(ab));
-    localStorage.setItem('dubai_elite_history_vault',JSON.stringify(av));
-}
 
 function displaySystemNotificationAlert(msg){
     const el=document.getElementById('system-toast');
     el.innerText=msg; el.classList.add('active');
-    setTimeout(()=>el.classList.remove('active'),3500);
-}
-
-function copyUpiIdToClipboard(t){
-    CoreSoundEngine.triggerTapFeedbackEffect();
-    navigator.clipboard.writeText(t).then(()=>displaySystemNotificationAlert("UPI ID copied successfully.")).catch(()=>displaySystemNotificationAlert("Could not copy automatically."));
+    setTimeout(()=>el.classList.remove('active'),2500);
 }
 
 // ============================================================
-// CLOCK DAEMON
+// CLOCK & REAL-TIME SYNC
 // ============================================================
-function engageSystemClockDaemonProcessLoop(){
-    setInterval(()=>{
+function engageSystemClockDaemon(){
+    setInterval(async ()=>{
         const nowSec = Math.floor(Date.now()/1000);
-        const BASE   = 20260101001;
-        const newPeriod = BASE + Math.floor(nowSec/60);
-        const rem       = 60 - (nowSec % 60);
+        const newPeriod = 20260101001 + Math.floor(nowSec/60);
+        const rem = 60 - (nowSec % 60);
 
-        const periodJustRolled = (newPeriod > SystemStateEngine.gameContext.currentRoundPeriod);
-
-        if(periodJustRolled){
-            executeMacroPeriodOutcomeResolutionEngine(SystemStateEngine.gameContext.currentRoundPeriod);
+        if(newPeriod > SystemStateEngine.gameContext.currentRoundPeriod){
+            // Round just ended
+            await syncAndResolveRound(SystemStateEngine.gameContext.currentRoundPeriod);
             SystemStateEngine.gameContext.currentRoundPeriod = newPeriod;
         }
 
-        SystemStateEngine.gameContext.activePeriodIndex  = newPeriod;
-        SystemStateEngine.gameContext.secondsLoopTimer   = rem;
-
-        refreshClockDisplaysAndPanels();
+        SystemStateEngine.gameContext.secondsLoopTimer = rem;
+        document.getElementById('arena-timer-value').innerText = `00:${rem < 10 ? '0'+rem : rem}`;
+        document.getElementById('arena-period-id').innerText = SystemStateEngine.gameContext.currentRoundPeriod;
+        document.getElementById('adm-live-sync-period').innerText = SystemStateEngine.gameContext.currentRoundPeriod;
 
         if(rem <= 5) closeBetSheetModal();
     },1000);
 }
 
-function refreshClockDisplaysAndPanels(){
-    const rem = SystemStateEngine.gameContext.secondsLoopTimer;
-    const s   = `00:${rem<10?'0'+rem:rem}`;
-    const td  = document.getElementById('arena-timer-value');
-    const pd  = document.getElementById('arena-period-id');
-    if(td) td.innerText=s;
-    if(pd) pd.innerText=SystemStateEngine.gameContext.currentRoundPeriod;
-}
-
-// ============================================================
-// OUTCOME RESOLUTION (LINKED TO SUPABASE)
-// ============================================================
-async function executeMacroPeriodOutcomeResolutionEngine(resolvedPeriodId){
-    CoreSoundEngine.triggerCycleResolutionEffect();
-
+async function syncAndResolveRound(periodId){
     let outcome = "Green";
 
-    if(SystemStateEngine.memoryPool.activeAdminState) {
-        // ADMIN CALCULATES AND PUSHES TO SUPABASE
+    if(SystemStateEngine.memoryPool.activeAdminState){
+        // Admin Logic
         const pools = SystemStateEngine.gameContext.liveRoundPoolWeights;
-        if(SystemStateEngine.gameContext.outcomeResolutionMode==="manual" && SystemStateEngine.gameContext.forcedOutcomeVector){
+        if(SystemStateEngine.gameContext.outcomeResolutionMode === "manual" && SystemStateEngine.gameContext.forcedOutcomeVector){
             outcome = SystemStateEngine.gameContext.forcedOutcomeVector;
-        } else if(SystemStateEngine.gameContext.outcomeResolutionMode==="lowside"){
-            if(pools.Green<=pools.Red && pools.Green<=pools.Violet)      outcome="Green";
-            else if(pools.Red<=pools.Green && pools.Red<=pools.Violet)   outcome="Red";
-            else                                                           outcome="Violet";
+        } else if(SystemStateEngine.gameContext.outcomeResolutionMode === "lowside"){
+            const min = Math.min(pools.Green, pools.Red, pools.Violet);
+            outcome = (pools.Green === min) ? "Green" : (pools.Red === min ? "Red" : "Violet");
         } else {
-            if(pools.Green<=pools.Red) outcome = (Math.random()>0.85) ? "Violet" : "Green";
-            else outcome = (Math.random()>0.85) ? "Violet" : "Red";
+            outcome = Math.random() > 0.5 ? "Green" : "Red";
         }
-        
-        // PUSH TO SUPABASE
-        await _supabase.from('game_results').upsert({ period_id: resolvedPeriodId, outcome: outcome });
+        // Save to Supabase
+        await _supabase.from('game_results').upsert({ period_id: periodId.toString(), outcome: outcome });
     } else {
-        // USER FETCHES FROM SUPABASE (RETRY UNTIL ADMIN PUSHES)
-        let attempts = 0;
-        while(attempts < 10) {
-            const { data } = await _supabase.from('game_results').select('outcome').eq('period_id', resolvedPeriodId).single();
-            if(data) {
-                outcome = data.outcome;
-                break;
-            }
-            await new Promise(r => setTimeout(r, 1000));
-            attempts++;
-        }
+        // User Logic: Fetch from Supabase
+        await new Promise(r => setTimeout(r, 2000)); // Delay to wait for admin push
+        const { data } = await _supabase.from('game_results').select('outcome').eq('period_id', periodId.toString()).single();
+        outcome = data ? data.outcome : "Green";
     }
 
-    const allBets = JSON.parse(localStorage.getItem('dubai_elite_history_bets'))||{};
-
-    SystemStateEngine.memoryPool.registeredUsers.forEach(u=>{
-        const userBets = allBets[u.mobile]||[];
-        let changed = false;
-        userBets.forEach(rec=>{
-            if(rec.period===resolvedPeriodId && rec.status==="Pending"){
-                if(rec.selection===outcome){
-                    const mult = outcome==='Violet' ? 4.5 : 2.0;
-                    rec.payout = parseFloat((rec.amount*mult).toFixed(2));
-                    rec.status = "Win";
-                    u.balance  = parseFloat((u.balance + rec.payout).toFixed(2));
-                } else {
-                    rec.status = "Loss";
-                    rec.payout = 0;
-                }
-                changed = true;
-            }
-        });
-        if(changed) allBets[u.mobile]=userBets;
-    });
-
-    const adminKey = "SYSTEM UTILITY NODE";
-    const adminBets = allBets[adminKey]||[];
-    adminBets.forEach(rec=>{
-        if(rec.period===resolvedPeriodId && rec.status==="Pending"){
-            if(rec.selection===outcome){
-                const mult = outcome==='Violet' ? 4.5 : 2.0;
-                rec.payout = parseFloat((rec.amount*mult).toFixed(2));
-                rec.status = "Win";
-                if(SystemStateEngine.memoryPool.activeSessionUser && SystemStateEngine.memoryPool.activeSessionUser.mobile===adminKey){
-                    SystemStateEngine.memoryPool.activeSessionUser.balance=parseFloat((SystemStateEngine.memoryPool.activeSessionUser.balance+rec.payout).toFixed(2));
-                }
-            } else {
-                rec.status="Loss"; rec.payout=0;
-            }
-        }
-    });
-    allBets[adminKey]=adminBets;
-
-    localStorage.setItem('dubai_elite_history_bets',JSON.stringify(allBets));
-    saveUsersToLocalStorage();
-
-    if(SystemStateEngine.memoryPool.activeSessionUser && SystemStateEngine.memoryPool.activeSessionUser.mobile!==adminKey){
-        const match=SystemStateEngine.memoryPool.registeredUsers.find(u=>u.mobile===SystemStateEngine.memoryPool.activeSessionUser.mobile);
-        if(match) SystemStateEngine.memoryPool.activeSessionUser.balance=match.balance;
-        loadIsolatedUserLedgerData(SystemStateEngine.memoryPool.activeSessionUser.mobile);
-    }
-
-    SystemStateEngine.gameContext.liveRoundPoolWeights={Green:0,Violet:0,Red:0};
-    SystemStateEngine.gameContext.forcedOutcomeVector=null;
-
-    synchronizeActiveDOMProfileBalanceFields();
-    renderLocalUserPlacementsLedgersTable();
-    showRoundResultPopup(outcome, resolvedPeriodId);
-
-    if(!document.getElementById('view-admin-override').classList.contains('hidden')){
-        refreshAdministrativeDashboardTerminalEngine();
-    }
+    processBets(periodId, outcome);
+    showResultPopup(outcome, periodId);
+    
+    // Reset Pool
+    SystemStateEngine.gameContext.liveRoundPoolWeights = { Green:0, Violet:0, Red:0 };
+    SystemStateEngine.gameContext.forcedOutcomeVector = null;
+    refreshAdminPools();
 }
 
-function showRoundResultPopup(outcome, periodId){
-    const profile = SystemStateEngine.memoryPool.activeSessionUser;
-    if(!profile) return;
-    const allBets = JSON.parse(localStorage.getItem('dubai_elite_history_bets'))||{};
-    const userBets = allBets[profile.mobile]||[];
-    const myBet = userBets.find(b=>b.period===periodId && b.status!=="Pending");
-    const old = document.getElementById('round-result-popup');
-    if(old) old.remove();
-    const overlay = document.createElement('div');
-    overlay.id = 'round-result-popup';
-    overlay.className = 'result-overlay';
-    let icon='🎰', title='Round Ended', sub=`Result: <strong>${outcome}</strong>`, borderColor='var(--light-blue)', payout='';
-    const outcomeColor = outcome==='Green'?'var(--green)': outcome==='Red'?'var(--red)':'var(--violet)';
-    if(myBet){
-        if(myBet.status==='Win'){
-            icon='🏆'; title='You Won!'; borderColor='var(--green)';
-            payout=`<div style="font-size:22px;font-weight:900;color:var(--green);margin-bottom:8px;">+₹${myBet.payout}</div>`;
-        } else {
-            icon='😔'; title='You Lost'; borderColor='var(--red)';
-            payout=`<div style="font-size:18px;font-weight:700;color:var(--red);margin-bottom:8px;">-₹${myBet.amount}</div>`;
+function processBets(periodId, outcome){
+    const user = SystemStateEngine.memoryPool.activeSessionUser;
+    if(!user) return;
+    const bets = JSON.parse(localStorage.getItem('bets_'+user.mobile)) || [];
+    bets.forEach(b => {
+        if(b.period == periodId && b.status === "Pending"){
+            if(b.selection === outcome){
+                const mult = outcome === 'Violet' ? 4.5 : 2;
+                b.status = "Win";
+                b.payout = b.amount * mult;
+                user.balance += b.payout;
+            } else {
+                b.status = "Loss";
+                b.payout = 0;
+            }
         }
-        sub = `You picked <strong>${myBet.selection}</strong> · Result: <strong style="color:${outcomeColor}">${outcome}</strong>`;
-    }
-    overlay.innerHTML=`
-        <div class="result-card" style="border-color:${borderColor};">
-            <div class="result-icon">${icon}</div>
-            <div class="result-title" style="color:${borderColor};">${title}</div>
-            ${payout}
-            <div class="result-sub">${sub}</div>
-            <div class="result-outcome-badge" style="background:${outcomeColor}20;border:2px solid ${outcomeColor};color:${outcomeColor};">
-                ${outcome} Won · Round #${periodId}
-            </div>
-            <button class="gold-button" style="margin-top:4px;" onclick="document.getElementById('round-result-popup').remove()">Continue Playing</button>
-        </div>
-    `;
-    document.querySelector('.phone-wrapper').appendChild(overlay);
-    setTimeout(()=>{ const p=document.getElementById('round-result-popup'); if(p) p.remove(); },6000);
+    });
+    localStorage.setItem('bets_'+user.mobile, JSON.stringify(bets));
+    synchronizeActiveDOMProfileBalanceFields();
 }
 
 // ============================================================
-// AUTH / NAVIGATION / UI (REMAINING CODE)
+// UI & NAVIGATION
 // ============================================================
 function switchAuthModeTab(mode){
-    CoreSoundEngine.triggerTapFeedbackEffect();
-    SystemStateEngine.config.activeAuthTab=mode;
-    document.getElementById('trigger-auth-login').classList.remove('active');
-    document.getElementById('trigger-auth-signup').classList.remove('active');
-    document.getElementById(`trigger-auth-${mode}`).classList.add('active');
-    const lbl=document.getElementById('auth-label-account');
-    const btn=document.getElementById('auth-main-action-btn');
-    if(mode==='login'){ lbl.innerText="Mobile Number"; btn.innerText="Log In Now"; }
-    else { lbl.innerText="Enter New Mobile Number"; btn.innerText="Create New Account Profile"; }
-}
-
-function toggleProfileDropdownMenu(){ CoreSoundEngine.triggerTapFeedbackEffect(); document.getElementById('profile-context-dropdown').classList.toggle('hidden'); }
-function routeToProfileVaultAccount(){ document.getElementById('profile-context-dropdown').classList.add('hidden'); switchActiveApplicationModuleView('wallet'); }
-
-function executeApplicationLogoutSequence(){
-    CoreSoundEngine.triggerTapFeedbackEffect();
-    document.getElementById('profile-context-dropdown').classList.add('hidden');
-    localStorage.removeItem('dubai_elite_active_session');
-    SystemStateEngine.memoryPool.activeSessionUser=null;
-    SystemStateEngine.memoryPool.activeAdminState=false;
-    document.getElementById('view-main-app-shell').classList.add('hidden');
-    document.getElementById('nav-item-admin').classList.add('hidden');
-    document.getElementById('app-footer-navigation').classList.remove('admin-mode-shell');
-    document.getElementById('view-auth').classList.remove('hidden');
-    CoreSoundEngine.disengageAmbientBackgroundMusicLoop();
+    CoreSoundEngine.triggerTap();
+    document.getElementById('trigger-auth-login').classList.toggle('active', mode === 'login');
+    document.getElementById('trigger-auth-signup').classList.toggle('active', mode === 'signup');
+    document.getElementById('auth-main-action-btn').innerText = mode === 'login' ? "Log In Now" : "Sign Up Now";
 }
 
 function executeAuthenticationRequest(){
-    const account=document.getElementById('auth-input-account').value.trim();
-    const secret=document.getElementById('auth-input-secret').value;
-    const mode=SystemStateEngine.config.activeAuthTab;
+    const acc = document.getElementById('auth-input-account').value;
+    const sec = document.getElementById('auth-input-secret').value;
 
-    if(account==="CR7" && secret==="CR7"){
-        SystemStateEngine.memoryPool.activeAdminState=true;
-        SystemStateEngine.memoryPool.activeSessionUser={mobile:"SYSTEM UTILITY NODE",balance:9999999.99,hasDeposited:true};
-        document.getElementById('view-auth').classList.add('hidden');
-        document.getElementById('view-main-app-shell').classList.remove('hidden');
+    if(acc === "CR7" && sec === "CR7"){
+        SystemStateEngine.memoryPool.activeAdminState = true;
+        SystemStateEngine.memoryPool.activeSessionUser = { mobile: "ADMIN", balance: 99999 };
         document.getElementById('nav-item-admin').classList.remove('hidden');
-        document.getElementById('app-footer-navigation').classList.add('admin-mode-shell');
-        document.getElementById('dropdown-profile-id').innerText="CONSOLE INTERFACE";
-        loadIsolatedUserLedgerData("SYSTEM UTILITY NODE");
-        switchActiveApplicationModuleView('admin');
-        if(SystemStateEngine.config.acousticState) CoreSoundEngine.engageAmbientBackgroundMusicLoop();
-        return;
+    } else {
+        SystemStateEngine.memoryPool.activeSessionUser = { mobile: acc, balance: 1000 };
     }
 
-    if(account.length===10 && !isNaN(account) && secret.length>=4){
-        let client=SystemStateEngine.memoryPool.registeredUsers.find(u=>u.mobile===account);
-        if(mode==='signup'){
-            if(client){ displaySystemNotificationAlert("Number exists. Log In."); return; }
-            client={mobile:account,secret:secret,balance:100.00,status:"Active",hasDeposited:false};
-            SystemStateEngine.memoryPool.registeredUsers.push(client);
-            saveUsersToLocalStorage();
-        } else {
-            if(!client || client.secret!==secret){ displaySystemNotificationAlert("Error."); return; }
-        }
-        SystemStateEngine.memoryPool.activeSessionUser=client;
-        document.getElementById('view-auth').classList.add('hidden');
-        document.getElementById('view-main-app-shell').classList.remove('hidden');
-        document.getElementById('dropdown-profile-id').innerText=client.mobile;
-        loadIsolatedUserLedgerData(client.mobile);
-        synchronizeActiveDOMProfileBalanceFields();
-        renderLocalUserPlacementsLedgersTable();
-        switchActiveApplicationModuleView('game');
-        if(SystemStateEngine.config.acousticState) CoreSoundEngine.engageAmbientBackgroundMusicLoop();
-    }
+    document.getElementById('view-auth').classList.add('hidden');
+    document.getElementById('view-main-app-shell').classList.remove('hidden');
+    document.getElementById('dropdown-profile-id').innerText = SystemStateEngine.memoryPool.activeSessionUser.mobile;
+    synchronizeActiveDOMProfileBalanceFields();
+    displaySystemNotificationAlert("Access Granted.");
 }
 
 function switchActiveApplicationModuleView(t){
-    ['view-game-arena','view-vault-platform','view-history-ledgers','view-admin-override'].forEach(v=>document.getElementById(v).classList.add('hidden'));
-    let id='view-game-arena';
-    if(t==='wallet')  id='view-vault-platform';
-    if(t==='history') id='view-history-ledgers';
-    if(t==='admin')   id='view-admin-override';
-    document.getElementById(id).classList.remove('hidden');
-    ['nav-item-game','nav-item-wallet','nav-item-history','nav-item-admin'].forEach(n=>document.getElementById(n).classList.remove('active'));
-    document.getElementById(`nav-item-${t}`).classList.add('active');
-    if(t==='history') renderLocalUserPlacementsLedgersTable();
-    if(t==='admin') refreshAdministrativeDashboardTerminalEngine();
-}
-
-function toggleVaultSubmoduleTab(s){
-    if(s==='deposit'){
-        document.getElementById('trigger-tab-deposit').classList.add('active');
-        document.getElementById('trigger-tab-withdraw').classList.remove('active');
-        document.getElementById('vault-module-deposit').classList.remove('hidden');
-        document.getElementById('vault-module-withdraw').classList.add('hidden');
-    } else {
-        document.getElementById('trigger-tab-deposit').classList.remove('active');
-        document.getElementById('trigger-tab-withdraw').classList.add('active');
-        document.getElementById('vault-module-deposit').classList.add('hidden');
-        document.getElementById('vault-module-withdraw').classList.remove('hidden');
-    }
-}
-
-function toggleEngineAcousticState(){
-    SystemStateEngine.config.acousticState=!SystemStateEngine.config.acousticState;
-    if(SystemStateEngine.config.acousticState) CoreSoundEngine.engageAmbientBackgroundMusicLoop();
-    else CoreSoundEngine.disengageAmbientBackgroundMusicLoop();
+    CoreSoundEngine.triggerTap();
+    const views = ['game', 'wallet', 'history', 'admin'];
+    views.forEach(v => {
+        const el = document.getElementById(`view-${v === 'game' ? 'game-arena' : (v === 'wallet' ? 'vault-platform' : (v === 'history' ? 'history-ledgers' : 'admin-override'))}`);
+        if(el) el.classList.toggle('hidden', v !== t);
+        const nav = document.getElementById(`nav-item-${v}`);
+        if(nav) nav.classList.toggle('active', v === t);
+    });
+    if(t === 'history') renderHistory();
 }
 
 function synchronizeActiveDOMProfileBalanceFields(){
-    if(!SystemStateEngine.memoryPool.activeSessionUser) return;
-    const v="₹"+SystemStateEngine.memoryPool.activeSessionUser.balance.toFixed(2);
-    document.getElementById('global-display-balance').innerText=v;
-    const vd=document.getElementById('vault-total-balance'); if(vd) vd.innerText=v;
+    const b = "₹" + SystemStateEngine.memoryPool.activeSessionUser.balance.toFixed(2);
+    document.getElementById('global-display-balance').innerText = b;
+    document.getElementById('vault-total-balance').innerText = b;
 }
 
+// ============================================================
+// BETTING
+// ============================================================
 function launchBetSheetModal(color){
-    if(SystemStateEngine.gameContext.secondsLoopTimer<=5) return;
-    SystemStateEngine.config.currentSelectionTarget=color;
-    document.getElementById('bet-modal-title-header').innerText=`Trade ${color}`;
+    if(SystemStateEngine.gameContext.secondsLoopTimer <= 5) return;
+    SystemStateEngine.config.currentSelectionTarget = color;
+    document.getElementById('bet-modal-title-header').innerText = `Bet on ${color}`;
     document.getElementById('bet-placement-modal-sheet').classList.remove('hidden');
 }
 
 function closeBetSheetModal(){ document.getElementById('bet-placement-modal-sheet').classList.add('hidden'); }
 
-function adjustActiveChipSelectionValue(v,el){
-    SystemStateEngine.config.currentChipSelectionVal=v;
-    document.querySelectorAll('.chip-node-selector').forEach(n=>n.classList.remove('active'));
+function adjustActiveChipSelectionValue(v, el){
+    SystemStateEngine.config.currentChipSelectionVal = v;
+    document.querySelectorAll('.chip-node-selector').forEach(n => n.classList.remove('active'));
     el.classList.add('active');
-    document.getElementById('input-custom-chip-multiplier').value=v;
 }
 
 function commitContractBetPlacementExecution(){
-    const quantum=SystemStateEngine.config.currentChipSelectionVal;
-    const color=SystemStateEngine.config.currentSelectionTarget;
-    const profile=SystemStateEngine.memoryPool.activeSessionUser;
-    if(quantum>profile.balance) return;
-    profile.balance=parseFloat((profile.balance-quantum).toFixed(2));
-    const m=SystemStateEngine.memoryPool.registeredUsers.find(u=>u.mobile===profile.mobile);
-    if(m) m.balance=profile.balance;
-    SystemStateEngine.localUserLedgers.bets.unshift({period: SystemStateEngine.gameContext.currentRoundPeriod,selection: color,amount: quantum,status:"Pending",payout:0});
-    saveIsolatedUserLedgerData(profile.mobile);
-    SystemStateEngine.gameContext.liveRoundPoolWeights[color]+=quantum;
+    const user = SystemStateEngine.memoryPool.activeSessionUser;
+    const amt = SystemStateEngine.config.currentChipSelectionVal;
+    const col = SystemStateEngine.config.currentSelectionTarget;
+
+    if(amt > user.balance) return displaySystemNotificationAlert("Insufficient Balance.");
+
+    user.balance -= amt;
+    const bets = JSON.parse(localStorage.getItem('bets_'+user.mobile)) || [];
+    bets.unshift({ period: SystemStateEngine.gameContext.currentRoundPeriod, selection: col, amount: amt, status: "Pending" });
+    localStorage.setItem('bets_'+user.mobile, JSON.stringify(bets));
+
+    SystemStateEngine.gameContext.liveRoundPoolWeights[col] += amt;
+    
     synchronizeActiveDOMProfileBalanceFields();
-    renderLocalUserPlacementsLedgersTable();
     closeBetSheetModal();
+    CoreSoundEngine.triggerSuccess();
+    refreshAdminPools();
+    displaySystemNotificationAlert("Bet Placed.");
 }
 
-function renderLocalUserPlacementsLedgersTable(){
-    const el=document.getElementById('table-user-bets-ledger'); if(!el) return;
-    el.innerHTML=`<div class="table-row-node"><span>Round</span><span>Pick</span><span>Amt</span><span>Status</span></div>`;
-    SystemStateEngine.localUserLedgers.bets.forEach(b=>{
-        el.innerHTML+=`<div class="table-row-node"><span>${b.period}</span><span style="color:${b.selection}">${b.selection}</span><span>₹${b.amount}</span><span>${b.status}</span></div>`;
+// ============================================================
+// ADMIN LOGIC
+// ============================================================
+function adjustAdminOutcomeSelectionMode(m){
+    SystemStateEngine.gameContext.outcomeResolutionMode = m;
+    document.getElementById('adm-mode-btn-auto').classList.toggle('active', m === 'auto');
+    document.getElementById('adm-mode-btn-lowside').classList.toggle('active', m === 'lowside');
+    document.getElementById('adm-mode-btn-manual').classList.toggle('active', m === 'manual');
+    document.getElementById('adm-manual-action-tray').classList.toggle('hidden', m !== 'manual');
+}
+
+function forceAdminOutcomeVector(col){
+    SystemStateEngine.gameContext.forcedOutcomeVector = col;
+    displaySystemNotificationAlert(`Forced: ${col}`);
+}
+
+function refreshAdminPools(){
+    if(!SystemStateEngine.memoryPool.activeAdminState) return;
+    const w = SystemStateEngine.gameContext.liveRoundPoolWeights;
+    document.getElementById('adm-pool-weight-green').innerText = "₹"+w.Green.toFixed(2);
+    document.getElementById('adm-pool-weight-violet').innerText = "₹"+w.Violet.toFixed(2);
+    document.getElementById('adm-pool-weight-red').innerText = "₹"+w.Red.toFixed(2);
+}
+
+// ============================================================
+// SUPPORT CHAT (REAL-TIME SYNC)
+// ============================================================
+async function openCustomerSupportDialogModal(){
+    document.getElementById('user-support-modal-overlay').classList.remove('hidden');
+    loadChat();
+}
+
+async function loadChat(){
+    const user = SystemStateEngine.memoryPool.activeSessionUser;
+    const { data } = await _supabase.from('support_chat').select('*').eq('mobile', user.mobile).order('created_at', { ascending: true });
+    const canvas = document.getElementById('user-support-chat-canvas');
+    canvas.innerHTML = '';
+    if(data) data.forEach(m => {
+        canvas.innerHTML += `<div class="chat-bubble-node bubble-${m.side}"><span>${m.text}</span></div>`;
+    });
+    canvas.scrollTop = canvas.scrollHeight;
+}
+
+async function executeUserSupportMessageDispatch(){
+    const user = SystemStateEngine.memoryPool.activeSessionUser;
+    const text = document.getElementById('user-support-input-msg-node').value;
+    if(!text) return;
+    await _supabase.from('support_chat').insert({ mobile: user.mobile, text: text, side: 'user' });
+    document.getElementById('user-support-input-msg-node').value = '';
+    loadChat();
+}
+
+function closeCustomerSupportDialogModal(){ document.getElementById('user-support-modal-overlay').classList.add('hidden'); }
+
+// ============================================================
+// RESULT POPUP
+// ============================================================
+function showResultPopup(outcome, periodId){
+    const user = SystemStateEngine.memoryPool.activeSessionUser;
+    if(!user) return;
+    const bets = JSON.parse(localStorage.getItem('bets_'+user.mobile)) || [];
+    const myBet = bets.find(b => b.period == periodId);
+
+    const container = document.getElementById('round-result-popup-container');
+    const color = outcome === 'Green' ? 'var(--green)' : (outcome === 'Red' ? 'var(--red)' : 'var(--violet)');
+    
+    let content = `<div class="result-title" style="color:${color}">${outcome} Wins</div>`;
+    if(myBet){
+        content += `<div class="result-outcome-badge" style="background:${myBet.status === 'Win' ? 'var(--green)' : 'var(--red)'}">${myBet.status}</div>`;
+    }
+
+    container.innerHTML = `
+        <div class="result-overlay" onclick="this.remove()">
+            <div class="result-card" style="border-color:${color}">
+                <div class="result-icon">${outcome === 'Violet' ? '💎' : '💰'}</div>
+                ${content}
+                <div class="result-sub">Round #${periodId}</div>
+                <button class="gold-button" style="margin-top:20px;">Continue</button>
+            </div>
+        </div>
+    `;
+    setTimeout(() => { if(container.firstChild) container.firstChild.remove(); }, 5000);
+}
+
+function renderHistory(){
+    const user = SystemStateEngine.memoryPool.activeSessionUser;
+    const bets = JSON.parse(localStorage.getItem('bets_'+user.mobile)) || [];
+    const el = document.getElementById('table-user-bets-ledger');
+    el.innerHTML = '';
+    bets.forEach(b => {
+        el.innerHTML += `<div class="table-row-node"><span>${b.period}</span><span style="color:var(--${b.selection.toLowerCase()})">${b.selection}</span><span>₹${b.amount}</span><span style="color:${b.status === 'Win' ? 'var(--green)' : 'var(--red)'}">${b.status}</span></div>`;
     });
 }
 
-function initializeTrafficSimulationTickerEngine(){
-    setInterval(()=>{
-        SystemStateEngine.memoryPool.globalActiveTrafficCount=Math.floor(Math.random()*500)+400;
-        const lc=document.getElementById('live-traffic-counter'); if(lc) lc.innerText=SystemStateEngine.memoryPool.globalActiveTrafficCount;
-    },1500);
+function initializeTrafficSimulator(){
+    setInterval(() => {
+        document.getElementById('live-traffic-counter').innerText = Math.floor(Math.random() * 500) + 200;
+    }, 2000);
 }
 
-function submitCapitalInwardFormRequest(){ displaySystemNotificationAlert("Processing."); }
-function submitCapitalOutwardFormRequest(){ displaySystemNotificationAlert("Processing."); }
-
-function refreshAdministrativeDashboardTerminalEngine(){
-    document.getElementById('adm-metric-total-users').innerText=SystemStateEngine.memoryPool.registeredUsers.length;
-    document.getElementById('adm-live-sync-period').innerText=SystemStateEngine.gameContext.currentRoundPeriod;
-    const w=SystemStateEngine.gameContext.liveRoundPoolWeights;
-    document.getElementById('adm-pool-weight-green').innerText="₹"+w.Green.toFixed(2);
-    document.getElementById('adm-pool-weight-violet').innerText="₹"+w.Violet.toFixed(2);
-    document.getElementById('adm-pool-weight-red').innerText="₹"+w.Red.toFixed(2);
-}
-
-function adjustAdminOutcomeSelectionMode(m){
-    SystemStateEngine.gameContext.outcomeResolutionMode=m;
-    ['auto','lowside','manual'].forEach(k=>document.getElementById(`adm-mode-btn-${k}`).className="split-tab-trigger");
-    document.getElementById(`adm-mode-btn-${m}`).className="split-tab-trigger active";
-    if(m==='manual') document.getElementById('adm-manual-action-tray').classList.remove('hidden');
-    else document.getElementById('adm-manual-action-tray').classList.add('hidden');
-}
-
-function forceAdminOutcomeVector(color){
-    SystemStateEngine.gameContext.forcedOutcomeVector=color;
-    displaySystemNotificationAlert(`Forced: ${color}`);
-}
-
-function openCustomerSupportDialogModal(){ document.getElementById('user-support-modal-overlay').classList.remove('hidden'); }
-function closeCustomerSupportDialogModal(){ document.getElementById('user-support-modal-overlay').classList.add('hidden'); }
+function toggleProfileDropdownMenu(){ document.getElementById('profile-context-dropdown').classList.toggle('hidden'); }
+function executeApplicationLogoutSequence(){ location.reload(); }
 </script>
 </body>
 </html>
