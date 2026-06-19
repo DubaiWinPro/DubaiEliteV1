@@ -1279,24 +1279,31 @@ of leaving them fully open.
         }
 
         async function sbLoadSupport(mobile) {
-            const { data, error } = await db.from('dubai_elite_support').select('*').eq('mobile', mobile).order('created_at');
-            if (error) return [];
-            return (data || []).map(m => ({ side: m.side, text: m.text }));
+            const { data, error } = await db.from('dubai_elite_support').select('*').eq('user_id', mobile).order('created_at', { ascending: true });
+            if (error) { console.error('sbLoadSupport:', error); return []; }
+            return (data || []).map(m => ({ side: m.sender, text: m.message }));
         }
 
         async function sbLoadAllSupportThreads() {
-            const { data, error } = await db.from('dubai_elite_support').select('mobile').order('created_at');
-            if (error) return [];
-            const mobileSet = [...new Set((data || []).map(m => m.mobile))];
+            // Fetch all messages from dubai_elite_support ordered by created_at ascending
+            const { data, error } = await db.from('dubai_elite_support').select('*').order('created_at', { ascending: true });
+            if (error) { console.error('sbLoadAllSupportThreads:', error); return {}; }
+            // Group messages by user_id (mobile)
             const conversations = {};
-            for (const mobile of mobileSet) {
-                conversations[mobile] = await sbLoadSupport(mobile);
+            for (const row of (data || [])) {
+                const mobile = row.user_id;
+                if (!conversations[mobile]) conversations[mobile] = [];
+                conversations[mobile].push({ side: row.sender, text: row.message });
             }
             return conversations;
         }
 
-        async function sbInsertSupportMsg(mobile, side, text) {
-            const { error } = await db.from('dubai_elite_support').insert({ mobile, side, text });
+        async function sbInsertSupportMsg(mobile, sender, message) {
+            const { error } = await db.from('dubai_elite_support').insert({
+                user_id: mobile,
+                message: message,
+                sender: sender
+            });
             if (error) console.error('sbInsertSupportMsg:', error);
         }
 
