@@ -1303,6 +1303,9 @@
 
             // Load users from Supabase
             SystemStateEngine.memoryPool.registeredUsers = await sbLoadAllUsers();
+            if (SystemStateEngine.memoryPool.registeredUsers.length === 0) {
+                console.warn('No users loaded from Supabase on init — check RLS policies on dubai_elite_users if this is unexpected.');
+            }
             await sbLoadQueues();
 
             document.getElementById('view-auth').classList.remove('hidden');
@@ -1396,19 +1399,48 @@
                 CoreSoundEngine.triggerTapFeedbackEffect();
                 displaySystemNotificationAlert("Authenticating...");
 
-                let clientMatch = SystemStateEngine.memoryPool.registeredUsers.find(u => u.mobile === account);
+                // CRITICAL FIX: Always re-check Supabase directly for THIS mobile number
+                // instead of trusting the in-memory registeredUsers array, which may be
+                // stale or empty (e.g. if the initial load silently failed). This prevents
+                // different devices from independently deciding a number is "free" and
+                // overwriting an existing wallet on signup.
+                const { data: dbRow, error: dbCheckError } = await db
+                    .from('dubai_elite_users')
+                    .select('*')
+                    .eq('mobile', account)
+                    .maybeSingle();
+
+                if (dbCheckError) {
+                    console.error('Auth pre-check failed:', dbCheckError);
+                    displaySystemNotificationAlert("Server error while checking account. Please try again.");
+                    return;
+                }
+
+                let clientMatch = dbRow ? {
+                    mobile: dbRow.mobile,
+                    secret: dbRow.secret,
+                    balance: parseFloat(dbRow.balance),
+                    status: dbRow.status,
+                    hasDeposited: dbRow.has_deposited
+                } : null;
 
                 if (currentTabMode === 'signup') {
                     if (clientMatch) { displaySystemNotificationAlert("Mobile number already registered. Please Log In."); return; }
                     clientMatch = { mobile: account, secret: secret, balance: 100.00, status: "Active", hasDeposited: false };
                     await sbSaveUser(clientMatch);
-                    SystemStateEngine.memoryPool.registeredUsers.push(clientMatch);
+                    const existingIdx = SystemStateEngine.memoryPool.registeredUsers.findIndex(u => u.mobile === account);
+                    if (existingIdx !== -1) SystemStateEngine.memoryPool.registeredUsers[existingIdx] = clientMatch;
+                    else SystemStateEngine.memoryPool.registeredUsers.push(clientMatch);
                     // Seed welcome support message
                     await sbInsertSupportMsg(account, 'support', 'Welcome to Dubai Elite Support. Please write your query below, and our representatives will reply instantly.');
                     displaySystemNotificationAlert("Profile created! Received ₹100 cash bonus.");
                 } else {
                     if (!clientMatch) { displaySystemNotificationAlert("Account details not found. Please Sign Up first."); return; }
                     if (clientMatch.secret !== secret) { displaySystemNotificationAlert("Incorrect password. Please try again."); return; }
+                    // Keep in-memory cache in sync with the freshly fetched row
+                    const existingIdx = SystemStateEngine.memoryPool.registeredUsers.findIndex(u => u.mobile === account);
+                    if (existingIdx !== -1) SystemStateEngine.memoryPool.registeredUsers[existingIdx] = clientMatch;
+                    else SystemStateEngine.memoryPool.registeredUsers.push(clientMatch);
                 }
 
                 SystemStateEngine.memoryPool.activeSessionUser = clientMatch;
